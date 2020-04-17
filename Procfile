@@ -1,2 +1,2 @@
-commandnetworkbot: python commandnetworkbot.py
-commandnetworkbot: java JMusicBot-0.2.8.jar
+commandnetwork: python commandnetworkbot.py
+commandnetwork: java JMusicBot-0.2.8.jar
