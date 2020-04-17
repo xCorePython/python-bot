@@ -31,8 +31,8 @@ modskyblockst2 = '>>> **Skyblock in mod Server** (Forge 1.12.2 Server) \n `Serve
 modskyblockst = '>>> **Skyblock in mod Server** (Forge 1.12.2 Server) \n `Server is Online`'
 twilightforestst2 = '>>> **Twilight Forest Server** (Forge 1.7.10 Server) \n `Server is Offline`'
 twilightforestst = '>>> **Twilight Forest Server** (Forge 1.7.10 Server) \n `Server is Online`'
-build = 'v2.1.58'
-kousinnjyouhou = '```CommandsとStatusとInfoとMusic Botが実装されました```'
+build = 'v2.1.59'
+kousinnjyouhou = '```herokuで動作するために最適化しました。```'
 osirase = '```特になし```'
 updatelog = 'f'
 
@@ -146,10 +146,10 @@ async def st(ctx, *, arg):
         await ctx.send('>>> **Info**\n `BungeeCord, Lobby, Skyblock, Command, Survival, Athletic, PvP, Mod Skyblock, Twilight Forest`\nのどれかを入力してください。\n (全部の文字が小文字でも反応します。誤字は反応しません。)')
 
 @bot.command()
-async def check(ctx, arg):
+async def check(ctx, arg, arg2):
     """サーバーアドレスを入れるとオンラインか確認できます。"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    checkport = sock.connect_ex((arg,25565))
+    checkport = sock.connect_ex((arg,int(arg2)))
     if checkport == 0:
         await ctx.send('チェックしたサーバーは現在開いています。')
     else:
@@ -210,7 +210,7 @@ async def status(ctx, *, arg):
 @bot.command()
 async def shutdown(ctx):
     await ctx.send('Botをシャットダウンします。')
-    sys.exit(code)
+    exit()
 
 @bot.command()
 async def commands(ctx, arg):
@@ -236,9 +236,5 @@ async def neta(ctx):
     if a6193 == 3:
         await ctx.send(file=discord.File('neta3.png'))
 
-@bot.command()
-async def calc(ctx, arg):
-    await ctx.send(arg)
-
-#os.system('start java -jar "JMusicBot-0.2.8.jar"')
+os.system('start java -jar "JMusicBot-0.2.8.jar"')
 bot.run(token)

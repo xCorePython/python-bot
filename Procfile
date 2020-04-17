@@ -1,1 +1,1 @@
-commandnetwork: python commandnetworkbot.py
+commandnetworkbot: python commandnetworkbot.py
