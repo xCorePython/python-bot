@@ -14,7 +14,7 @@ from discord.ext import commands
 token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XlGwuA.gsmJ-n7-TItMUUuNZM8OAANGlZw'
 bungeest2 = '>>> **Command Network** \nIP: akitama.xyz, 60.112.154.214 \n `Server is Offline`'
 bungeest = '>>> **Command Network** \nIP: akitama.xyz, 60.112.154.214 \n `Server is Online`'
-build = 'v2.1.62'
+build = 'v2.1.63'
 kousinnjyouhou = '```Music Bot導入不可能だったためBot作成者オンライン時のみしか使えません。```'
 osirase = '```一部機能に修正・削除があります```'
 updatelog = 'f'
@@ -64,7 +64,7 @@ async def on_ready():
 
 @bot.command()
 async def st(ctx):
-    """\n: Command Networkのサーバーステータスを表示"""
+    """\n: s!statusと同様"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     bungeeport = sock.connect_ex(("60.112.154.214",25565))
     if bungeeport == 0:
@@ -131,6 +131,14 @@ async def invite(ctx):
 
 @bot.command()
 async def pfm(ctx, arg):
+    """\n: パフォーマンス(ホストコンピューターの状態)を表示します。"""
+    a173013 = 'Memory: ' + str(mem.percent) + '%' + ' (' + str(mem.used / 1024 / 1024) + ' / ' + str(mem.total / 1024 / 1024) + 'MB' + ')'
+    await ctx.send(a173013)
+    a124897 = 'CPU: ' + str(cpu) + '%'
+    await ctx.send(a124897)
+
+@bot.command()
+async def performance(ctx, arg):
     """\n: パフォーマンス(ホストコンピューターの状態)を表示します。"""
     a173013 = 'Memory: ' + str(mem.percent) + '%' + ' (' + str(mem.used / 1024 / 1024) + ' / ' + str(mem.total / 1024 / 1024) + 'MB' + ')'
     await ctx.send(a173013)
