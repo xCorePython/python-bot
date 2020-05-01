@@ -14,7 +14,7 @@ from discord.ext import commands
 token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XlGwuA.gsmJ-n7-TItMUUuNZM8OAANGlZw'
 bungeest2 = '>>> **Command Network** \nIP: akitama.xyz, 60.112.154.214 \n `Server is Offline`'
 bungeest = '>>> **Command Network** \nIP: akitama.xyz, 60.112.154.214 \n `Server is Online`'
-build = 'v2.1.66'
+build = 'v2.1.67'
 kousinnjyouhou = '```ネタコマンドが動作しなかったのを修正```'
 osirase = '```Music Bot導入不可能だったためBot作成者オンライン時のみしか使えません。```'
 updatelog = 'f'
@@ -130,7 +130,7 @@ async def invite(ctx):
     await ctx.send('Command Network: https://discord.gg/6yETYTK\nPlease read rules')
 
 @bot.command()
-async def pfm(ctx, arg):
+async def pfm(ctx):
     """: s!performanceと同様"""
     a173013 = 'Memory: ' + str(mem.percent) + '%' + ' (' + str(mem.used / 1024 / 1024) + ' / ' + str(mem.total / 1024 / 1024) + 'MB' + ')'
     await ctx.send(a173013)
@@ -138,7 +138,7 @@ async def pfm(ctx, arg):
     await ctx.send(a124897)
 
 @bot.command()
-async def performance(ctx, arg):
+async def performance(ctx):
     """: パフォーマンス(ホストコンピューターの状態)を表示します。"""
     a173013 = 'Memory: ' + str(mem.percent) + '%' + ' (' + str(mem.used / 1024 / 1024) + ' / ' + str(mem.total / 1024 / 1024) + 'MB' + ')'
     await ctx.send(a173013)
@@ -146,15 +146,17 @@ async def performance(ctx, arg):
     await ctx.send(a124897)
 
 @bot.command()
-async def neta(ctx):
+async def seen(ctx):
     """: ネタをランダムで選び表示します。"""
-    a47901 = randomint(1, 3)
+    a47901 = randomint(1, 4)
     if a47901 == 1:
-        await ctx.send(file=discord.File(randomcho(neta1.mp4)))
+        await ctx.send(file=discord.File(randomcho('neta1.mp4')))
     elif a47901 == 2:
-        await ctx.send(file=discord.File(randomcho(neta2.mp4)))
+        await ctx.send(file=discord.File(randomcho('neta2.mp4')))
     elif a47901 == 3:
-        await ctx.send(file=discord.File(randomcho(neta3.mp4)))
+        await ctx.send('neta3.pngは削除されました。')
+    elif a47901 == 4:
+        await ctx.send(file=discord.File(randomcho('neta4.mp4')))
 
 @bot.command()
 async def music(ctx):
