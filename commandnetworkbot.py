@@ -150,13 +150,13 @@ async def seen(ctx):
     """: ネタをランダムで選び表示します。"""
     a47901 = randomint(1, 4)
     if a47901 == 1:
-        await ctx.send(file=discord.File(randomcho('neta1.mp4')))
+        await ctx.send(file=discord.File('neta1.mp4'))
     elif a47901 == 2:
-        await ctx.send(file=discord.File(randomcho('neta2.mp4')))
+        await ctx.send(file=discord.File('neta2.mp4'))
     elif a47901 == 3:
         await ctx.send('neta3.pngは削除されました。')
     elif a47901 == 4:
-        await ctx.send(file=discord.File(randomcho('neta4.mp4')))
+        await ctx.send(file=discord.File('neta4.mp4'))
 
 @bot.command()
 async def music(ctx):
