@@ -1,0 +1,8 @@
+discord.py
+pip
+psutil
+base64
+youtube_dl
+asyncio
+numpy
+cv

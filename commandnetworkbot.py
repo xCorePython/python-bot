@@ -1,168 +1,168 @@
-#読み込み
+import datetime
+now = datetime.datetime.now()
+starttime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
 import os
 import discord
-import time
+client = discord.Client()
 import socket
 import sys
 import subprocess
 import psutil
 import random
+import time
+import requests
+import numpy as np
+import base64
+import cv2
+import asyncio
+import functools
+import itertools
+import math
+import youtube_dl
+from async_timeout import timeout
+now = datetime.datetime.now()
+importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+global voich
+global activityst
+global uptime2
+global readytime
+global nowtime
+global whileonoff
 
-from discord.ext import commands
+token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XsG6AQ.zkuCC2kX7vL6EFpnqIOFI9e13-g'
+version = 'v3.1.01 beta 2'
+updatelog = 'コマンドを増やしました。'
+information = 'Beta版なのでバグがまだあります。`Cn!report <バグ内容>`で報告してください！'
+updatelogsw = 'f'
+prefix = 'Cn!'
 
-#変更場所
-token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XlGwuA.gsmJ-n7-TItMUUuNZM8OAANGlZw'
-bungeest2 = '>>> **Command Network** \nIP: akitama.xyz, 60.112.154.214 \n `Server is Offline`'
-bungeest = '>>> **Command Network** \nIP: akitama.xyz, 60.112.154.214 \n `Server is Online`'
-build = 'v2.1.67'
-kousinnjyouhou = '```ネタコマンドが動作しなかったのを修正```'
-osirase = '```Music Bot導入不可能だったためBot作成者オンライン時のみしか使えません。```'
-updatelog = 'f'
-
-#help日本語化
-class JapaneseHelpCommand(commands.DefaultHelpCommand):
-    def __init__(self):
-        super().__init__()
-        self.commands_heading = ""
-        self.no_category = "コマンド"
-        self.command_attrs["help"] = ": コマンド一覧と簡単な説明を表示"
-        self.command_attrs["play"] = ": Bot作成者がオンラインのときに使用できます。"
-    
-    def get_ending_note(self):
-        return (f"各コマンドの説明: s!help <コマンド名>\n"
-                f"各カテゴリの説明: s!help <カテゴリ名>\n")
-
-#関数置き場
-shell = '>>> '
-shell2 = '```'
-a = ' is '
-kaigyou = ' \n '
-sikiri = ' | '
-aa = 'Let\'s play Command Network!'
-aaa = '**Status Bot Started**'
-aaaa = 's!help'
-aaaaa = 'Status Check Mode Now'
-aaaaaa = ' このバージョンの更新内容: '
-aaaaaaa = 'お知らせ :'
-startstatus = shell + aaa + kaigyou + build + kaigyou + aaaaaa + kousinnjyouhou + kaigyou + aaaaaaa + osirase
-customstatus = aaaa + sikiri + build
-mode = 1
-client = discord.Client()
-bot = commands.Bot(command_prefix='s!', help_command=JapaneseHelpCommand())
-mem = psutil.virtual_memory()
-cpu = psutil.cpu_percent(interval=1)
-randomint = random.randint
-randomcho = random.choice
-
-#起動時の処理
-@bot.event
+@client.event
 async def on_ready():
-    if updatelog == 'true':
-        channel = bot.get_channel(683792670900224019)
-        await channel.send(startstatus)
-    await bot.change_presence(activity=discord.Game(name=customstatus))
+    if updatelogsw == 't':
+        startupst = discord.Embed(title='Command Network Botがアップデートされました', description=version, colour=0x00ffff)
+        now = datetime.datetime.now()
+        startupst.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
+        startupst.add_field(name='更新内容', value=information, inline=False)
+        startupst.add_field(name='お知らせ', value=updatelog, inline=False)
+        channel = client.get_channel(707426067098501171)
+        await channel.send(embed=startupst)
+    now = datetime.datetime.now()
+    readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+    activityst = prefix + 'help' + ' | ' + 'Startup Time : ' + str(float(readytime - starttime)) + 's | ' + 'Import Time : ' + str(float(importtime - starttime)) + 's | ' + version
+    await client.change_presence(activity=discord.Game(activityst))
 
-@bot.command()
-async def st(ctx):
-    """: s!statusと同様"""
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    bungeeport = sock.connect_ex(("60.112.154.214",25565))
-    if bungeeport == 0:
-        await ctx.send(bungeest)
-    else:
-        await ctx.send(bungeest2)
+@client.event
+async def on_message(message):
+    if message.content.startswith(prefix):
+        if message.content == prefix + 'help':
+            sendms = discord.Embed(title="コマンド一覧", description="Cn!help <コマンド名>で詳細が見れます", color=0x00ffff)
+            sendms.set_footer(text="This bot created by Aquatic_Core")
+            sendms.add_field(name="Tool", value='`timer`,`check`,`time`', inline=False)
+            sendms.add_field(name="Status", value='`check`,`status`', inline=False)
+            await message.channel.send(embed=sendms)
+        if message.content.startswith('Cn!say '):
+            sendms = discord.Embed(description=f"{message.content}"[7:], colour=0xF46900)
+            sendms.set_author(name=message.author.name, icon_url=message.author.avatar_url)
+            now = datetime.datetime.now()
+            sendms.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
+            await message.channel.send(embed=sendms)
+        if message.content == prefix + 'time':
+            now = datetime.datetime.now()
+            sendms = discord.Embed(title='Time', description=now.strftime("%Y/%m/%d %H:%M:%S.%f"), colour=0x7ED6DE)
+            sendms.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
+            await message.channel.send(embed=sendms)
+        if message.content.startswith('Cn!stopwatch '):
+            arg = message.content[13:]
+            if arg == 'start':
+                now = datetime.datetime.now()
+                nowtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+                with open('stopwatch/{}.txt'.format(message.author.id), 'w', encoding = 'utf_8') as f:
+                    f.write(str(nowtime))
+            if arg == 'now':
+                now = datetime.datetime.now()
+                nowtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+                readms = open('stopwatch/{}.txt'.format(message.author.id), 'r', encoding = 'utf_8')
+                readtime = readms.read()
+                currenttime = float(nowtime) - float(readtime)
+                if currenttime > 3600:
+                    sw02 = int(currenttime / 3600)
+                    sw01 = int(currenttime - 3600 * sw02)
+                    sw00 = float(currenttime - 60 * sw01)
+                    if sw00 < 10:
+                        sendms = 'Now Time : ' + str(sw01) + ':0' + str(sw00)
+                        await message.channel.send(sendms)
+                    else:
+                        sendms = 'Now Time : ' + str(sw01) + ':' + str(sw00)
+                        await message.channel.send(sendms)
+                if currenttime > 60:
+                    sw01 = int(currenttime / 60)
+                    sw00 = float(currenttime - 60 * sw01)
+                    if sw00 < 10:
+                        sendms = 'Now Time : ' + str(sw01) + ':0' + str(sw00)
+                        await message.channel.send(sendms)
+                    else:
+                        sendms = 'Now Time : ' + str(sw01) + ':' + str(sw00)
+                        await message.channel.send(sendms)
+                else:
+                    sw00 = float(currenttime)
+                    if sw00 < 10:
+                        sendms = 'Now Time : ' + str(sw00)
+                        await message.channel.send(sendms)
+                    else:
+                        sendms = 'Now Time : ' + str(sw00)
+                        await message.channel.send(sendms)
+        if message.content.startswith('Cn!timer '):
+            arg = int(message.content[9:])
+            await asyncio.sleep(arg)
+            await message.channel.send(embed=discord.Embed)
+        if message.content.startswith('Cn!report '):
+            arg = str(message.content[10:])
+            savems = '内容 : ' + arg + '\n' + '報告者ID : ' + str(message.author.id) + '\n\n'
+            await message.channel.send('報告ありがとうございます。')
+            with open('bugreport/{}.txt'.format(message.author.name), 'a', encoding = 'utf_8') as f:
+                f.write(savems)
+        if message.content == 'Cn!ping':
+            now = datetime.datetime.now()
+            ping1 = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+            await message.channel.send('Pong!')
+            now = datetime.datetime.now()
+            ping2 = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+            sendms = str(float(float(ping2 - ping1) * 1000)) + 'ms'
+            await message.channel.send(sendms)
+        if message.content.startswith('Cn!check '):
+            arg = str(message.content[9:])
+            data = requests.get("https://api.mcsrvstat.us/2/{}".format(arg)).json()
+            if data['online'] == True:
+                sendms = discord.Embed(title="Minecraft Server Check", description="This server is online!", colour=0x7ED6DE)
+                send-ms.add_field(name='Hostname', value=str(data['hostname']), inline=False)
+                sendms.add_field(name='IP Address', value=str(data['ip']), inline=False)
+                sendms.add_field(name='Port', value=str(data['port']), inline=False)
+                sendms1 = str(data['players']['online']) + '/' + str(data['players']['max'])
+                sendms.add_field(name='Players', value=str(sendms1), inline=False)
+                sendms.add_field(name='Version', value=str(data['version']), inline=False)
+                now = datetime.datetime.now()
+                sendms.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
+                await message.channel.send(embed=sendms)
+            if data['ip'] == data['port']:
+                sendms = discord.Embed(title="Minecraft Server Check", description="The server not found.", colour=0x7ED6DE)
+                now = datetime.datetime.now()
+                sendms.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
+                await message.channel.send(embed=sendms)
+            if data['online'] == False:
+                sendms = discord.Embed(title="Minecraft Server Check", description="This server is offline...", colour=0x7ED6DE)
+                sendms.add_field(name='Hostname', value=str(data['hostname']), inline=False)
+                sendms.add_field(name='IP Address', value=str(data['ip']), inline=False)
+                sendms.add_field(name='Port', value=str(data['port']), inline=False)
+                now = datetime.datetime.now()
+                sendms.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
+                await message.channel.send(embed=sendms)
+        if message.content == 'Cn!upload ':
+            await voich.disconnect()
+        if message.content == 'Cn!status':
+            await message.channel.send(activityst)
+    if message.content == 'おみくじ':
+        omikuji = [ '大吉', '中吉', '小吉', '吉', '末吉', '凶', '小凶', '中凶', '大凶' ]
+        sendms = random.choice(omikuji)
+        await message.channel.send(sendms)
 
-@bot.command()
-async def status(ctx):
-    """: Command Networkのサーバーステータスを表示"""
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    bungeeport = sock.connect_ex(("60.112.154.214",25565))
-    if bungeeport == 0:
-        await ctx.send(bungeest)
-    else:
-        await ctx.send(bungeest2)
-
-@bot.command()
-async def check(ctx, arg, arg2):
-    """: サーバーアドレスを入れるとオンラインか確認できます。"""
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    checkport = sock.connect_ex((arg,int(arg2)))
-    if checkport == 0:
-        await ctx.send('チェックしたサーバーは現在開いています。')
-    else:
-        await ctx.send('チェックしたサーバーは現在開いていません。')
-
-@bot.command()
-async def pick(ctx, arg, arg2):
-    """: 選択された語句からどちらかを選ぶ"""
-    a6790135 = [ arg, arg2 ]
-    await ctx.send(randomcho(a6790135))
-
-@bot.command()
-async def random(ctx, arg, arg2):
-    """: はじめと終わりの数字の間でランダムな数字を生成します。"""
-    await ctx.send(randomint(int(arg),int(arg2)))
-
-@bot.command()
-async def say(ctx, *, arg):
-    """: 言わせたい文字の部分をいいます。"""
-    await ctx.send(arg)
-
-@bot.command()
-async def info(ctx):
-    """: s!informationと同様"""
-    await ctx.send(startstatus)
-
-@bot.command()
-async def information(ctx):
-    """: このBotの情報を表示します。"""
-    await ctx.send(startstatus)
-
-@bot.command()
-async def activity(ctx, *, arg):
-    """: アクティビティを表示させたい部分を追加して変更します。"""
-    a1048 = arg + sikiri + customstatus
-    await bot.change_presence(activity=discord.Game(name=a1048))
-
-@bot.command()
-async def invite(ctx):
-    """: 招待コードを表示します。"""
-    await ctx.send('Command Network: https://discord.gg/6yETYTK\nPlease read rules')
-
-@bot.command()
-async def pfm(ctx):
-    """: s!performanceと同様"""
-    a173013 = 'Memory: ' + str(mem.percent) + '%' + ' (' + str(mem.used / 1024 / 1024) + ' / ' + str(mem.total / 1024 / 1024) + 'MB' + ')'
-    await ctx.send(a173013)
-    a124897 = 'CPU: ' + str(cpu) + '%'
-    await ctx.send(a124897)
-
-@bot.command()
-async def performance(ctx):
-    """: パフォーマンス(ホストコンピューターの状態)を表示します。"""
-    a173013 = 'Memory: ' + str(mem.percent) + '%' + ' (' + str(mem.used / 1024 / 1024) + ' / ' + str(mem.total / 1024 / 1024) + 'MB' + ')'
-    await ctx.send(a173013)
-    a124897 = 'CPU: ' + str(cpu) + '%'
-    await ctx.send(a124897)
-
-@bot.command()
-async def seen(ctx):
-    """: ネタをランダムで選び表示します。"""
-    a47901 = randomint(1, 4)
-    if a47901 == 1:
-        await ctx.send(file=discord.File('neta1.mp4'))
-    elif a47901 == 2:
-        await ctx.send(file=discord.File('neta2.mp4'))
-    elif a47901 == 3:
-        await ctx.send('neta3.pngは削除されました。')
-    elif a47901 == 4:
-        await ctx.send(file=discord.File('neta4.mp4'))
-
-@bot.command()
-async def music(ctx):
-    """: Botの作成者が現時点で気に入っている曲のYouTubeリンクをチャンネルにアップロードします。"""
-    await ctx.send('PSYQUI, Mo∀ - Rainbow Dream')
-    await ctx.send('https://www.youtube.com/watch?v=BCM423NDOE0')
-    await ctx.send('(Music Botに挿入済, s!play Rainbow Dream.mp3)')
-
-bot.run(token)
+client.run(token)
