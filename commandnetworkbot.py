@@ -6,7 +6,7 @@ import discord
 client = discord.Client()
 
 
-import subprocess
+
 
 import random
 import time
