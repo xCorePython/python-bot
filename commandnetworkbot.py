@@ -4,21 +4,10 @@ starttime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 8
 import os
 import discord
 client = discord.Client()
-
-
-
-
 import random
 import time
 import requests
-
-
-
 import asyncio
-
-
-
-
 from async_timeout import timeout
 now = datetime.datetime.now()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)

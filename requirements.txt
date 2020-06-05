@@ -1,7 +1,4 @@
 discord.py
 pip
-
-
-
+requests
 asyncio
-
