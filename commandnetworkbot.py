@@ -158,5 +158,51 @@ async def on_message(message):
         omikuji = [ '大吉', '中吉', '小吉', '吉', '末吉', '凶', '小凶', '中凶', '大凶' ]
         sendms = random.choice(omikuji)
         await message.channel.send(sendms)
+    if message.content.find('おみくじ') != -1:
+        await message.channel.send('test')
+    if message.content.find('よかったね') != -1:
+        await message.channel.send('うんほんとによかった！')
+    if message.content.find('良かったね') != -1:
+        await message.channel.send('うんほんとによかった！')
+    if message.content.find('kusa') != -1:
+        await message.channel.send('www')
+    if message.content.find('草') != -1:
+        await message.channel.send('www')
+    if message.content.find('くさ') != -1:
+        await message.channel.send('www')
+    if message.content.find('クサ') != -1:
+        await message.channel.send('www')
+    if message.content.find('ｸｻ') != -1:
+        await message.channel.send('www')
+    if message.content.find('KUSA') != -1:
+        await message.channel.send('www')
+    if message.content.find('いいね') != -1:
+        await message.channel.send('いい！')
+    if message.content.find('f**k') != -1:
+        await message.channel.send('暴言！')
+    if message.content.find('fuck') != -1:
+        await message.channel.send('暴言！')
+    if message.content.find('Fuck') != -1:
+        await message.channel.send('暴言！')
+    if message.content.find('F**k') != -1:
+        await message.channel.send('暴言！')
+    if message.content.find('fk') != -1:
+        await message.channel.send('暴言！')
+    if message.content.find('死ね') != -1:
+        await message.channel.send('暴言！')
+    if message.content.find('しね') != -1:
+        await message.channel.send('暴言！')
+    if message.content.find('tintin') != -1:
+        await message.channel.send('ﾊﾊｯ!')
+    if message.content.find('wwww') != -1:
+        await message.channel.send('www')
+    if message.content.find('ｗｗｗｗ') != -1:
+        await message.channel.send('www')
+    if message.content.find('じゃね？w') != -1:
+        await message.channel.send('それなwww')
+    if message.content.find('じゃね？ｗ') != -1:
+        await message.channel.send('それなwww')
+    if message.content.find('じゃね?w') != -1:
+        await message.channel.send('それなwww')
 
 client.run(token)
