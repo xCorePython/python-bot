@@ -2,3 +2,4 @@ discord.py
 pip
 requests
 asyncio
+psutil
