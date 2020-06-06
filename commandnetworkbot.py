@@ -4,11 +4,11 @@ starttime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 8
 import os
 import discord
 client = discord.Client()
+import psutil
 import random
 import time
 import requests
 import asyncio
-from async_timeout import timeout
 now = datetime.datetime.now()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
 global voich
@@ -19,7 +19,7 @@ global nowtime
 global whileonoff
 
 token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XsG6AQ.zkuCC2kX7vL6EFpnqIOFI9e13-g'
-version = 'v3.1.01 beta 2'
+version = 'v3.1.06 beta'
 updatelog = 'コマンドを増やしました。'
 information = 'Beta版なのでバグがまだあります。`Cn!report <バグ内容>`で報告してください！'
 updatelogsw = 'f'
@@ -53,12 +53,10 @@ async def on_message(message):
             sendms = discord.Embed(description=f"{message.content}"[7:], colour=0xF46900)
             sendms.set_author(name=message.author.name, icon_url=message.author.avatar_url)
             now = datetime.datetime.now()
-            sendms.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
             await message.channel.send(embed=sendms)
         if message.content == prefix + 'time':
             now = datetime.datetime.now()
             sendms = discord.Embed(title='Time', description=now.strftime("%Y/%m/%d %H:%M:%S.%f"), colour=0x7ED6DE)
-            sendms.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
             await message.channel.send(embed=sendms)
         if message.content.startswith('Cn!stopwatch '):
             arg = message.content[13:]
@@ -103,7 +101,7 @@ async def on_message(message):
         if message.content.startswith('Cn!timer '):
             arg = int(message.content[9:])
             await asyncio.sleep(arg)
-            await message.channel.send(embed=discord.Embed)
+            await message.channel.send('Timer Finished!\n<@{}>'.format(message.author.id))
         if message.content.startswith('Cn!report '):
             arg = str(message.content[10:])
             savems = '内容 : ' + arg + '\n' + '報告者ID : ' + str(message.author.id) + '\n\n'
@@ -145,8 +143,15 @@ async def on_message(message):
                 now = datetime.datetime.now()
                 sendms.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
                 await message.channel.send(embed=sendms)
-        if message.content == 'Cn!upload ':
-            await voich.disconnect()
+        if message.content.startswith('Cn!upload '):
+            arg = message.content[10:]
+            await message.channel.send(file=discord.File('uploader/{}'.format(arg)))
+        if message.content.startswith('Cn!play '):
+            arg = message.content[8:]
+            if discord.voice_client is not None:
+                await discord.VoiceChannel.connect(message.author.voice.channel)
+            source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(arg))
+            await discord.voice_client.play(source)
         if message.content == 'Cn!status':
             await message.channel.send(activityst)
     if message.content == 'おみくじ':
