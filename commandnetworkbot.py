@@ -121,7 +121,7 @@ async def on_message(message):
             data = requests.get("https://api.mcsrvstat.us/2/{}".format(arg)).json()
             if data['online'] == True:
                 sendms = discord.Embed(title="Minecraft Server Check", description="This server is online!", colour=0x7ED6DE)
-                send-ms.add_field(name='Hostname', value=str(data['hostname']), inline=False)
+                sendms.add_field(name='Hostname', value=str(data['hostname']), inline=False)
                 sendms.add_field(name='IP Address', value=str(data['ip']), inline=False)
                 sendms.add_field(name='Port', value=str(data['port']), inline=False)
                 sendms1 = str(data['players']['online']) + '/' + str(data['players']['max'])
