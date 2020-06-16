@@ -18,6 +18,10 @@ global readytime
 global nowtime
 global whileonoff
 
+
+if not discord.opus.is_loaded():
+    discord.opus.load_opus("heroku-buildpack-libopus")
+    
 token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XsG6AQ.zkuCC2kX7vL6EFpnqIOFI9e13-g'
 version = 'v3.1.06 beta'
 updatelog = 'コマンドを増やしました。'
