@@ -149,8 +149,9 @@ async def on_message(message):
         if message.content.startswith('Cn!play '):
             arg = message.content[8:]
 
-            voich = await discord.VoiceChannel.connect(message.author.voice.channel)
-            await voich.play(discord.FFmpegPCMAudio(arg))
+            voice = await client.get_channel(message.author.voice.channel).connect()
+            voice.play(discord.FFmpegPCMAudio('music/{}.mp3'.format(arg)))
+                 
 
         if message.content == 'Cn!status':
             await message.channel.send(activityst)
