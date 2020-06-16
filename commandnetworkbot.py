@@ -148,10 +148,10 @@ async def on_message(message):
             await message.channel.send(file=discord.File('uploader/{}'.format(arg)))
         if message.content.startswith('Cn!play '):
             arg = message.content[8:]
-            if discord.voice_client is not None:
-                await discord.VoiceChannel.connect(message.author.voice.channel)
-            source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(arg))
-            await discord.voice_client.play(source)
+
+            voich = await discord.VoiceChannel.connect(message.author.voice.channel)
+            await voich.play(discord.FFmpegPCMAudio(arg))
+
         if message.content == 'Cn!status':
             await message.channel.send(activityst)
     if message.content == 'おみくじ':
