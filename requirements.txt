@@ -3,3 +3,4 @@ pip
 requests
 asyncio
 psutil
+discord.py[voice]
