@@ -4,3 +4,5 @@ requests
 asyncio
 psutil
 discord.py[voice]
+PyNaCl
+
