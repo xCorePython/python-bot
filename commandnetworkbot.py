@@ -149,7 +149,7 @@ async def on_message(message):
         if message.content.startswith('Cn!play '):
             arg = message.content[8:]
 
-            voice = await client.get_channel(message.author.voice.channel).connect()
+            voice = await discord.VoiceChannel.connect(message.author.voice.channel)
             voice.play(discord.FFmpegPCMAudio('music/{}.mp3'.format(arg)))
                  
 
