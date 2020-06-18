@@ -157,12 +157,12 @@ async def on_message(message):
             arg = message.content[9:]
 
             voice = await discord.VoiceChannel.connect(message.author.voice.channel)
-            voice.play(discord.FFmpegPCMAudio('music/{}.mp3'.format(arg),after=endmusic))
-            def endmusic():
-                await voice.disconnect()
+            voice.play(discord.FFmpegPCMAudio('music/{}.mp3'.format(arg)))
+
+
         if message.content == 'Cn!dc':
 
-            voice.disconnect()
+            await voice.disconnect()
         if message.content == 'Cn!status':
             await message.channel.send(activityst)
     if message.content == 'おみくじ':
