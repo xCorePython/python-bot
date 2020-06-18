@@ -151,18 +151,18 @@ async def on_message(message):
         if message.content.startswith('Cn!upload '):
             arg = message.content[10:]
             await message.channel.send(file=discord.File('uploader/{}'.format(arg)))
-        if message.content == 'Cn!join':
-            voice = await discord.VoiceChannel.connect(message.author.voice.channel)
-        if message.content.startswith('Cn!music '):
-            arg = message.content[9:]
+  #      if message.content == 'Cn!join':
+   #         voice = await discord.VoiceChannel.connect(message.author.voice.channel)
+   #     if message.content.startswith('Cn!music '):
+     #       arg = message.content[9:]
 
-            voice = await discord.VoiceChannel.connect(message.author.voice.channel)
-            voice.play(discord.FFmpegPCMAudio('music/{}.mp3'.format(arg)))
+    #        voice = await discord.VoiceChannel.connect(message.author.voice.channel)
+    #        voice.play(discord.FFmpegPCMAudio('music/{}.mp3'.format(arg)))
 
 
-        if message.content == 'Cn!dc':
+   #     if message.content == 'Cn!dc':
 
-            await voice.disconnect()
+   #         await voice.disconnect()
         if message.content == 'Cn!status':
             await message.channel.send(activityst)
     if message.content == 'おみくじ':
