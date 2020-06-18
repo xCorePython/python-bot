@@ -147,14 +147,19 @@ async def on_message(message):
                 now = datetime.datetime.now()
                 sendms.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
                 await message.channel.send(embed=sendms)
+                
         if message.content.startswith('Cn!upload '):
             arg = message.content[10:]
             await message.channel.send(file=discord.File('uploader/{}'.format(arg)))
+        if message.content == 'Cn!join':
+            voice = await discord.VoiceChannel.connect(message.author.voice.channel)
         if message.content.startswith('Cn!music '):
             arg = message.content[9:]
 
             voice = await discord.VoiceChannel.connect(message.author.voice.channel)
-            voice.play(discord.FFmpegPCMAudio('music/{}.mp3'.format(arg)))
+            voice.play(discord.FFmpegPCMAudio('music/{}.mp3'.format(arg),after=endmusic))
+            def endmusic():
+                await voice.disconnect()
         if message.content == 'Cn!dc':
 
             voice.disconnect()
