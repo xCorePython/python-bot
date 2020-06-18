@@ -51,7 +51,6 @@ bot = commands.Bot(command_prefix=prefix, help_command=None)
 randomint = random.randint
 randomcho = random.choice
 
-
 #起動時の処理
 @bot.event
 async def on_ready():
@@ -60,59 +59,15 @@ async def on_ready():
         await channel.send(startstatus)
     await bot.change_presence(activity=discord.Game(name=customstatus))
 
-bot.command(aliases=["connect","summon"]) #connectやsummonでも呼び出せる
-async def join(ctx):
-    """Botをボイスチャンネルに入室させます。"""
-    voice_state = ctx.author.voice
-
-    if (not voice_state) or (not voice_state.channel):
-        await ctx.send("先にボイスチャンネルに入っている必要があります。")
-        return
-
-    channel = voice_state.channel
-
-    await channel.connect()
-    print("connected to:",channel.name)
-
-
-@bot.command(aliases=["disconnect","bye"])
-async def leave(ctx):
-    """Botをボイスチャンネルから切断します。"""
-    voice_client = ctx.message.guild.voice_client
-
-    if not voice_client:
-        await ctx.send("Botはこのサーバーのボイスチャンネルに参加していません。")
-        return
-
-    await voice_client.disconnect()
-    await ctx.send("ボイスチャンネルから切断しました。")
-
-
 @bot.command()
-async def music(ctx, arg):
-    """指定された音声ファイルを流します。"""
-    voice_client = ctx.message.guild.voice_client
-
-    if not voice_client:
-        await ctx.send("Botはこのサーバーのボイスチャンネルに参加していません。")
-        return
-
-
-
-
-
-
-
-    ffmpeg_audio_source = discordFFmpegPCMAudio("music/{}.mp3".format(arg))
-    voice_client.play(ffmpeg_audio_source)
-
-
-
-
-bot.run(token)
-
-
-
+async def st(ctx):
+    """: s!statusと同様"""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    bungeeport = sock.connect_ex(("60.112.154.214",25565))
+    if bungeeport == 0:
+        await ctx.send(bungeest)
+    else:
+        await ctx.send(bungeest2)
 
 @bot.command()
 async def status(ctx):
@@ -227,10 +182,10 @@ async def music(ctx):
     """: Botの作成者が現時点で気に入っている曲のYouTubeリンクをチャンネルにアップロードします。"""
     await ctx.send('PSYQUI, Mo∀ - Rainbow Dream')
     await ctx.send('https://www.youtube.com/watch?v=BCM423NDOE0')
-    await ctx.sen
+    await ctx.send('(Music Botに挿入済, s!play Rainbow Dream.mp3)')
 
-
-
-
+@bot.command()
+async def help(ctx):
+    await ctx.send('test command')
 
 bot.run(token)
