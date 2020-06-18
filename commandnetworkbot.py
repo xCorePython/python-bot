@@ -11,7 +11,7 @@ import requests
 import asyncio
 now = datetime.datetime.now()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-global voich
+global voice
 global activityst
 global uptime2
 global readytime
@@ -155,8 +155,8 @@ async def on_message(message):
 
             voice = await discord.VoiceChannel.connect(message.author.voice.channel)
             voice.play(discord.FFmpegPCMAudio('music/{}.mp3'.format(arg)))
-                 
-
+        If message.content == 'Cn!dc':
+            await voice.disconnect()
         if message.content == 'Cn!status':
             await message.channel.send(activityst)
     if message.content == 'おみくじ':
