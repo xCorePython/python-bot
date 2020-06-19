@@ -60,7 +60,7 @@ async def on_ready():
         await channel.send(startstatus)
     await bot.change_presence(activity=discord.Game(name=customstatus))
 
-bot.command(aliases=["connect","summon"]) #connectやsummonでも呼び出せる
+@bot.command(aliases=["connect","summon"]) #connectやsummonでも呼び出せる
 async def join(ctx):
     """Botをボイスチャンネルに入室させます。"""
     voice_state = ctx.author.voice
@@ -103,7 +103,7 @@ async def music(ctx, arg):
 
 
 
-    ffmpeg_audio_source = discordFFmpegPCMAudio("music/{}.mp3".format(arg))
+    ffmpeg_audio_source = discord.FFmpegPCMAudio("music/{}.mp3".format(arg))
     voice_client.play(ffmpeg_audio_source)
 
 
@@ -114,7 +114,7 @@ bot.run(token)
 
 
 
-@bot.command()
+Test = '''@bot.command()
 async def status(ctx):
     """: Command Networkのサーバーステータスを表示"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -234,3 +234,5 @@ async def music(ctx):
 
 
 bot.run(token)
+'''
+                                                    
