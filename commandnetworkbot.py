@@ -1,33 +1,139 @@
 import datetime
 now = datetime.datetime.now()
 starttime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-import os
-import discord
-client = discord.Client()
-import psutil
-import random
-import time
-import requests
-import asyncio
+import calendar, os, discord, psutil, random, time, requests, asyncio
 now = datetime.datetime.now()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-global voice
-global activityst
-global uptime2
-global readytime
-global nowtime
-global whileonoff
+global voich, whileonly, whilemode, readytime, uptime, nowmonthtotal
 
-
-
-
-    
 token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XsG6AQ.zkuCC2kX7vL6EFpnqIOFI9e13-g'
-version = 'v3.1.06 beta'
+version = 'v3.2.0 beta 1'
 updatelog = 'コマンドを増やしました。'
 information = 'Beta版なのでバグがまだあります。`Cn!report <バグ内容>`で報告してください！'
 updatelogsw = 'f'
 prefix = 'Cn!'
+client = discord.Client()
+whileonly = 1
+
+def nowmonth(mode):
+    if mode == 'total':
+        now = datetime.datetime.now()
+        if now.month == 1:
+            a01 = 0
+            for n in range(1):
+                nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
+                a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
+            a01 = a01 + now.day
+            return a01
+        if now.month == 2:
+            a01 = 0
+            for n in range(1, 2):
+                nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
+                a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
+            a01 = a01 + now.day
+            return a01
+        if now.month == 3:
+            a01 = 0
+            for n in range(1, 3):
+                nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
+                a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
+            a01 = a01 + now.day
+            return a01
+        if now.month == 4:
+            a01 = 0
+            for n in range(1, 4):
+                nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
+                a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
+            a01 = a01 + now.day
+            return a01
+        if now.month == 5:
+            a01 = 0
+            for n in range(1, 5):
+                nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
+                a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
+            a01 = a01 + now.day
+            return a01
+        if now.month == 6:
+            a01 = 0
+            for n in range(1, 6):
+                nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
+                a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
+            a01 = a01 + now.day
+            return a01
+        if now.month == 7:
+            a01 = 0
+            for n in range(1, 7):
+                nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
+                a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
+            a01 = a01 + now.day
+            return a01
+        if now.month == 8:
+            a01 = 0
+            for n in range(1, 8):
+                nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
+                a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
+            a01 = a01 + now.day
+            return a01
+        if now.month == 9:
+            a01 = 0
+            for n in range(1, 9):
+                nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
+                a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
+            a01 = a01 + now.day
+            return a01
+        if now.month == 10:
+            a01 = 0
+            for n in range(1, 10):
+                nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
+                a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
+            a01 = a01 + now.day
+            return a01
+        if now.month == 11:
+            a01 = 0
+            for n in range(1, 11):
+                nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
+                a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
+            a01 = a01 + now.day
+            return a01
+        if now.month == 12:
+            a01 = 0
+            for n in range(1, 12):
+                nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
+                a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
+            a01 = a01 + now.day
+            return a01
+    if mode == 'month':
+        now = datetime.datetime.now()
+        nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(now.month))))
+        a01 = int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
+        return a01
+
+print(nowmonth('month'))
+    
+def nowtime(mode, location):
+    if mode == 'off':
+        now = datetime.datetime.utcnow()
+        return float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(nowmonth(month))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+    if mode == 'on':
+        now = datetime.datetime.utcnow()
+        locationtime = location
+        year = now.year
+        hour = now.hour + locationtime
+        day = now.day
+        month = now.month
+        if hour > 24:
+            hour2 = hour / 24
+            hour1 = hour - hour2 * 24
+            day = day + 1
+            if day > nowmonth(month):
+                month = month + 1
+                if month > 12:
+                    month = month - 12
+                    year = year + 1
+        a01 = datetime.datetime(year, month, day, hour, now.minute, now.second, int(now.strftime("%f")))
+        return a01.strftime("Time: %Y/%m/%d %H:%M:%S.%f")
+
+print(nowtime('on', 9))
 
 @client.event
 async def on_ready():
@@ -125,7 +231,7 @@ async def on_message(message):
             data = requests.get("https://api.mcsrvstat.us/2/{}".format(arg)).json()
             if data['online'] == True:
                 sendms = discord.Embed(title="Minecraft Server Check", description="This server is online!", colour=0x7ED6DE)
-                sendms.add_field(name='Hostname', value=str(data['hostname']), inline=False)
+                send-ms.add_field(name='Hostname', value=str(data['hostname']), inline=False)
                 sendms.add_field(name='IP Address', value=str(data['ip']), inline=False)
                 sendms.add_field(name='Port', value=str(data['port']), inline=False)
                 sendms1 = str(data['players']['online']) + '/' + str(data['players']['max'])
@@ -147,22 +253,9 @@ async def on_message(message):
                 now = datetime.datetime.now()
                 sendms.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
                 await message.channel.send(embed=sendms)
-                
         if message.content.startswith('Cn!upload '):
             arg = message.content[10:]
             await message.channel.send(file=discord.File('uploader/{}'.format(arg)))
-  #      if message.content == 'Cn!join':
-   #         voice = await discord.VoiceChannel.connect(message.author.voice.channel)
-   #     if message.content.startswith('Cn!music '):
-     #       arg = message.content[9:]
-
-    #        voice = await discord.VoiceChannel.connect(message.author.voice.channel)
-    #        voice.play(discord.FFmpegPCMAudio('music/{}.mp3'.format(arg)))
-
-
-   #     if message.content == 'Cn!dc':
-
-   #         await voice.disconnect()
         if message.content == 'Cn!status':
             await message.channel.send(activityst)
     if message.content == 'おみくじ':
@@ -217,3 +310,7 @@ async def on_message(message):
         await message.channel.send('それなwww')
 
 client.run(token)
+
+is necessary for us to
+Is it easy for you to
+is important for me to read this book
