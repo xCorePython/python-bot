@@ -1,9 +1,23 @@
+#読み込み
+import os
 import discord
+import socket
+import sys
+import subprocess
+import psutil
+import random
+import time
+import datetime
+
 from discord.ext import commands
 
+#変更場所
 token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XsG6AQ.zkuCC2kX7vL6EFpnqIOFI9e13-g'
 token2 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XlGwzw.q8KueVIWhefOr4i-TdviLuQjs7Y'
 build = 'v3.1.01 beta 1'
+kousinnjyouhou = '```ネタコマンドが動作しなかったのを修正```'
+osirase = '```Music Bot導入不可能だったためBot作成者オンライン時のみしか使えません。```'
+updatelog = 'f'
 prefix = 'Cnt!'
 
 #help日本語化
@@ -18,64 +32,42 @@ class JapaneseHelpCommand(commands.DefaultHelpCommand):
     def get_ending_note(self):
         return (f"各コマンドの説明: s!cmd <コマンド名>\n")
 
+#関数置き場
 bot = commands.Bot(command_prefix=prefix, help_command=None)
+a = ' is '
+kaigyou = ' \n '
+sikiri = ' | '
+aa = 'Let\'s play Command Network!'
+aaa = '**Status Bot Started**'
+aaaa = 's!help'
+aaaaa = 'Status Check Mode Now'
+aaaaaa = ' このバージョンの更新内容: '
+aaaaaaa = 'お知らせ :'
+startstatus = '>>>' + aaa + kaigyou + build + kaigyou + aaaaaa + kousinnjyouhou + kaigyou + aaaaaaa + osirase
+customstatus = aaaa + sikiri + build
+mode = 1
+client = discord.Client()
+bot = commands.Bot(command_prefix=prefix, help_command=None)
+randomint = random.randint
+randomcho = random.choice
 
-bot.command(aliases=["connect","summon"]) #connectやsummonでも呼び出せる
-async def join(ctx):
-    """Botをボイスチャンネルに入室させます。"""
-    voice_state = ctx.author.voice
-
-    if (not voice_state) or (not voice_state.channel):
-        await ctx.send("先にボイスチャンネルに入っている必要があります。")
-        return
-
-    channel = voice_state.channel
-
-    await channel.connect()
-    print("connected to:",channel.name)
-
-@bot.command(aliases=["disconnect","bye"])
-async def leave(ctx):
-    """Botをボイスチャンネルから切断します。"""
-    voice_client = ctx.message.guild.voice_client
-
-    if not voice_client:
-        await ctx.send("Botはこのサーバーのボイスチャンネルに参加していません。")
-        return
-
-    await voice_client.disconnect()
-    await ctx.send("ボイスチャンネルから切断しました。")
+#起動時の処理
+@bot.event
+async def on_ready():
+    if updatelog == 'true':
+        channel = bot.get_channel(683792670900224019)
+        await channel.send(startstatus)
+    await bot.change_presence(activity=discord.Game(name=customstatus))
 
 @bot.command()
-async def music(ctx, arg):
-    """指定された音声ファイルを流します。"""
-    voice_client = ctx.message.guild.voice_client
-
-    if not voice_client:
-        await ctx.send("Botはこのサーバーのボイスチャンネルに参加していません。")
-        return
-
-<<<<<<< HEAD
-    ffmpeg_audio_source = discord.FFmpegPCMAudio("music/{}.mp3".format(arg))
-    voice_client.play(ffmpeg_audio_source)
-
-=======
-
-
-
-
-
-
-    ffmpeg_audio_source = discordFFmpegPCMAudio("music/{}.mp3".format(arg))
-    voice_client.play(ffmpeg_audio_source)
-
-
-
-
-bot.run(token)
-
-
-
+async def st(ctx):
+    """: s!statusと同様"""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    bungeeport = sock.connect_ex(("60.112.154.214",25565))
+    if bungeeport == 0:
+        await ctx.send(bungeest)
+    else:
+        await ctx.send(bungeest2)
 
 @bot.command()
 async def status(ctx):
@@ -190,11 +182,10 @@ async def music(ctx):
     """: Botの作成者が現時点で気に入っている曲のYouTubeリンクをチャンネルにアップロードします。"""
     await ctx.send('PSYQUI, Mo∀ - Rainbow Dream')
     await ctx.send('https://www.youtube.com/watch?v=BCM423NDOE0')
-    await ctx.sen
+    await ctx.send('(Music Botに挿入済, s!play Rainbow Dream.mp3)')
 
+@bot.command()
+async def help(ctx):
+    await ctx.send('test command')
 
-
-
-
->>>>>>> parent of a581418... Update commandnetworkbotdiscordext.py
 bot.run(token)

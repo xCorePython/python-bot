@@ -310,7 +310,3 @@ async def on_message(message):
         await message.channel.send('それなwww')
 
 client.run(token)
-
-is necessary for us to
-Is it easy for you to
-is important for me to read this book
