@@ -2,8 +2,8 @@ import discord
 from discord.ext import commands
 import psutil
 
-token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XsG6AQ.zkuCC2kX7vL6EFpnqIOFI9e13-g'
-token2 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XlGwzw.q8KueVIWhefOr4i-TdviLuQjs7Y'
+token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XxLR6g.zb4a7lm9SNFnmO6moxmsb8biDCQ'
+token2 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
 build = 'v3.1.01 beta 1'
 prefix = 'Cnt!'
 
