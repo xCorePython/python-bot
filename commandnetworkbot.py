@@ -175,7 +175,6 @@ def ready(mode):
 @client.event
 async def on_ready():
     if sys.version.startswith == '3.8.3':
-        await channel.send('[Bot.1] [{0}] {1}'.format('Send', 'Sending Updatelog....'))
         startupst = discord.Embed(title='Command Network Botがアップデートされました', description=version, colour=0x00ffff)
         now = datetime.datetime.now()
         startupst.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
