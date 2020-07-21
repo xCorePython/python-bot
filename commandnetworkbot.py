@@ -8,8 +8,8 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 
 token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XxLR6g.zb4a7lm9SNFnmO6moxmsb8biDCQ'
 token2 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-version = 'v3.2.05'
-updatelog = 'コマンドを増やしました。'
+version = 'v3.2.06'
+updatelog = 'Herokuに入れたときに時差が発生するのを修正'
 information = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
 prefix = 'Cn!'
 client = discord.Client()
@@ -45,7 +45,7 @@ ydl_opts3 = {
     ],
 }
 
-def month(mode):
+def now_month(mode):
         if mode == 'total':
             now = datetime.datetime.now()
             if now.month == 1:
@@ -138,10 +138,10 @@ def month(mode):
             a01 = int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
             return a01
     
-def date(mode, location):
+def now_date(mode, location):
     if mode == 'off':
         now = datetime.datetime.utcnow()
-        return float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(nowmonth(month))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+        return float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month(month))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
     if mode == 'on':
         now = datetime.datetime.utcnow()
         locationtime = location
@@ -163,8 +163,8 @@ def date(mode, location):
 
 def ready(mode):
     if mode == 'save':
-        now = datetime.datetime.now()
-        readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+        now = datetime.datetime.utcnow()
+        readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month(month))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
         activityst = prefix + 'help' + ' | ' + 'Startup Time : ' + str(float(readytime - starttime)) + 's | ' + 'Import Time : ' + str(float(importtime - starttime)) + 's | ' + version
         return activityst
     else:
@@ -174,12 +174,12 @@ def ready(mode):
 
 @client.event
 async def on_ready():
-    if sys.version.startswith == '3.8.3':
+    if sys.version.startswith('3.8.3'):
         startupst = discord.Embed(title='Command Network Botがアップデートされました', description=version, colour=0x00ffff)
-        now = datetime.datetime.now()
-        startupst.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
-        startupst.add_field(name='更新内容', value=information, inline=False)
-        startupst.add_field(name='お知らせ', value=updatelog, inline=False)
+        temp01 = 'Update Time : ' + now_date('on', 9)
+        startupst.set_footer(text=temp01)
+        startupst.add_field(name='更新内容', value=updatelog, inline=False)
+        startupst.add_field(name='お知らせ', value=information, inline=False)
         channel = client.get_channel(707426067098501171)
         await channel.send(embed=startupst)
     now = datetime.datetime.now()
@@ -197,7 +197,7 @@ async def on_message(message):
         if message.content == 'Cn!help''<@!680700378928644117>':
             sendms = discord.Embed(title="コマンド一覧", description="Cn!help <コマンド名>で詳細が見れます", color=0x00ffff)
             sendms.set_footer(text="This bot created by Aquatic_Core")
-            sendms.add_field(name="Tool", value='`timer`,`check`,`time`', inline=False)
+            sendms.add_field(name="Tool", value='`timer`,`check`,`time``stopwatch``', inline=False)
             sendms.add_field(name="Status", value='`check`,`status`', inline=False)
             await message.channel.send(embed=sendms)
         if message.content.startswith('Cn!say '):
@@ -206,20 +206,20 @@ async def on_message(message):
             now = datetime.datetime.now()
             await message.channel.send(embed=sendms)
         if message.content == prefix + 'time':
-            temp11 = date('on', 9)
+            temp11 = now_date('on', 9)
             sendms = discord.Embed(title='Time', description=temp11, colour=0x7ED6DE)
             await message.channel.send(embed=sendms)
         if message.content.startswith('Cn!stopwatch '):
             arg = message.content[13:]
             if arg == 'start':
                 now = datetime.datetime.utcnow()
-                nowtime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(month('total'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+                nowtime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('total'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
                 with open('stopwatch/{}.txt'.format(message.author.id), 'w', encoding = 'utf_8') as f:
                     f.write(str(nowtime))
                 await message.channel.send('Stopwatch started')
             if arg == 'now':
                 now = datetime.datetime.utcnow()
-                nowtime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(month('total'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+                nowtime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('total'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
                 readms = open('stopwatch/{}.txt'.format(message.author.id), 'r', encoding = 'utf_8')
                 readtime = readms.read()
                 currenttime = float(nowtime) - float(readtime)
@@ -262,15 +262,17 @@ async def on_message(message):
                 f.write(savems)
         if message.content == 'Cn!ping':
             now = datetime.datetime.utcnow()
-            beforesend = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(nowmonth('total'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+            beforesend = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('total'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
             await message.channel.send('Pong!')
             now = datetime.datetime.utcnow()
-            aftersend = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(nowmonth('total'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+            aftersend = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('total'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
             sendms = discord.Embed(title='Ping', description="Ping + system status", colour=0x7ED6DE)
-            temp1 = str(float(aftersend - beforesend)) + 'ms'
+            temp11 = str(float(aftersend - beforesend)) + 'ms'
             sendms.add_field(name="Response Time", value=temp1)
-            temp2 = str(psutil.cpu_percent()) + '%'
+            temp12 = str(psutil.cpu_percent()) + '%'
             sendms.add_field(name='CPU Usage', value=temp2)
+            temp13 = 'Time : ' + now_time('on', 9)
+            sendms.set_footer(text=temp13)
             await message.channel.send(embed=sendms)
         if message.content.startswith('Cn!check '):
             arg = str(message.content[9:])
@@ -283,21 +285,22 @@ async def on_message(message):
                 sendms1 = str(data['players']['online']) + '/' + str(data['players']['max'])
                 sendms.add_field(name='Players', value=str(sendms1), inline=False)
                 sendms.add_field(name='Version', value=str(data['version']), inline=False)
-                now = datetime.datetime.now()
-                sendms.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
+                temp21 = 'Time : ' + now_time('on', 9)
+                sendms.set_footer(text=temp13)
                 await message.channel.send(embed=sendms)
             if data['ip'] == data['port']:
                 sendms = discord.Embed(title="Minecraft Server Check", description="The server not found.", colour=0x7ED6DE)
                 now = datetime.datetime.now()
-                sendms.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
+                temp21 = 'Time : ' + now_time('on', 9)
+                sendms.set_footer(text=temp13)
                 await message.channel.send(embed=sendms)
             if data['online'] == False:
                 sendms = discord.Embed(title="Minecraft Server Check", description="This server is offline...", colour=0x7ED6DE)
                 sendms.add_field(name='Hostname', value=str(data['hostname']), inline=False)
                 sendms.add_field(name='IP Address', value=str(data['ip']), inline=False)
                 sendms.add_field(name='Port', value=str(data['port']), inline=False)
-                now = datetime.datetime.now()
-                sendms.set_footer(text=now.strftime("Time: %Y/%m/%d %H:%M:%S.%f"))
+                temp21 = 'Time : ' + now_time('on', 9)
+                sendms.set_footer(text=temp13)
                 await message.channel.send(embed=sendms)
         if message.content.startswith('Cn!upload '):
             arg = message.content[10:]
