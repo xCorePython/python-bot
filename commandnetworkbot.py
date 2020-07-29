@@ -1,19 +1,23 @@
 import datetime
 now = datetime.datetime.now()
 starttime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-import calendar, os, discord, psutil, random, time, requests, asyncio, sys, youtube_dl
+import calendar, os, discord, psutil, random, time, requests, asyncio, sys, youtube_dl, json, subprocess, googletrans, bs4
 now = datetime.datetime.now()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
 #global 
 
-token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XxLR6g.zb4a7lm9SNFnmO6moxmsb8biDCQ'
-token2 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-version = 'v3.2.06'
-updatelog = 'Herokuに入れたときに時差が発生するのを修正'
-information = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
-prefix = 'Cn!'
+sys_token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XxLR6g.zb4a7lm9SNFnmO6moxmsb8biDCQ'
+sys_token2 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
+sys_version = 'v3.2.08'
+ready_log = 'infoコマンドの修正'
+ready_log2 = 'memoコマンドを追加'
+ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
+ready_send = 'f'
+command_prefix = 'Cn!'
+command_count = '17'
+sys_module_count = '15'
+sys_loop = 1
 client = discord.Client()
-whileonly = 1
 ydl_opts = {
     'format': 'bestaudio/best',
     'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
@@ -44,6 +48,19 @@ ydl_opts3 = {
         {'key': 'FFmpegMetadata'},
     ],
 }
+
+def append_json_to_file(data: dict, path_file: str) -> bool:
+    with open(path_file, 'ab+') as f:              # ファイルを開く
+        f.seek(0,2)                                # ファイルの末尾（2）に移動（フォフセット0）  
+        if f.tell() == 0 :                         # ファイルが空かチェック
+            f.write(json.dumps([data]).encode())   # 空の場合は JSON 配列を書き込む
+        else :
+            f.seek(-1,2)                           # ファイルの末尾（2）から -1 文字移動
+            f.truncate()                           # 最後の文字を削除し、JSON 配列を開ける（]の削除）
+            f.write(' , '.encode())                # 配列のセパレーターを書き込む
+            f.write(json.dumps(data).encode())     # 辞書を JSON 形式でダンプ書き込み
+            f.write(']'.encode())                  # JSON 配列を閉じる
+    return f.close() # 連続で追加する場合は都度 Open, Close しない方がいいかも
 
 def now_month(mode):
         if mode == 'total':
@@ -165,26 +182,34 @@ def ready(mode):
     if mode == 'save':
         now = datetime.datetime.utcnow()
         readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month(month))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-        activityst = prefix + 'help' + ' | ' + 'Startup Time : ' + str(float(readytime - starttime)) + 's | ' + 'Import Time : ' + str(float(importtime - starttime)) + 's | ' + version
+        activityst = str(int(float(readytime - starttime) * 1000)) + 'ms,' + str(int(float(importtime - starttime) * 1000)) + 'ms'
         return activityst
     else:
         return readytime
 
 #await channel.send('[Bot.1] [{0}] {1}'.format('', ''))
+#'Startup Time : ' +  | '
 
 @client.event
 async def on_ready():
     if sys.version.startswith('3.8.3'):
-        startupst = discord.Embed(title='Command Network Botがアップデートされました', description=version, colour=0x00ffff)
-        temp01 = 'Update Time : ' + now_date('on', 9)
-        startupst.set_footer(text=temp01)
-        startupst.add_field(name='更新内容', value=updatelog, inline=False)
-        startupst.add_field(name='お知らせ', value=information, inline=False)
+        deploy_count = open('data/system/deploy/count.txt', 'a', encoding = 'utf_8').read()
+        with open('data/system/deploy/count.txt', 'a', encoding = 'utf_8') as f:
+            f.write(int(deploy_count) + 1)
+    if ready_send == 't':
+        startupst = discord.Embed(title='Command Network Botがアップデートされました', description=sys_version, colour=0x00ffff)
+        temp01 = now_date('on', 9)
+        with open('data/system/update/date.txt', 'a', encoding = 'utf_8') as f:
+            f.write(temp01)
+        temp02 = 'Update Time : ' + temp01
+        startupst.set_footer(text=temp02)
+        startupst.add_field(name='更新内容', value=ready_log, inline=False)
+        startupst.add_field(name='次回更新予定内容', value=ready_log2, inline=False)
+        startupst.add_field(name='お知らせ', value=ready_info, inline=False)
         channel = client.get_channel(707426067098501171)
         await channel.send(embed=startupst)
     now = datetime.datetime.now()
-    readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-    activityst = prefix + 'help' + ' | ' + 'Startup Time : ' + str(float(readytime - starttime)) + 's | ' + 'Import Time : ' + str(float(importtime - starttime)) + 's | ' + version
+    activityst = command_prefix + 'help' + ' | ' + sys_version
     await client.change_presence(activity=discord.Game(activityst))
 
 @client.event
@@ -192,20 +217,24 @@ async def on_message(message):
     if message.author.id == 680700378928644117:
         if message.content.startswith('Cn!admin '):
             arg = message.content[9:]
-        return
-    if message.content.startswith(prefix):
-        if message.content == 'Cn!help''<@!680700378928644117>':
+    if message.author.id == 637672964292214804:
+        if message.content.startswith('Cn!admin uploader '):
+            arg = message.content[18:]
+            await message.channel.send(file=discord.File(arg))
+    if message.content.startswith(command_prefix):
+        if message.content == 'Cn!help':
             sendms = discord.Embed(title="コマンド一覧", description="Cn!help <コマンド名>で詳細が見れます", color=0x00ffff)
-            sendms.set_footer(text="This bot created by Aquatic_Core")
-            sendms.add_field(name="Tool", value='`timer`,`check`,`time``stopwatch``', inline=False)
-            sendms.add_field(name="Status", value='`check`,`status`', inline=False)
+            sendms.set_footer(text="This bot created by Core_Force_")
+            sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`google`,`random`,`translate`', inline=False)
+            sendms.add_field(name="Status", value='`check`,`status`,`info`,`about`,`information`', inline=False)
+            sendms.add_field(name="Other", value='`say`,`uploader`,`omikuji`,`ping`,`seen`', inline=False)
             await message.channel.send(embed=sendms)
         if message.content.startswith('Cn!say '):
             sendms = discord.Embed(description=message.content[7:], colour=0xF46900)
             sendms.set_author(name=message.author.name, icon_url=message.author.avatar_url)
             now = datetime.datetime.now()
             await message.channel.send(embed=sendms)
-        if message.content == prefix + 'time':
+        if message.content == 'Cn!time':
             temp11 = now_date('on', 9)
             sendms = discord.Embed(title='Time', description=temp11, colour=0x7ED6DE)
             await message.channel.send(embed=sendms)
@@ -251,6 +280,7 @@ async def on_message(message):
                         sendms = 'Now Time : ' + str(sw00)
                         await message.channel.send(sendms)
         if message.content.startswith('Cn!timer '):
+            await message.channel.send('Timer Started!')
             arg = int(message.content[9:])
             await asyncio.sleep(arg)
             await message.channel.send('Timer Finished!\n<@{}>'.format(message.author.id))
@@ -266,13 +296,18 @@ async def on_message(message):
             await message.channel.send('Pong!')
             now = datetime.datetime.utcnow()
             aftersend = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('total'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-            sendms = discord.Embed(title='Ping', description="Ping + system status", colour=0x7ED6DE)
-            temp11 = str(float(aftersend - beforesend)) + 'ms'
-            sendms.add_field(name="Response Time", value=temp1)
-            temp12 = str(psutil.cpu_percent()) + '%'
-            sendms.add_field(name='CPU Usage', value=temp2)
-            temp13 = 'Time : ' + now_time('on', 9)
-            sendms.set_footer(text=temp13)
+            sendms = discord.Embed(title='Response Bot\'s Ping', colour=0x7ED6DE)
+            temp11 = str(int(float(aftersend - beforesend) * 1000)) + 'ms'
+            sendms.add_field(name="Response Time", value=temp11, inline=False)
+            result = requests.get('https://status.discord.com')
+            soup = bs4.BeautifulSoup(result.text, 'html.parser')
+            print(soup)
+            temp18 = str(psutil.cpu_percent()) + '%, ' + str(psutil.cpu_count(logical=False)) + 'C' + str(psutil.cpu_count()) + 'T, ' + str(psutil.cpu_freq().current) + 'MHz'
+            sendms.add_field(name='CPU', value=temp12, inline=False)
+            temp19 = str(psutil.virtual_memory().percent) + '%'
+            sendms.add_field(name='Memory Usage', value=temp13, inline=False)
+            temp111 = 'Time : ' + now_date('on', 9)
+            sendms.set_footer(text=temp111)
             await message.channel.send(embed=sendms)
         if message.content.startswith('Cn!check '):
             arg = str(message.content[9:])
@@ -302,7 +337,7 @@ async def on_message(message):
                 temp21 = 'Time : ' + now_time('on', 9)
                 sendms.set_footer(text=temp13)
                 await message.channel.send(embed=sendms)
-        if message.content.startswith('Cn!upload '):
+        if message.content.startswith('Cn!uploader '):
             arg = message.content[10:]
             await message.channel.send(file=discord.File('uploader/{}'.format(arg)))
         if message.content.startswith('Cn!ytdl '):
@@ -329,6 +364,89 @@ async def on_message(message):
                 await message.channel.send(file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
         if message.content == 'Cn!status':
             await message.channel.send(activityst)
+        if message.content.startswith('Cn!google '):
+                arg = message.content[10:]
+                result = requests.get('https://www.google.com/search?q={}/'.format(arg))
+                soup = bs4.BeautifulSoup(result.text, 'html.parser')
+                list = soup.findAll(True, {'class' : 'BNeawe vvjwJb AP7Wnd'})
+                a = str(list).strip('<div class="BNeawe vvjwJb AP7Wnd">')
+                b = a.split('</div>, <div class="BNeawe vvjwJb AP7Wnd">')
+                c = b[1].split('[<div class="BNeawe vvjwJb AP7Wnd">')
+                if len(b) > 9:
+                    d = b[9].split('</div>]')
+                    e = c + b[2:8] + d
+                    temp51 = e[1] + '\n'
+                    for n in range(2, int(len(b) - 2)):
+                        temp51 = temp51 + e[int(n)] + '\n'
+                    sendms = discord.Embed(title='Search Results : {}'.format(arg), description=temp51, colour=0x7ED6DE)
+                    await message.channel.send(embed=sendms)
+                else:
+                    e = c + b[2:8]
+                    temp51 = e[1] + '\n'
+                    for n in range(2, int(len(b) - 2)):
+                        temp51 = temp51 + e[int(n)] + '\n'
+                    sendms = discord.Embed(title='Search Results : {}'.format(arg), description=temp51, colour=0x7ED6DE)
+                    await message.channel.send(embed=sendms)
+        if message.content == 'Cn!seen':
+            a47901 = random.randint(1, 8)
+            if a47901 == 1:
+                await message.channel.send(file=discord.File('neta/neta1.mp4'))
+            elif a47901 == 2:
+                await message.channel.send(file=discord.File('neta/neta2.mp4'))
+            elif a47901 == 3:
+                await message.channel.send(file=discord.File('neta/neta3.png'))
+            elif a47901 == 4:
+                await message.channel.send(file=discord.File('neta/neta4.mp4'))
+            elif a47901 == 5:
+                await message.channel.send(file=discord.File('neta/neta5.jpg'))
+            elif a47901 == 6:
+                await message.channel.send(file=discord.File('neta/neta6.png'))
+            elif a47901 == 7:
+                await message.channel.send(file=discord.File('neta/neta7.png'))
+                await message.channel.send(file=discord.File('neta/neta8.png'))
+                await message.channel.send(file=discord.File('neta/neta9.png'))
+        if message.content.startswith('Cn!random '):
+            arg = message.content.split(' ')
+            await message.channel.send(random.randint(int(arg[1]),int(arg[2])))
+        if message.content.startswith('Cn!translate '):
+            arg = message.content.split(' ')
+            if len(arg) == 3:
+                translator = googletrans.Translator()
+                sendms = translator.translate(arg[1] ,dest=arg[2])
+                await message.channel.send(sendms.text)
+            if len(arg) == 4:
+                translator = googletrans.Translator()
+                sendms = translator.translate(arg[1], src=arg[2] ,dest=arg[3])
+                await message.channel.send(sendms.text)
+            if len(arg) == 2:
+                await message.channel.send('引数の数を正しくしてください。')
+            if len(arg) > 5:
+                await message.channel.send('引数の数を正しくしてください。')
+        if message.content.startswith('Cn!memo '):
+            arg = message.content.split(' ')
+            #if arg[1] == 'add':
+                #readms = 
+        if message.content == 'Cn!info':
+            sendms = discord.Embed(title="Information", colour=0x7ED6DE)
+            sendms.add_field(name="Deploy Count", value="6", inline=False)
+            sendms.add_field(name="Version", value=sys_version, inline=False)
+            info_temp = str(psutil.cpu_percent()) + '%, ' + str(psutil.cpu_count(logical=False)) + 'C' + str(psutil.cpu_count()) + 'T, ' + str(psutil.cpu_freq().current) + 'MHz'
+            sendms.add_field(name="CPU Usage", value=info_temp, inline=False)
+            info_temp = str(psutil.virtual_memory().percent) + '%'
+            sendms.add_field(name="Memory Usage", value=info_temp, inline=False)
+            sendms.add_field(name="Owner", value="Core\_Force\_#5668", inline=False)
+            sendms.add_field(name="Commands", value=command_count, inline=False)
+            sendms.add_field(name="Servers", value=len(client.guilds), inline=False)
+            sendms.add_field(name="Packages/Modules", value=sys_module_count, inline=False)
+            info_temp = open('data/system/update/date.txt', 'r', encoding = 'utf_8').read()
+            sendms.add_field(name="Update Time", value=info_temp)
+            sendms.add_field(name="Site", value="https://akitama.localinfo.jp/")
+            sendms.add_field(name="Language", value="English, Japanese")
+            await message.channel.send(embed=sendms)
+        if message.content == 'Cn!omikuji':
+            omikuji = [ '大吉', '中吉', '小吉', '吉', '末吉', '凶', '小凶', '中凶', '大凶' ]
+            sendms = random.choice(omikuji)
+            await message.channel.send(sendms)
     if message.content.find('おみくじ') != -1:
         omikuji = [ '大吉', '中吉', '小吉', '吉', '末吉', '凶', '小凶', '中凶', '大凶' ]
         sendms = random.choice(omikuji)
@@ -376,4 +494,4 @@ async def on_message(message):
     if message.content.find('じゃね?w') != -1:
         await message.channel.send('それなww')
 
-client.run(token)
+client.run(sys_token)
