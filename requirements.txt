@@ -3,6 +3,6 @@ pip
 requests
 asyncio
 psutil
-discord.py[voice]
-PyNaCl
-youtube-dl
+bs4
+googletrans
+youtube_dl
