@@ -8,8 +8,8 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 
 sys_token = 'NjgwNzAwMzc4OTI4NjQ0MTE3.XxLR6g.zb4a7lm9SNFnmO6moxmsb8biDCQ'
 sys_token2 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v3.2.09'
-ready_log = 'リアクションループを修正'
+sys_version = 'v3.2.10'
+ready_log = 'infoコマンドのバグを修正'
 ready_log2 = 'memoコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
 ready_send = 'f'
@@ -436,9 +436,9 @@ async def on_message(message):
             sendms.add_field(name="Servers", value=len(client.guilds), inline=False)
             sendms.add_field(name="Packages/Modules", value=sys_module_count, inline=False)
             info_temp = open('data/system/update/date.txt', 'r', encoding = 'utf_8').read()
-            sendms.add_field(name="Update Time", value=info_temp)
-            sendms.add_field(name="Site", value="https://akitama.localinfo.jp/")
-            sendms.add_field(name="Language", value="English, Japanese")
+            sendms.add_field(name="Update Time", value=info_temp, inline=False)
+            sendms.add_field(name="Site", value="https://akitama.localinfo.jp/", inline=False)
+            sendms.add_field(name="Language", value="English, Japanese", inline=False)
             await message.channel.send(embed=sendms)
         if message.content == 'Cn!omikuji':
             omikuji = [ '大吉', '中吉', '小吉', '吉', '末吉', '凶', '小凶', '中凶', '大凶' ]
