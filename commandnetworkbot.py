@@ -194,7 +194,7 @@ def ready(mode):
 async def on_ready():
     if sys.version.startswith('3.8.3'):
         deploy_count = open('data/system/deploy/count.txt', 'r', encoding = 'utf_8').read()
-        with open('data/system/deploy/count.txt', 'a', encoding = 'utf_8') as f:
+        with open('data/system/deploy/count.txt', 'w', encoding = 'utf_8') as f:
             f.write(str(int(deploy_count) + 1))
     if ready_send == 't':
         startupst = discord.Embed(title='Command Network Botがアップデートされました', description=sys_version, colour=0x00ffff)
@@ -298,9 +298,6 @@ async def on_message(message):
             sendms = discord.Embed(title='Response Bot\'s Ping', colour=0x7ED6DE)
             temp11 = str(int(float(aftersend - beforesend) * 1000)) + 'ms'
             sendms.add_field(name="Response Time", value=temp11, inline=False)
-            result = requests.get('https://status.discord.com')
-            soup = bs4.BeautifulSoup(result.text, 'html.parser')
-            print(soup)
             temp18 = str(psutil.cpu_percent()) + '%, ' + str(psutil.cpu_count(logical=False)) + 'C' + str(psutil.cpu_count()) + 'T, ' + str(psutil.cpu_freq().current) + 'MHz'
             sendms.add_field(name='CPU', value=temp12, inline=False)
             temp19 = str(psutil.virtual_memory().percent) + '%'
@@ -427,7 +424,8 @@ async def on_message(message):
                 #readms = 
         if message.content == 'Cn!info':
             sendms = discord.Embed(title="Information", colour=0x7ED6DE)
-            sendms.add_field(name="Deploy Count", value="6", inline=False)
+            info_temp = open('data/system/deploy/count.txt', 'r', encoding = 'utf_8').read()
+            sendms.add_field(name="Deploy Count", value=info_temp, inline=False)
             sendms.add_field(name="Version", value=sys_version, inline=False)
             info_temp = str(psutil.cpu_percent()) + '%, ' + str(psutil.cpu_count(logical=False)) + 'C' + str(psutil.cpu_count()) + 'T, ' + str(psutil.cpu_freq().current) + 'MHz'
             sendms.add_field(name="CPU Usage", value=info_temp, inline=False)
