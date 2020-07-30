@@ -193,13 +193,13 @@ def ready(mode):
 @client.event
 async def on_ready():
     if sys.version.startswith('3.8.3'):
-        deploy_count = open('data/system/deploy/count.txt', 'a', encoding = 'utf_8').read()
+        deploy_count = open('data/system/deploy/count.txt', 'r', encoding = 'utf_8').read()
         with open('data/system/deploy/count.txt', 'a', encoding = 'utf_8') as f:
             f.write(int(deploy_count) + 1)
     if ready_send == 't':
         startupst = discord.Embed(title='Command Network Botがアップデートされました', description=sys_version, colour=0x00ffff)
         temp01 = now_date('on', 9)
-        with open('data/system/update/date.txt', 'a', encoding = 'utf_8') as f:
+        with open('data/system/update/date.txt', 'w', encoding = 'utf_8') as f:
             f.write(temp01)
         temp02 = 'Update Time : ' + temp01
         startupst.set_footer(text=temp02)
