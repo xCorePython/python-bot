@@ -8,7 +8,7 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 
 sys_token = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token2 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v3.2.10'
+sys_version = 'v3.2.11'
 ready_log = 'infoコマンドのバグを修正'
 ready_log2 = 'memoコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
@@ -214,7 +214,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author.id == 680700378928644117:
+    if message.author.id == client.user.id:
         return
     if message.author.id == 637672964292214804:
         if message.content.startswith('Cn!admin uploader '):
