@@ -9,8 +9,8 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.01'
-ready_log = 'バージョンの表示方法を変更。va.bb.ccで大規模なアップデートの時はaが増えます。小規模のときはbbが増え、バグなどの修正ではccが増えます。'
+sys_version = 'v4.01.02'
+ready_log = '複数のコマンドのバグを修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
 command_prefix = 'Cn!'
@@ -183,7 +183,10 @@ def ready(mode):
         now = datetime.datetime.utcnow()
         readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month(month))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
         activityst = str(int(float(readytime - starttime) * 1000)) + 'ms,' + str(int(float(importtime - starttime) * 1000)) + 'ms'
+
+    if mode == 'load':
         return activityst
+
     else:
         return readytime
 
@@ -199,7 +202,7 @@ async def on_ready():
         with open('data/system/version.txt', 'w', encoding = 'utf_8') as f:
             f.write(str(sys_version))
     if sys.version.startswith('3.8.3'):
-        deploy_count = open('data/system/deploy/count.txt', 'r', encoding = 'utf_8').read()
+        deploy_count = open('data/system/deploy/count.txt', 'r', g = 'utf_8').read()
         with open('data/system/deploy/count.txt', 'w', encoding = 'utf_8') as f:
             f.write(str(int(deploy_count) + 1))
     if ready_send == 't':
@@ -215,8 +218,9 @@ async def on_ready():
         channel = client.get_channel(707426067098501171)
         await channel.send(embed=startupst)
     now = datetime.datetime.now()
-    activityst = command_prefix + 'help' + ' | ' + sys_version
-    await client.change_presence(activity=discord.Game(activityst))
+    sys_activity = command_prefix + 'help' + ' | ' + sys_version
+    await client.change_presence(activity=discord.Game(sys_activity))
+    ready('save')
 
 @client.event
 async def on_message(message):
@@ -231,7 +235,7 @@ async def on_message(message):
             sendms = discord.Embed(title="コマンド一覧", description="Cn!help <コマンド名>で詳細が見れます", color=0x00ffff)
             sendms.set_footer(text="This bot created by Core_Force_")
             sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`google`,`random`,`translate`', inline=False)
-            sendms.add_field(name="Status", value='`check`,`status`,`info`,`about`,`information`', inline=False)
+            sendms.add_field(name="Status", value='`check`,`info`,`about`,`information`', inline=False)
             sendms.add_field(name="Other", value='`say`,`uploader`,`omikuji`,`ping`,`seen`', inline=False)
             await message.channel.send(embed=sendms)
         if message.content.startswith('Cn!say '):
@@ -276,7 +280,7 @@ async def on_message(message):
                     else:
                         sendms = 'Now Time : ' + str(sw01) + ':' + str(sw00)
                         await message.channel.send(sendms)
-                else:
+                if currenttime < 60:
                     sw00 = float(currenttime)
                     if sw00 < 10:
                         sendms = 'Now Time : ' + str(sw00)
@@ -304,11 +308,15 @@ async def on_message(message):
             sendms = discord.Embed(title='Response Bot\'s Ping', colour=0x7ED6DE)
             temp11 = str(int(float(aftersend - beforesend) * 1000)) + 'ms'
             sendms.add_field(name="Response Time", value=temp11, inline=False)
+            temp12 = ready('load').split(',')
+            sendms.add_field(name="Startup Time", value=temp12[0], inline=False)
+            sendms.add_field(name="Import Time", value=temp12[1], inline=False)
             temp18 = str(psutil.cpu_percent()) + '%, ' + str(psutil.cpu_count(logical=False)) + 'C' + str(psutil.cpu_count()) + 'T, ' + str(psutil.cpu_freq().current) + 'MHz'
-            sendms.add_field(name='CPU', value=temp12, inline=False)
+            sendms.add_field(name='CPU', value=temp18, inline=False)
             temp19 = str(psutil.virtual_memory().percent) + '%'
-            sendms.add_field(name='Memory Usage', value=temp13, inline=False)
+            sendms.add_field(name='Memory Usage', value=temp19, inline=False)
             temp111 = 'Time : ' + now_date('on', 9)
+
             sendms.set_footer(text=temp111)
             await message.channel.send(embed=sendms)
         if message.content.startswith('Cn!check '):
@@ -322,13 +330,13 @@ async def on_message(message):
                 sendms1 = str(data['players']['online']) + '/' + str(data['players']['max'])
                 sendms.add_field(name='Players', value=str(sendms1), inline=False)
                 sendms.add_field(name='Version', value=str(data['version']), inline=False)
-                temp21 = 'Time : ' + now_time('on', 9)
+                temp21 = 'Time : ' + now_date('on', 9)
                 sendms.set_footer(text=temp13)
                 await message.channel.send(embed=sendms)
             if data['ip'] == data['port']:
                 sendms = discord.Embed(title="Minecraft Server Check", description="The server not found.", colour=0x7ED6DE)
                 now = datetime.datetime.now()
-                temp21 = 'Time : ' + now_time('on', 9)
+                temp21 = 'Time : ' + now_date('on', 9)
                 sendms.set_footer(text=temp13)
                 await message.channel.send(embed=sendms)
             if data['online'] == False:
@@ -336,7 +344,7 @@ async def on_message(message):
                 sendms.add_field(name='Hostname', value=str(data['hostname']), inline=False)
                 sendms.add_field(name='IP Address', value=str(data['ip']), inline=False)
                 sendms.add_field(name='Port', value=str(data['port']), inline=False)
-                temp21 = 'Time : ' + now_time('on', 9)
+                temp21 = 'Time : ' + now_date('on', 9)
                 sendms.set_footer(text=temp13)
                 await message.channel.send(embed=sendms)
         if message.content.startswith('Cn!uploader '):
@@ -364,8 +372,6 @@ async def on_message(message):
                 await message.channel.send('Downloading... (128kbps)')
                 info_dict = ydl.extract_info("{}".format(arg[1]), download=True, process=True)
                 await message.channel.send(file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
-        if message.content == 'Cn!status':
-            await message.channel.send(activityst)
         if message.content.startswith('Cn!google '):
                 arg = message.content[10:]
                 result = requests.get('https://www.google.com/search?q={}/'.format(arg))
@@ -416,14 +422,13 @@ async def on_message(message):
                 translator = googletrans.Translator()
                 sendms = translator.translate(arg[1] ,dest=arg[2])
                 await message.channel.send(sendms.text)
-            if len(arg) == 4:
+            if len(arg) > 4:
                 translator = googletrans.Translator()
-                sendms = translator.translate(arg[1], src=arg[2] ,dest=arg[3])
+                sendms = translator.translate(arg[1], src=arg[2] ,dest=arg[3:])
                 await message.channel.send(sendms.text)
             if len(arg) == 2:
                 await message.channel.send('引数の数を正しくしてください。')
-            if len(arg) > 5:
-                await message.channel.send('引数の数を正しくしてください。')
+
         if message.content.startswith('Cn!memo '):
             arg = message.content.split(' ')
             #if arg[1] == 'add':
@@ -443,6 +448,9 @@ async def on_message(message):
             sendms.add_field(name="Packages/Modules", value=sys_module_count, inline=False)
             info_temp = open('data/system/update/date.txt', 'r', encoding = 'utf_8').read()
             sendms.add_field(name="Update Time", value=info_temp, inline=False)
+            info_temp = str(int(now_date('off', 9) - ready('aa')) + 'ms')
+)
+            sendms.add_field(name="Uptime", value=info_temp, inline=False)
             sendms.add_field(name="Site", value="https://akitama.localinfo.jp/", inline=False)
             sendms.add_field(name="Language", value="English, Japanese", inline=False)
             await message.channel.send(embed=sendms)
