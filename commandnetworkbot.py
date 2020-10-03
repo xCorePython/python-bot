@@ -196,7 +196,7 @@ async def on_ready():
     if sys_version_saved != sys_version:
         ready_send = 't'
         with open('data/system/version.txt', 'w', encoding = 'utf_8') as f:
-            f.write(str(sys_version)
+            f.write(str(sys_version))
     if sys.version.startswith('3.8.3'):
         deploy_count = open('data/system/deploy/count.txt', 'r', encoding = 'utf_8').read()
         with open('data/system/deploy/count.txt', 'w', encoding = 'utf_8') as f:
