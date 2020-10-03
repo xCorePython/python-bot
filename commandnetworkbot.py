@@ -8,11 +8,10 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 
 sys_token = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token2 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v3.2.11'
-ready_log = 'infoコマンドのバグを修正'
-ready_log2 = 'memoコマンドを追加'
+sys_version = 'v4.01.01'
+ready_log = 'バージョンの表示方法を変更。va.bb.ccで大規模なアップデートの時はaが増えます。小規模のときはbbが増え、バグなどの修正ではccが増えます。'
+ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
-ready_send = 'f'
 command_prefix = 'Cn!'
 command_count = '17'
 sys_module_count = '15'
@@ -192,6 +191,12 @@ def ready(mode):
 
 @client.event
 async def on_ready():
+    ready_send = 'f'
+    sys_version_saved = open('data/system/version.txt', 'r', encoding = 'utf_8').read()
+    if sys_version_saved != sys_version:
+        ready_send = 't'
+        with open('data/system/version.txt', 'w', encoding = 'utf_8') as f:
+            f.write(str(sys_version)
     if sys.version.startswith('3.8.3'):
         deploy_count = open('data/system/deploy/count.txt', 'r', encoding = 'utf_8').read()
         with open('data/system/deploy/count.txt', 'w', encoding = 'utf_8') as f:
