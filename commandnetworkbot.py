@@ -9,8 +9,8 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.03'
-ready_log = 'infoコマンドにUptimeを追加'
+sys_version = 'v4.01.04'
+ready_log = '複数のコマンドを修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
 command_prefix = 'Cn!'
@@ -194,7 +194,7 @@ def reverse(time):
 def ready(mode):
     if mode == 'save':
         now = datetime.datetime.utcnow()
-        readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month(month))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+        readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('month'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
         activityst = str(int(float(readytime - starttime) * 1000)) + 'ms,' + str(int(float(importtime - starttime) * 1000)) + 'ms'
 
     if mode == 'load':
@@ -344,13 +344,13 @@ async def on_message(message):
                 sendms.add_field(name='Players', value=str(sendms1), inline=False)
                 sendms.add_field(name='Version', value=str(data['version']), inline=False)
                 temp21 = 'Time : ' + now_date('on', 9)
-                sendms.set_footer(text=temp13)
+                sendms.set_footer(text=temp21)
                 await message.channel.send(embed=sendms)
             if data['ip'] == data['port']:
                 sendms = discord.Embed(title="Minecraft Server Check", description="The server not found.", colour=0x7ED6DE)
                 now = datetime.datetime.now()
                 temp21 = 'Time : ' + now_date('on', 9)
-                sendms.set_footer(text=temp13)
+                sendms.set_footer(text=temp21)
                 await message.channel.send(embed=sendms)
             if data['online'] == False:
                 sendms = discord.Embed(title="Minecraft Server Check", description="This server is offline...", colour=0x7ED6DE)
@@ -358,7 +358,7 @@ async def on_message(message):
                 sendms.add_field(name='IP Address', value=str(data['ip']), inline=False)
                 sendms.add_field(name='Port', value=str(data['port']), inline=False)
                 temp21 = 'Time : ' + now_date('on', 9)
-                sendms.set_footer(text=temp13)
+                sendms.set_footer(text=temp21)
                 await message.channel.send(embed=sendms)
         if message.content.startswith('Cn!uploader '):
             arg = message.content[10:]
