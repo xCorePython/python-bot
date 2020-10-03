@@ -178,6 +178,19 @@ def now_date(mode, location):
         a01 = datetime.datetime(year, month, day, hour, now.minute, now.second, int(now.strftime("%f")))
         return a01.strftime("%Y/%m/%d %H:%M:%S.%f")
 
+def reverse(time):
+    if hour < 3600:
+        minute = str(time / 60)
+        second = str(int(time - int(minute * 60)))
+        uptime = minute + ':' + second
+        return uptime
+    else:
+        hour = str(time / 3600)
+        minute = str(time - int(hour * 3600))
+        second = str(int(time - int(hour * 3600) - int(minute * 60)))
+        uptime = hour + ':' + minute + ':' + second
+        return uptime
+
 def ready(mode):
     if mode == 'save':
         now = datetime.datetime.utcnow()
@@ -449,8 +462,8 @@ async def on_message(message):
             info_temp = open('data/system/update/date.txt', 'r', encoding = 'utf_8').read()
             sendms.add_field(name="Update Time", value=info_temp, inline=False)
             info_temp = str(int(now_date('off', 9) - ready('aa')) + 'ms')
-)
-            sendms.add_field(name="Uptime", value=info_temp, inline=False)
+            info_temp2 = str(reverse(info_temp))
+            sendms.add_field(name="Uptime", value=info_temp2, inline=False)
             sendms.add_field(name="Site", value="https://akitama.localinfo.jp/", inline=False)
             sendms.add_field(name="Language", value="English, Japanese", inline=False)
             await message.channel.send(embed=sendms)
