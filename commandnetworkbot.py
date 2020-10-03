@@ -9,8 +9,8 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.02'
-ready_log = '複数のコマンドのバグを修正'
+sys_version = 'v4.01.03'
+ready_log = 'infoコマンドにUptimeを追加'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
 command_prefix = 'Cn!'
@@ -215,7 +215,7 @@ async def on_ready():
         with open('data/system/version.txt', 'w', encoding = 'utf_8') as f:
             f.write(str(sys_version))
     if sys.version.startswith('3.8.3'):
-        deploy_count = open('data/system/deploy/count.txt', 'r', g = 'utf_8').read()
+        deploy_count = open('data/system/deploy/count.txt', 'r', encoding = 'utf_8').read()
         with open('data/system/deploy/count.txt', 'w', encoding = 'utf_8') as f:
             f.write(str(int(deploy_count) + 1))
     if ready_send == 't':
