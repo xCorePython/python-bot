@@ -170,7 +170,7 @@ def now_date(mode, location):
             hour2 = hour / 24
             hour1 = hour - hour2 * 24
             day = day + 1
-            if day > nowmonth('month'):
+            if day > now_month('month'):
                 month = month + 1
                 if month > 12:
                     month = month - 12
