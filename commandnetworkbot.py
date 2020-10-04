@@ -9,7 +9,7 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.11'
+sys_version = 'v4.01.12'
 ready_log = '複数のコマンドを修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
@@ -196,9 +196,9 @@ def savetime():
     readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('month'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
     activityst = str(int(float(readytime - starttime) * 1000)) + 'ms,' + str(int(float(importtime - starttime) * 1000)) + 'ms'
     with open('data/system/readytime.txt', 'w', encoding = 'utf_8') as f:
-        f.write(readytime)
-    with open('data/system/status.txt', 'w', encoding = 'utf_8') as f:
-        f.write(activityst)
+        f.write(str(readytime))
+    with open('data/system/status.txt', 'w', encoding = 'utf_8') as m:
+        m.write(activityst)
 
 #await channel.send('[Bot.1] [{0}] {1}'.format('', ''))
 #'Startup Time : ' +  | '
