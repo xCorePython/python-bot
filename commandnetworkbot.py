@@ -488,7 +488,7 @@ async def on_message(message):
             info_temp = open('data/system/uptime.txt', 'r', encoding = 'utf_8').read()
             print(info_temp)
             info_temp2 = int(float(now_date('off', 9)) - float(info_temp))
-            print(info_temp)
+            print(info_temp2)
             info_temp3 = str(reverse(info_temp))
             sendms.add_field(name="Uptime", value=info_temp3, inline=False)
             sendms.add_field(name="Site", value="https://akitama.localinfo.jp/", inline=False)
