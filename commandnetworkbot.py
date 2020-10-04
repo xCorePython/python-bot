@@ -1,15 +1,15 @@
 import datetime
-now = datetime.datetime.now()
+now = datetime.datetime.utcnow()
 starttime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
 import calendar, os, discord, psutil, random, time, requests, asyncio, sys, youtube_dl, json, subprocess, googletrans, bs4
-now = datetime.datetime.now()
+now = datetime.datetime.utcnow()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
 #global 
 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.10'
+sys_version = 'v4.01.11'
 ready_log = '複数のコマンドを修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
@@ -191,16 +191,14 @@ def reverse(time):
         uptime = hour + ':' + minute + ':' + second
         return uptime
 
-def savetime(time):
-    if time == 'save':
-        now = datetime.datetime.utcnow()
-        readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('month'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-        activityst = str(int(float(readytime - starttime) * 1000)) + 'ms,' + str(int(float(importtime - starttime) * 1000)) + 'ms'
-        print(readytime, activityst)
-    if time == 'load':
-        return activityst
-    else:
-        return readytime
+def savetime():
+    now = datetime.datetime.utcnow()
+    readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('month'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+    activityst = str(int(float(readytime - starttime) * 1000)) + 'ms,' + str(int(float(importtime - starttime) * 1000)) + 'ms'
+    with open('data/system/readytime.txt', 'w', encoding = 'utf_8') as f:
+        f.write(readytime)
+    with open('data/system/status.txt', 'w', encoding = 'utf_8') as f:
+        f.write(activityst)
 
 #await channel.send('[Bot.1] [{0}] {1}'.format('', ''))
 #'Startup Time : ' +  | '
@@ -232,7 +230,7 @@ async def on_ready():
     now = datetime.datetime.now()
     sys_activity = command_prefix + 'help' + ' | ' + sys_version
     await client.change_presence(activity=discord.Game(sys_activity))
-    savetime('save')
+    savetime()
 
 @client.event
 async def on_message(message):
@@ -321,7 +319,7 @@ async def on_message(message):
             sendms = discord.Embed(title='Response Bot\'s Ping', colour=0x7ED6DE)
             temp11 = str(int(float(aftersend - beforesend) * 1000)) + 'ms'
             sendms.add_field(name="Response Time", value=temp11, inline=False)
-            temp12 = savetime('load')
+            temp12 = open('data/system/status.txt', 'r', encoding = 'utf_8').read()
             temp13 = temp12.split(',')
             sendms.add_field(name="Startup Time", value=temp13[0], inline=False)
             sendms.add_field(name="Import Time", value=temp13[1], inline=False)
@@ -461,8 +459,9 @@ async def on_message(message):
             sendms.add_field(name="Packages/Modules", value=sys_module_count, inline=False)
             info_temp = open('data/system/update/date.txt', 'r', encoding = 'utf_8').read()
             sendms.add_field(name="Update Time", value=info_temp, inline=False)
-            info_temp = int(int(now_date('off', 9)) - int(savetime('aa')))
-            info_temp2 = str(reverse(info_temp))
+            info_temp = open('data/system/readytime.txt', 'r', encoding = 'utf_8').read()
+            info_temp2 = int(int(now_date('off', 0)) - int(info_temp))
+            info_temp3 = str(reverse(info_temp))
             sendms.add_field(name="Uptime", value=info_temp2, inline=False)
             sendms.add_field(name="Site", value="https://akitama.localinfo.jp/", inline=False)
             sendms.add_field(name="Language", value="English, Japanese", inline=False)
