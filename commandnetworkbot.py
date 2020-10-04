@@ -9,7 +9,7 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.15'
+sys_version = 'v4.01.16'
 ready_log = '複数のコマンドを修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
@@ -178,7 +178,8 @@ def now_date(mode, location):
         a01 = datetime.datetime(year, month, day, hour, now.minute, now.second, int(now.strftime("%f")))
         return a01.strftime("%Y/%m/%d %H:%M:%S.%f")
 
-def reverse(time):
+def reverse(data):
+    time = int(data)
     if time < 3600:
         minute = str(int(time / 60))
         second = str(int(time - int(minute * 60)))
