@@ -9,7 +9,7 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.23'
+sys_version = 'v4.01.24'
 ready_log = 'デバッグのためのアップデート'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
@@ -180,43 +180,36 @@ def now_date(mode, location):
 
 def reverse(data):
     time = int(float(data))
-    if time < 3600:
-        minute = int(time / 60)
-        print(minute)
-        print(1)
-        second = int(time - minute * 60)
-        print(second)
-        print(2)
-        if second < 10:
-            uptime = str(minute) + ':0' + str(second)
-            return uptime
-        else:
-            uptime = str(minute) + ':' + str(second)
-            return uptime
-    else:
-        hour = int(time / 3600)
-        print(hour)
-        print(3)
-        minute = int(int(time - hour * 3600) / 60)
-        print(minute)
-        print(4)
-        second = int(time - hour * 3600 - minute * 60)
-        print(second)
-        print(5)
-        if minute < 10:
+    if time > 60:
+        if time < 3600:
+            minute = int(time / 60)
+            second = int(time - minute * 60)
             if second < 10:
-                uptime = str(hour) + ':0' + str(minute) + ':0' + str(second)
+                uptime = str(minute) + ':0' + str(second)
                 return uptime
             else:
-                uptime = str(hour) + ':0' + str(minute) + ':' + str(second)
+                uptime = str(minute) + ':' + str(second)
                 return uptime
         else:
-            if second < 10:
-                uptime = str(hour) + ':' + str(minute) + ':0' + str(second)
-                return uptime
+            hour = int(time / 3600)
+            minute = int(int(time - hour * 3600) / 60)
+            second = int(time - hour * 3600 - minute * 60)
+            if minute < 10:
+                if second < 10:
+                    uptime = str(hour) + ':0' + str(minute) + ':0' + str(second)
+                    return uptime
+                else:
+                    uptime = str(hour) + ':0' + str(minute) + ':' + str(second)
+                    return uptime
             else:
-                uptime = str(hour) + ':' + str(minute) + ':' + str(second)
-                return uptime
+                if second < 10:
+                    uptime = str(hour) + ':' + str(minute) + ':0' + str(second)
+                    return uptime
+                else:
+                    uptime = str(hour) + ':' + str(minute) + ':' + str(second)
+                    return uptime
+      else:
+        uptime = '0:' + str(time)
 
 def savetime():
     now = datetime.datetime.utcnow()
@@ -486,9 +479,7 @@ async def on_message(message):
             info_temp = open('data/system/update/date.txt', 'r', encoding = 'utf_8').read()
             sendms.add_field(name="Update Time", value=info_temp, inline=False)
             info_temp = open('data/system/uptime.txt', 'r', encoding = 'utf_8').read()
-            print(info_temp)
             info_temp2 = int(float(now_date('off', 9)) - float(info_temp))
-            print(info_temp2)
             info_temp3 = str(reverse(info_temp))
             sendms.add_field(name="Uptime", value=info_temp3, inline=False)
             sendms.add_field(name="Site", value="https://akitama.localinfo.jp/", inline=False)
