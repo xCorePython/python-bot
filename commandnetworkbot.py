@@ -440,7 +440,7 @@ async def on_message(message):
                 sendms = translator.translate(arg[1], src=arg[2] ,dest=arg[3:])
                 await message.channel.send(sendms.text)
             if len(arg) == 2:
-                await message.channel.send('引数の数を正しくしてください。)
+                await message.channel.send('引数の数を正しくしてください。')
         if message.content.startswith('Cn!memo '):
             arg = message.content.split(' ')
             #if arg[1] == 'add':
