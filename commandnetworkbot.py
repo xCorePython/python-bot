@@ -9,7 +9,7 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.06'
+sys_version = 'v4.01.07'
 ready_log = '複数のコマンドを修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
@@ -192,15 +192,12 @@ def reverse(time):
         return uptime
 
 def savetime(time):
-
     if mode == 'save':
         now = datetime.datetime.utcnow()
         readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('month'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
         activityst = str(int(float(readytime - starttime) * 1000)) + 'ms,' + str(int(float(importtime - starttime) * 1000)) + 'ms'
-
     if mode == 'load':
         return activityst
-
     else:
         return readytime
 
@@ -285,15 +282,16 @@ async def on_message(message):
                     else:
                         sendms = 'Now Time : ' + str(sw01) + ':' + str(sw00)
                         await message.channel.send(sendms)
-                if currenttime > 60:
-                    sw01 = int(currenttime / 60)
-                    sw00 = float(currenttime - 60 * sw01)
-                    if sw00 < 10:
-                        sendms = 'Now Time : ' + str(sw01) + ':0' + str(sw00)
-                        await message.channel.send(sendms)
-                    else:
-                        sendms = 'Now Time : ' + str(sw01) + ':' + str(sw00)
-                        await message.channel.send(sendms)
+                if currenttime < 3600:
+                    if currenttime > 60:
+                        sw01 = int(currenttime / 60)
+                        sw00 = float(currenttime - 60 * sw01)
+                        if sw00 < 10:
+                            sendms = 'Now Time : ' + str(sw01) + ':0' + str(sw00)
+                            await message.channel.send(sendms)
+                        else:
+                            sendms = 'Now Time : ' + str(sw01) + ':' + str(sw00)
+                            await message.channel.send(sendms)
                 if currenttime < 60:
                     sw00 = float(currenttime)
                     if sw00 < 10:
@@ -442,8 +440,7 @@ async def on_message(message):
                 sendms = translator.translate(arg[1], src=arg[2] ,dest=arg[3:])
                 await message.channel.send(sendms.text)
             if len(arg) == 2:
-                await message.channel.send('引数の数を正しくしてください。')
-
+                await message.channel.send('引数の数を正しくしてください。)
         if message.content.startswith('Cn!memo '):
             arg = message.content.split(' ')
             #if arg[1] == 'add':
