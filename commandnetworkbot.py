@@ -457,7 +457,7 @@ async def on_message(message):
             info_temp = open('data/system/update/date.txt', 'r', encoding = 'utf_8').read()
             sendms.add_field(name="Update Time", value=info_temp, inline=False)
             info_temp = open('data/system/readytime.txt', 'r', encoding = 'utf_8').read()
-            info_temp2 = int(float(now_date('off'), 0)) - float(info_temp)))
+            info_temp2 = int(float(now_date('off', 0)) - float(info_temp))
             info_temp3 = str(reverse(info_temp))
             sendms.add_field(name="Uptime", value=info_temp2, inline=False)
             sendms.add_field(name="Site", value="https://akitama.localinfo.jp/", inline=False)
