@@ -197,7 +197,7 @@ def reverse(data):
         hour = int(time / 3600)
         print(hour)
         print(3)
-        minute = int(time - hour * 3600)
+        minute = int(int(time - hour * 3600) / 60)
         print(minute)
         print(4)
         second = int(time - hour * 3600 - minute * 60)
@@ -300,7 +300,7 @@ async def on_message(message):
                 currenttime = float(nowtime) - float(readtime)
                 if currenttime > 3600:
                     sw02 = int(currenttime / 3600)
-                    sw01 = int(currenttime - 3600 * sw02)
+                    sw01 = int(int(currenttime - 3600 * sw02) / 60)
                     sw00 = float(currenttime - 60 * sw01)
                     if sw00 < 10:
                         sendms = 'Now Time : ' + str(sw02) + str(sw01) + ':0' + str(sw00)
@@ -321,10 +321,10 @@ async def on_message(message):
                 if currenttime < 60:
                     sw00 = float(currenttime)
                     if sw00 < 10:
-                        sendms = 'Now Time : ' + str(sw00)
+                        sendms = 'Now Time : 0:0' + str(sw00)
                         await message.channel.send(sendms)
                     else:
-                        sendms = 'Now Time : ' + str(sw00)
+                        sendms = 'Now Time : 0:' + str(sw00)
                         await message.channel.send(sendms)
         if message.content.startswith('Cn!timer '):
             await message.channel.send('Timer Started!')
@@ -486,7 +486,9 @@ async def on_message(message):
             info_temp = open('data/system/update/date.txt', 'r', encoding = 'utf_8').read()
             sendms.add_field(name="Update Time", value=info_temp, inline=False)
             info_temp = open('data/system/uptime.txt', 'r', encoding = 'utf_8').read()
+            print(info_temp)
             info_temp2 = int(float(now_date('off', 9)) - float(info_temp))
+            print(info_temp)
             info_temp3 = str(reverse(info_temp))
             sendms.add_field(name="Uptime", value=info_temp3, inline=False)
             sendms.add_field(name="Site", value="https://akitama.localinfo.jp/", inline=False)
