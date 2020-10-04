@@ -180,6 +180,7 @@ def now_date(mode, location):
 
 def reverse(data):
     time = int(float(data))
+    print(data, ',', time)
     if time > 60:
         if time < 3600:
             minute = int(time / 60)
@@ -210,6 +211,7 @@ def reverse(data):
                     return uptime
     else:
         uptime = '0:' + str(time)
+        return uptime
 
 def savetime():
     now = datetime.datetime.utcnow()
