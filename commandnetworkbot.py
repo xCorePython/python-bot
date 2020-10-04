@@ -9,8 +9,8 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.22'
-ready_log = '複数のコマンドを修正'
+sys_version = 'v4.01.23'
+ready_log = 'デバッグのためのアップデート'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
 command_prefix = 'Cn!'
@@ -182,7 +182,11 @@ def reverse(data):
     time = int(float(data))
     if time < 3600:
         minute = int(time / 60)
+        print(minute)
+        print(1)
         second = int(time - minute * 60)
+        print(second)
+        print(2)
         if second < 10:
             uptime = str(minute) + ':0' + str(second)
             return uptime
@@ -191,8 +195,14 @@ def reverse(data):
             return uptime
     else:
         hour = int(time / 3600)
+        print(hour)
+        print(3)
         minute = int(time - hour * 3600)
+        print(minute)
+        print(4)
         second = int(time - hour * 3600 - minute * 60)
+        print(second)
+        print(5)
         if minute < 10:
             if second < 10:
                 uptime = str(hour) + ':0' + str(minute) + ':0' + str(second)
