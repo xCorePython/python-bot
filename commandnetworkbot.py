@@ -217,7 +217,7 @@ def savetime():
     with open('data/system/status.txt', 'w', encoding = 'utf_8') as m:
         m.write(activityst)
     with open('data/system/uptime.txt', 'w', encoding = 'utf_8') as o:
-        o.write(str(now_date('off', 9))
+        o.write(str(now_date('off', 9)))
 
 #await channel.send('[Bot.1] [{0}] {1}'.format('', ''))
 #'Startup Time : ' +  | '
