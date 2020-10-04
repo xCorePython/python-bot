@@ -208,7 +208,7 @@ def reverse(data):
                 else:
                     uptime = str(hour) + ':' + str(minute) + ':' + str(second)
                     return uptime
-      else:
+    else:
         uptime = '0:' + str(time)
 
 def savetime():
