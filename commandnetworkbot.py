@@ -9,7 +9,7 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.05'
+sys_version = 'v4.01.06'
 ready_log = '複数のコマンドを修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
@@ -191,7 +191,8 @@ def reverse(time):
         uptime = hour + ':' + minute + ':' + second
         return uptime
 
-def savedata(mode):
+def savetime(time):
+
     if mode == 'save':
         now = datetime.datetime.utcnow()
         readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('month'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
@@ -233,7 +234,7 @@ async def on_ready():
     now = datetime.datetime.now()
     sys_activity = command_prefix + 'help' + ' | ' + sys_version
     await client.change_presence(activity=discord.Game(sys_activity))
-    savedata('save')
+    savetime('save')
 
 @client.event
 async def on_message(message):
@@ -321,7 +322,7 @@ async def on_message(message):
             sendms = discord.Embed(title='Response Bot\'s Ping', colour=0x7ED6DE)
             temp11 = str(int(float(aftersend - beforesend) * 1000)) + 'ms'
             sendms.add_field(name="Response Time", value=temp11, inline=False)
-            temp12 = savedata('load')
+            temp12 = savetime('load')
             temp13 = temp12.split(',')
             sendms.add_field(name="Startup Time", value=temp13[0], inline=False)
             sendms.add_field(name="Import Time", value=temp13[1], inline=False)
@@ -462,7 +463,7 @@ async def on_message(message):
             sendms.add_field(name="Packages/Modules", value=sys_module_count, inline=False)
             info_temp = open('data/system/update/date.txt', 'r', encoding = 'utf_8').read()
             sendms.add_field(name="Update Time", value=info_temp, inline=False)
-            info_temp = str(int(now_date('off', 9) - savedata('aa')) + 'ms')
+            info_temp = int(now_date('off', 9) - savetime('aa'))
             info_temp2 = str(reverse(info_temp))
             sendms.add_field(name="Uptime", value=info_temp2, inline=False)
             sendms.add_field(name="Site", value="https://akitama.localinfo.jp/", inline=False)
