@@ -9,7 +9,7 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.20'
+sys_version = 'v4.01.21'
 ready_log = '複数のコマンドを修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
@@ -188,6 +188,7 @@ def reverse(data):
             return uptime
         else:
             uptime = str(minute) + ':' + str(second)
+            return uptime
     else:
         hour = int(time / 3600)
         minute = int(time - hour * 3600)
@@ -475,7 +476,7 @@ async def on_message(message):
             info_temp = open('data/system/readytime.txt', 'r', encoding = 'utf_8').read()
             info_temp2 = int(float(now_date('off', 0)) - float(info_temp))
             info_temp3 = str(reverse(info_temp))
-            sendms.add_field(name="Uptime", value=info_temp2, inline=False)
+            sendms.add_field(name="Uptime", value=info_temp3, inline=False)
             sendms.add_field(name="Site", value="https://akitama.localinfo.jp/", inline=False)
             sendms.add_field(name="Language", value="English, Japanese", inline=False)
             await message.channel.send(embed=sendms)
