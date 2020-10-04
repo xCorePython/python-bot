@@ -9,7 +9,7 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.18'
+sys_version = 'v4.01.19
 ready_log = '複数のコマンドを修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
@@ -181,17 +181,17 @@ def now_date(mode, location):
 def reverse(data):
     time = int(float(data))
     if time < 3600:
-        minute = str(int(float(time / 60)))
-        second = str(int(float(time - minute * 60)))
+        minute = str(int(time / 60))
+        second = str(int(time - minute * 60))
         if second < 10:
             uptime = minute + ':0' + second
             return uptime
         else:
             uptime = minute + ':' + second
     else:
-        hour = str(int(float(time / 3600)))
-        minute = str(int(float(time - hour * 3600)))
-        second = str(int(float(time - hour * 3600 - minute * 60)))
+        hour = str(int(time / 3600))
+        minute = str(int(time - hour * 3600))
+        second = str(int(time - hour * 3600 - minute * 60))
         if minute < 10:
             if second < 10:
                 uptime = hour + ':0' + minute + ':0' + second
