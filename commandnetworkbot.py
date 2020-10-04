@@ -9,7 +9,7 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.12'
+sys_version = 'v4.01.13'
 ready_log = '複数のコマンドを修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
@@ -64,7 +64,7 @@ def append_json_to_file(data: dict, path_file: str) -> bool:
 
 def now_month(mode):
         if mode == 'total':
-            now = datetime.datetime.now()
+            now = datetime.datetime.utcnow()
             if now.month == 1:
                 a01 = 0
                 for n in range(1):
@@ -150,7 +150,7 @@ def now_month(mode):
                 a01 = a01 + now.day
                 return a01
         if mode == 'month':
-            now = datetime.datetime.now()
+            now = datetime.datetime.utcnow()
             nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(now.month))))
             a01 = int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
             return a01
@@ -193,7 +193,7 @@ def reverse(time):
 
 def savetime():
     now = datetime.datetime.utcnow()
-    readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('month'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+    readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
     activityst = str(int(float(readytime - starttime) * 1000)) + 'ms,' + str(int(float(importtime - starttime) * 1000)) + 'ms'
     with open('data/system/readytime.txt', 'w', encoding = 'utf_8') as f:
         f.write(str(readytime))
@@ -227,7 +227,6 @@ async def on_ready():
         startupst.add_field(name='お知らせ', value=ready_info, inline=False)
         channel = client.get_channel(707426067098501171)
         await channel.send(embed=startupst)
-    now = datetime.datetime.now()
     sys_activity = command_prefix + 'help' + ' | ' + sys_version
     await client.change_presence(activity=discord.Game(sys_activity))
     savetime()
@@ -251,7 +250,6 @@ async def on_message(message):
         if message.content.startswith('Cn!say '):
             sendms = discord.Embed(description=message.content[7:], colour=0xF46900)
             sendms.set_author(name=message.author.name, icon_url=message.author.avatar_url)
-            now = datetime.datetime.now()
             await message.channel.send(embed=sendms)
         if message.content == 'Cn!time':
             temp11 = now_date('on', 9)
@@ -347,7 +345,6 @@ async def on_message(message):
                 await message.channel.send(embed=sendms)
             if data['ip'] == data['port']:
                 sendms = discord.Embed(title="Minecraft Server Check", description="The server not found.", colour=0x7ED6DE)
-                now = datetime.datetime.now()
                 temp21 = 'Time : ' + now_date('on', 9)
                 sendms.set_footer(text=temp21)
                 await message.channel.send(embed=sendms)
