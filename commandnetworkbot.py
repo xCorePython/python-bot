@@ -9,7 +9,7 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.21'
+sys_version = 'v4.01.22'
 ready_log = '複数のコマンドを修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
@@ -216,6 +216,8 @@ def savetime():
         f.write(str(readytime))
     with open('data/system/status.txt', 'w', encoding = 'utf_8') as m:
         m.write(activityst)
+    with open('data/system/uptime.txt', 'w', encoding = 'utf_8') as o:
+        o.write(str(now_date('off', 9))
 
 #await channel.send('[Bot.1] [{0}] {1}'.format('', ''))
 #'Startup Time : ' +  | '
@@ -473,8 +475,8 @@ async def on_message(message):
             sendms.add_field(name="Packages/Modules", value=sys_module_count, inline=False)
             info_temp = open('data/system/update/date.txt', 'r', encoding = 'utf_8').read()
             sendms.add_field(name="Update Time", value=info_temp, inline=False)
-            info_temp = open('data/system/readytime.txt', 'r', encoding = 'utf_8').read()
-            info_temp2 = int(float(now_date('off', 0)) - float(info_temp))
+            info_temp = open('data/system/uptime.txt', 'r', encoding = 'utf_8').read()
+            info_temp2 = int(float(now_date('off', 9)) - float(info_temp))
             info_temp3 = str(reverse(info_temp))
             sendms.add_field(name="Uptime", value=info_temp3, inline=False)
             sendms.add_field(name="Site", value="https://akitama.localinfo.jp/", inline=False)
