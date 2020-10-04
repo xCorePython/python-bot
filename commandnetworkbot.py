@@ -179,7 +179,7 @@ def now_date(mode, location):
         return a01.strftime("%Y/%m/%d %H:%M:%S.%f")
 
 def reverse(data):
-    time = int(data)
+    time = float(data)
     if time < 3600:
         minute = str(int(time / 60))
         second = str(int(time - int(minute * 60)))
