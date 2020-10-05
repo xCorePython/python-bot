@@ -9,7 +9,7 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.24'
+sys_version = 'v4.01.25'
 ready_log = 'デバッグのためのアップデート'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
@@ -482,7 +482,7 @@ async def on_message(message):
             sendms.add_field(name="Update Time", value=info_temp, inline=False)
             info_temp = open('data/system/uptime.txt', 'r', encoding = 'utf_8').read()
             info_temp2 = int(float(now_date('off', 9)) - float(info_temp))
-            info_temp3 = str(reverse(info_temp))
+            info_temp3 = str(reverse(info_temp2))
             sendms.add_field(name="Uptime", value=info_temp3, inline=False)
             sendms.add_field(name="Site", value="https://akitama.localinfo.jp/", inline=False)
             sendms.add_field(name="Language", value="English, Japanese", inline=False)
