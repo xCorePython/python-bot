@@ -21,6 +21,8 @@ client = discord.Client()
 ydl_opts = {
     'format': 'bestaudio/best',
     'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
+    'ignoreerrors': True,
+    'noplaylist': True,
     'postprocessors': [
         {'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
