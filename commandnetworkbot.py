@@ -9,8 +9,8 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.25'
-ready_log = 'デバッグのためのアップデート'
+sys_version = 'v4.01.26'
+ready_log = 'バグを修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
 command_prefix = 'Cn!'
@@ -33,6 +33,8 @@ ydl_opts = {
 ydl_opts2 = {
     'format': 'bestaudio/best',
     'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
+    'ignoreerrors': True,
+    'noplaylist': True,
     'postprocessors': [
         {'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
@@ -43,6 +45,8 @@ ydl_opts2 = {
 ydl_opts3 = {
     'format': 'bestaudio/best',
     'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
+    'ignoreerrors': True,
+    'noplaylist': True,
     'postprocessors': [
         {'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
@@ -231,6 +235,7 @@ def savetime():
 
 @client.event
 async def on_ready():
+    await client.change_presence(activity=discord.Game('Bot Starting... Please wait | {}'.format(sys_version)))
     ready_send = 'f'
     sys_version_saved = open('data/system/version.txt', 'r', encoding = 'utf_8').read()
     if sys_version_saved != sys_version:
@@ -352,7 +357,6 @@ async def on_message(message):
             temp19 = str(psutil.virtual_memory().percent) + '%'
             sendms.add_field(name='Memory Usage', value=temp19, inline=False)
             temp111 = 'Time : ' + now_date('on', 9)
-
             sendms.set_footer(text=temp111)
             await message.channel.send(embed=sendms)
         if message.content.startswith('Cn!check '):
