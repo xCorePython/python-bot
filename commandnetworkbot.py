@@ -9,7 +9,7 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.01.26'
+sys_version = 'v4.01.27'
 ready_log = 'バグを修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
@@ -38,35 +38,10 @@ ydl_opts2 = {
     'postprocessors': [
         {'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
-         'preferredquality': '256'},
-        {'key': 'FFmpegMetadata'},
-    ],
-}
-ydl_opts3 = {
-    'format': 'bestaudio/best',
-    'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
-    'ignoreerrors': True,
-    'noplaylist': True,
-    'postprocessors': [
-        {'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
          'preferredquality': '128'},
         {'key': 'FFmpegMetadata'},
     ],
 }
-
-def append_json_to_file(data: dict, path_file: str) -> bool:
-    with open(path_file, 'ab+') as f:              # ファイルを開く
-        f.seek(0,2)                                # ファイルの末尾（2）に移動（フォフセット0）  
-        if f.tell() == 0 :                         # ファイルが空かチェック
-            f.write(json.dumps([data]).encode())   # 空の場合は JSON 配列を書き込む
-        else :
-            f.seek(-1,2)                           # ファイルの末尾（2）から -1 文字移動
-            f.truncate()                           # 最後の文字を削除し、JSON 配列を開ける（]の削除）
-            f.write(' , '.encode())                # 配列のセパレーターを書き込む
-            f.write(json.dumps(data).encode())     # 辞書を JSON 形式でダンプ書き込み
-            f.write(']'.encode())                  # JSON 配列を閉じる
-    return f.close() # 連続で追加する場合は都度 Open, Close しない方がいいかも
 
 def now_month(mode):
         if mode == 'total':
@@ -78,79 +53,9 @@ def now_month(mode):
                     a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
                 a01 = a01 + now.day
                 return a01
-            if now.month == 2:
+            if now.month > 2:
                 a01 = 0
-                for n in range(1, 2):
-                    nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
-                    a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
-                a01 = a01 + now.day
-                return a01
-            if now.month == 3:
-                a01 = 0
-                for n in range(1, 3):
-                    nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
-                    a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
-                a01 = a01 + now.day
-                return a01
-            if now.month == 4:
-                a01 = 0
-                for n in range(1, 4):
-                    nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
-                    a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
-                a01 = a01 + now.day
-                return a01
-            if now.month == 5:
-                a01 = 0
-                for n in range(1, 5):
-                    nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
-                    a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
-                a01 = a01 + now.day
-                return a01
-            if now.month == 6:
-                a01 = 0
-                for n in range(1, 6):
-                    nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
-                    a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
-                a01 = a01 + now.day
-                return a01
-            if now.month == 7:
-                a01 = 0
-                for n in range(1, 7):
-                    nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
-                    a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
-                a01 = a01 + now.day
-                return a01
-            if now.month == 8:
-                a01 = 0
-                for n in range(1, 8):
-                    nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
-                    a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
-                    a01 = a01 + now.day
-                return a01
-            if now.month == 9:
-                a01 = 0
-                for n in range(1, 9):
-                    nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
-                    a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
-                a01 = a01 + now.day
-                return a01
-            if now.month == 10:
-                a01 = 0
-                for n in range(1, 10):
-                    nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
-                    a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
-                a01 = a01 + now.day
-                return a01
-            if now.month == 11:
-                a01 = 0
-                for n in range(1, 11):
-                    nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
-                    a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
-                a01 = a01 + now.day
-                return a01
-            if now.month == 12:
-                a01 = 0
-                for n in range(1, 12):
+                for n in range(1, now.month):
                     nowcalendar = str(calendar.month(int('{}'.format(now.year)), int('{}'.format(n))))
                     a01 = a01 + int(nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
                 a01 = a01 + now.day
@@ -186,7 +91,6 @@ def now_date(mode, location):
 
 def reverse(data):
     time = int(float(data))
-    print(data, ',', time)
     if time > 60:
         if time < 3600:
             minute = int(time / 60)
@@ -219,62 +123,63 @@ def reverse(data):
         uptime = '0:' + str(time)
         return uptime
 
-def savetime():
-    now = datetime.datetime.utcnow()
-    readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-    activityst = str(int(float(readytime - starttime) * 1000)) + 'ms,' + str(int(float(importtime - starttime) * 1000)) + 'ms'
-    with open('data/system/readytime.txt', 'w', encoding = 'utf_8') as f:
-        f.write(str(readytime))
-    with open('data/system/status.txt', 'w', encoding = 'utf_8') as m:
-        m.write(activityst)
-    with open('data/system/uptime.txt', 'w', encoding = 'utf_8') as o:
-        o.write(str(now_date('off', 9)))
+async def log(level, info):
+	await channel.send('[{0}] {1}'.format(level, info))
 
-#await channel.send('[Bot.1] [{0}] {1}'.format('', ''))
-#'Startup Time : ' +  | '
+async def message(channelid):
+    messages = await client.get_channel(channelid).history(limit=1).flatten()
+    for message in messages:
+    	return message.content
+
+async def send(channelid, content, mode):
+	if mode == 9:
+		await client.get_channel(channelid).send(embed=content)
+	else:
+		await client.get_channel(channelid).send(content)
+
+async def status(content):
+	await client.change_presence(activity=discord.Game(content))
 
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Game('Bot Starting... Please wait | {}'.format(sys_version)))
+    data_version = await message(768764714271506452)
     ready_send = 'f'
-    sys_version_saved = open('data/system/version.txt', 'r', encoding = 'utf_8').read()
-    if sys_version_saved != sys_version:
+    if data_version != sys_version:
         ready_send = 't'
-        with open('data/system/version.txt', 'w', encoding = 'utf_8') as f:
-            f.write(str(sys_version))
-    if sys.version.startswith('3.8.3'):
-        deploy_count = open('data/system/deploy/count.txt', 'r', encoding = 'utf_8').read()
-        with open('data/system/deploy/count.txt', 'w', encoding = 'utf_8') as f:
-            f.write(str(int(deploy_count) + 1))
+        await send(768764714271506452, sys_version, 2)
     if ready_send == 't':
         startupst = discord.Embed(title='Command Network Botがアップデートされました', description=sys_version, colour=0x00ffff)
         temp01 = now_date('on', 9)
-        with open('data/system/update/date.txt', 'w', encoding = 'utf_8') as f:
-            f.write(temp01)
+        await send(770904260715347988, temp01, 2)
         temp02 = 'Update Time : ' + temp01
         startupst.set_footer(text=temp02)
         startupst.add_field(name='更新内容', value=ready_log, inline=False)
         startupst.add_field(name='次回更新予定内容', value=ready_log2, inline=False)
         startupst.add_field(name='お知らせ', value=ready_info, inline=False)
-        channel = client.get_channel(707426067098501171)
-        await channel.send(embed=startupst)
+        await send(707426067098501171, startupst, 9)
     sys_activity = command_prefix + 'help' + ' | ' + sys_version
-    await client.change_presence(activity=discord.Game(sys_activity))
-    savetime()
+    await status(sys_activity)
+    now = datetime.datetime.utcnow()
+    readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
+    activityst = str(int(float(readytime - starttime) * 1000)) + 'ms,' + str(int(float(importtime - starttime) * 1000)) + 'ms'
+    await send(770901834558603284, str(now_date('off', 9)), 2)
+    await send(770902094852390913, str(readytime), 2)
+    await send(770902347667996672, str(activityst), 2)
 
 @client.event
 async def on_message(message):
-    if message.author.id == client.user.id:
-        return
     if message.author.id == 637672964292214804:
         if message.content.startswith('Cn!admin uploader '):
             arg = message.content[18:]
             await message.channel.send(file=discord.File(arg))
+    if message.author.id == client.user.id:
+    	return
     if message.content.startswith(command_prefix):
         if message.content == 'Cn!help':
             sendms = discord.Embed(title="コマンド一覧", description="Cn!help <コマンド名>で詳細が見れます", color=0x00ffff)
             sendms.set_footer(text="This bot created by Core_Force_")
-            sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`google`,`random`,`translate`', inline=False)
+            sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`search`,`random`,`translate`', inline=False)
             sendms.add_field(name="Status", value='`check`,`info`,`about`,`information`', inline=False)
             sendms.add_field(name="Other", value='`say`,`uploader`,`omikuji`,`ping`,`seen`', inline=False)
             await message.channel.send(embed=sendms)
@@ -335,17 +240,15 @@ async def on_message(message):
             await message.channel.send('Timer Finished!\n<@{}>'.format(message.author.id))
         if message.content.startswith('Cn!report '):
             arg = str(message.content[10:])
-            savems = '内容 : ' + arg + '\n' + '報告者ID : ' + str(message.author.id) + '\n\n'
             await message.channel.send('報告ありがとうございます。')
-            with open('bugreport/{}.txt'.format(message.author.name), 'a', encoding = 'utf_8') as f:
-                f.write(savems)
+            await client.get_user(761929481421979669).send('Bug Report: {0}({1}) | {2}'.format(message.author.name, message.author.id, arg))
         if message.content == 'Cn!ping':
             now = datetime.datetime.utcnow()
             beforesend = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('total'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
             await message.channel.send('Pong!')
             now = datetime.datetime.utcnow()
             aftersend = float(now.strftime("0.%f")) + int(now.second) + int(int(int(now.month * 365) + int(now_month('total'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-            sendms = discord.Embed(title='Response Bot\'s Ping', colour=0x7ED6DE)
+            sendms = discord.Embed(title='Bot\'s Ping', colour=0x7ED6DE)
             temp11 = str(int(float(aftersend - beforesend) * 1000)) + 'ms'
             sendms.add_field(name="Response Time", value=temp11, inline=False)
             temp12 = open('data/system/status.txt', 'r', encoding = 'utf_8').read()
@@ -391,27 +294,38 @@ async def on_message(message):
             await message.channel.send(file=discord.File('uploader/{}'.format(arg)))
         if message.content.startswith('Cn!ytdl '):
             arg = message.content.split(' ')
+            info = youtube_dl.YoutubeDL().extract_info(arg[1], download=False, process=False)
+            link = 'https://youtu.be/{}'.format(info['id'])
+            thumbnail = info['thumbnails'][len(info['thumbnails'])-1]['url']
             if len(arg) == 2:
                 ydl = youtube_dl.YoutubeDL(ydl_opts3)
                 await message.channel.send('Downloading... (128kbps)')
-                info_dict = ydl.extract_info("{}".format(arg[1]), download=True, process=True)
+                info_dict = ydl.extract_info(link, download=True, process=True)
                 await message.channel.send(file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
             if arg[2] == 'low':
                 ydl = youtube_dl.YoutubeDL(ydl_opts)
                 await message.channel.send('Downloading... (64kbps)')
-                info_dict = ydl.extract_info("{}".format(arg[1]), download=True, process=True)
+                info_dict = ydl.extract_info(link, download=True, process=True)
                 await message.channel.send(file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
             if arg[2] == 'high':
-                ydl = youtube_dl.YoutubeDL(ydl_opts2)
-                await message.channel.send('Downloading... (256kbps)')
-                info_dict = ydl.extract_info("{}".format(arg[1]), download=True, process=True)
-                await message.channel.send(file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
+            	url = 'https://www.320youtube.com/v11/watch?v={}'.format(info['id'])
+            	result = requests.get(url)
+            	soup = bs4.BeautifulSoup(result.text, 'html.parser')
+            	dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
+            	sendms = discord.Embed(color=0x7ED6DE)
+            	sendms.add_field(name='Title', value=info['title'], inline=False)
+            	sendms.add_field(name='Channel', value=info['uploader'], inline=False)
+            	sendms.add_field(name='Extractor', value=info['extractor'], inline=False)
+            	sendms.add_field(name='DL Link', value=dllink, inline=False)
+            	sendms.set_thumbnail(url=thumbnail)
+            	sendms.set_footer(text='Powered by 320youtube | https://www.320youtube.com')
+            	await message.channel.send(embed=sendms)
             else:
                 ydl = youtube_dl.YoutubeDL(ydl_opts3)
                 await message.channel.send('Downloading... (128kbps)')
-                info_dict = ydl.extract_info("{}".format(arg[1]), download=True, process=True)
+                info_dict = ydl.extract_info(link, download=True, process=True)
                 await message.channel.send(file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
-        if message.content.startswith('Cn!google '):
+        if message.content.startswith('Cn!search '):
                 arg = message.content[10:]
                 result = requests.get('https://www.google.com/search?q={}/'.format(arg))
                 soup = bs4.BeautifulSoup(result.text, 'html.parser')
@@ -457,16 +371,17 @@ async def on_message(message):
             await message.channel.send(random.randint(int(arg[1]),int(arg[2])))
         if message.content.startswith('Cn!translate '):
             arg = message.content.split(' ')
-            if len(arg) == 3:
+            if arg[1].find('>') != -1:
+                lang = arg[1].split('>')
                 translator = googletrans.Translator()
-                sendms = translator.translate(arg[1] ,dest=arg[2])
-                await message.channel.send(sendms.text)
-            if len(arg) > 4:
-                translator = googletrans.Translator()
-                sendms = translator.translate(arg[1], src=arg[2] ,dest=arg[3:])
+                sendms = translator.translate(arg[2], src=lang[1], dest=lang[2])
                 await message.channel.send(sendms.text)
             if len(arg) == 2:
                 await message.channel.send('引数の数を正しくしてください。')
+            else:
+                translator = googletrans.Translator()
+                sendms = translator.translate(arg[1], dest=arg[2:])
+                await message.channel.send(sendms.text)
         if message.content.startswith('Cn!memo '):
             arg = message.content.split(' ')
             #if arg[1] == 'add':
