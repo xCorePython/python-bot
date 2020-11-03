@@ -148,7 +148,6 @@ async def commands(command, message):
     arg = message.content.split(' ')[1:]
     if command == 'help':
         sendms = discord.Embed(title="コマンド一覧", description="Cn!help <コマンド名>で詳細が見れます", color=0x00ffff)
-        sendms.set_footer(text="This bot created by Core_Force_")
         sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`search`,`random`,`translate`,`downloader`', inline=False)
         sendms.add_field(name="Status", value='`check`,`about`,`information`,(`status`)', inline=False)
         sendms.add_field(name="Other", value='`say`,`uploader`,`omikuji`,`ping`,`seen`', inline=False)
