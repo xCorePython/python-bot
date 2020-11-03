@@ -129,8 +129,7 @@ def reverse(data):
         return uptime
 
 async def log(level, info):
-	await channel.send('[{0}] {1}'.format(level, info))
-
+	await client.get_channel(773053692629876757).send('[{0}] {1}'.format(level, info))
 async def message(channelid):
     messages = await client.get_channel(channelid).history(limit=1).flatten()
     for message in messages:
@@ -451,6 +450,7 @@ async def on_message(message):
     	start= prefix.split(' ')[0]
     	if str(sys_commands).find(start) != -1:
     		await commands(start, message)
+	
     	else:
     		await commands('help', message)
     if message.content.find('おみくじ') != -1:
