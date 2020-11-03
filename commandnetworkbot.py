@@ -263,9 +263,10 @@ async def commands(command, message):
         await message.channel.send(file=discord.File('uploader/{}'.format(arg)))
     elif command == 'downloader':
         arg = message.content.split(' ')
+	
+	
         info = youtube_dl.YoutubeDL().extract_info(arg[1], download=False, process=False)
         link = 'https://youtu.be/{}'.format(info['id'])
-        thumbnail = info['thumbnails'][len(info['thumbnails'])-1]['url']
         if len(arg) == 2:
             ydl = youtube_dl.YoutubeDL(ydl_opts3)
             await message.channel.send('Downloading... (128kbps)')
@@ -278,6 +279,7 @@ async def commands(command, message):
             await message.channel.send(file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
         if arg[2] == 'high':
             url = 'https://www.320youtube.com/v11/watch?v={}'.format(info['id'])
+	    thumbnail = info['thumbnails'][len(info['thumbnails'])-1]['url']
             result = requests.get(url)
             soup = bs4.BeautifulSoup(result.text, 'html.parser')
             dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
