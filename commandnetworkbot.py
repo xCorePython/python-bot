@@ -9,13 +9,13 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v4.02.02'
+sys_version = 'v4.02.01'
 sys_commands = ['timer', 'check', 'time', 'stopwatch', 'search', 'random', 'translator', 'check', 'info', 'about', 'say', 'uploader', 'omikuji', 'ping', 'seen', 'downloader', 'reversetranslate']
 
 
 
 
-ready_log = '逆翻訳コマンドを修正'
+ready_log = '逆翻訳コマンド(Cn!reversetranslate)を追加。'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
 command_prefix = 'Cn!'
@@ -356,18 +356,22 @@ async def commands(command, message):
             await message.channel.send(sendms.text)
     elif command == 'reversetranslate':
         arg = message.content.split(' ')
-        temp_trans = len(arg[1]) + len(arg[0]) + 2
+        temp_trans = len(arg[1]) + len(arg[0])
+        await log('Debug', 'temp_trans = {}'.format(temp_trans))
         language = ['af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'be', 'bn', 'bs', 'bg', 'ca', 'ceb', 'ny', 'zh-cn', 'zh-tw', 'co', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'et', 'tl', 'fi', 'fr', 'fy', 'gl', 'ka', 'de', 'el', 'gu', 'ht', 'ha', 'haw', 'iw', 'he', 'hi', 'hmn', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 'jw', 'kn', 'kk', 'km', 'ko', 'ku', 'ky', 'lo', 'la', 'lv', 'lt', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'or', 'ps', 'fa', 'pl', 'pt', 'pa', 'ro', 'ru', 'sm', 'gd', 'sr', 'st', 'sn', 'sd', 'si', 'sk', 'sl', 'so', 'es', 'su', 'sw', 'sv', 'tg', 'ta', 'te', 'th', 'tr', 'uk', 'ur', 'ug', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo', 'zu']
         translator = googletrans.Translator()
+        await log('Debug', 'arg = {}'.format(message.content[temp_trans:]))
         sendms4 = translator.translate(message.content[temp_trans:], dest=str(random.choice(language)))
-        sendms3 = translator.translate(sendms4.text[:int(len(sendms4.text)- 2)], dest='ja')
+        sendms3 = translator.translate(sendms4.text, dest='ja')
+        await log('Debug', 'Translated  {}'.format(sendms3.text))
         words = sendms3.text + ' > '
         if len(arg) > 2:
-        	for n in range(1, int(int(arg[1]) - 1)):
-        		sendms4 = translator.translate(sendms4.text[:int(len(sendms4.text)- 2)], dest=str(random.choice(language)))
+        	for n in range(1, int(int(arg[1]) - 2)):
+        		sendms4 = translator.translate(sendms4.text, dest=str(random.choice(language)))
         		sendms2 = translator.translate(sendms4.text, dest='ja')
+        		await log('Debug', 'Translated  {}'.format(sendms2.text))
         		words = words + sendms2.text + ' > '
-        sendms4 = translator.translate(sendms4.text, dest=str(random.choice(language)))
+        sendms4 = translator.translate(sendms.text, dest=str(random.choice(language)))
         ted = translator.translate(sendms4.text, dest='ja')
         words = words + ted.text
         sendms = discord.Embed(title='Result', description=words, colour=0x7ED6DE)
@@ -447,7 +451,6 @@ async def on_message(message):
     	start= prefix.split(' ')[0]
     	if str(sys_commands).find(start) != -1:
     		await commands(start, message)
-	
     	else:
     		await commands('help', message)
     if message.content.find('おみくじ') != -1:
