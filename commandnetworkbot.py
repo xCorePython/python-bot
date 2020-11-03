@@ -355,7 +355,7 @@ async def commands(command, message):
             await message.channel.send(sendms.text)
     elif command == 'reversetranslate':
         arg = message.content.split(' ')
-        temp_trans = len(arg[1]) + len(arg[0])
+        temp_trans = len(arg[1]) + len(arg[0]) + 2
         await log('Debug', 'temp_trans = {}'.format(temp_trans))
         language = ['af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'be', 'bn', 'bs', 'bg', 'ca', 'ceb', 'ny', 'zh-cn', 'zh-tw', 'co', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'et', 'tl', 'fi', 'fr', 'fy', 'gl', 'ka', 'de', 'el', 'gu', 'ht', 'ha', 'haw', 'iw', 'he', 'hi', 'hmn', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 'jw', 'kn', 'kk', 'km', 'ko', 'ku', 'ky', 'lo', 'la', 'lv', 'lt', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'or', 'ps', 'fa', 'pl', 'pt', 'pa', 'ro', 'ru', 'sm', 'gd', 'sr', 'st', 'sn', 'sd', 'si', 'sk', 'sl', 'so', 'es', 'su', 'sw', 'sv', 'tg', 'ta', 'te', 'th', 'tr', 'uk', 'ur', 'ug', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo', 'zu']
         translator = googletrans.Translator()
@@ -370,7 +370,7 @@ async def commands(command, message):
         		sendms2 = translator.translate(sendms4.text, dest='ja')
         		await log('Debug', 'Translated  {}'.format(sendms2.text))
         		words = words + sendms2.text + ' > '
-        sendms4 = translator.translate(sendms.text, dest=str(random.choice(language)))
+        sendms4 = translator.translate(sendms4.text, dest=str(random.choice(language)))
         ted = translator.translate(sendms4.text, dest='ja')
         words = words + ted.text
         sendms = discord.Embed(title='Result', description=words, colour=0x7ED6DE)
