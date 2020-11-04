@@ -278,8 +278,8 @@ async def commands(command, message):
             info_dict = ydl.extract_info(link, download=True, process=True)
             await message.channel.send(file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
         if arg[2] == 'high':
-            url = 'https://www.320youtube.com/v11/watch?v={}'.format(info['id'])
-	    thumbnail = info['thumbnails'][len(info['thumbnails'])-1]['url']
+            url = 'https://www.320youtube.com/v11/watch?v=' + info['id']
+	thumbnail = info['thumbnails'][len(info['thumbnails'])-1]['url']
             result = requests.get(url)
             soup = bs4.BeautifulSoup(result.text, 'html.parser')
             dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
