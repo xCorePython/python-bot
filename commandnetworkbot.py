@@ -130,6 +130,7 @@ def reverse(data):
 
 async def log(level, info):
 	await client.get_channel(773053692629876757).send('[{0}] {1}'.format(level, info))
+
 async def message(channelid):
     messages = await client.get_channel(channelid).history(limit=1).flatten()
     for message in messages:
@@ -146,13 +147,7 @@ async def status(content):
 	
 async def commands(command, message):
     arg = message.content.split(' ')[1:]
-    if command == 'help':
-        sendms = discord.Embed(title="コマンド一覧", description="Cn!help <コマンド名>で詳細が見れます", color=0x00ffff)
-        sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`search`,`random`,`translate`,`downloader`', inline=False)
-        sendms.add_field(name="Status", value='`check`,`about`,`information`,(`status`)', inline=False)
-        sendms.add_field(name="Other", value='`say`,`uploader`,`omikuji`,`ping`,`seen`', inline=False)
-        await message.channel.send(embed=sendms)
-    elif command == 'say':
+    if command == 'say':
         sendms = discord.Embed(description=message.content[7:], colour=0xF46900)
         sendms.set_author(name=message.author.name, icon_url=message.author.avatar_url)
         await message.channel.send(embed=sendms)
@@ -263,10 +258,9 @@ async def commands(command, message):
         await message.channel.send(file=discord.File('uploader/{}'.format(arg)))
     elif command == 'downloader':
         arg = message.content.split(' ')
-	
-	
         info = youtube_dl.YoutubeDL().extract_info(arg[1], download=False, process=False)
         link = 'https://youtu.be/{}'.format(info['id'])
+        thumbnail = info['thumbnails'][len(info['thumbnails'])-1]['url']
         if len(arg) == 2:
             ydl = youtube_dl.YoutubeDL(ydl_opts3)
             await message.channel.send('Downloading... (128kbps)')
@@ -278,8 +272,7 @@ async def commands(command, message):
             info_dict = ydl.extract_info(link, download=True, process=True)
             await message.channel.send(file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
         if arg[2] == 'high':
-            url = 'https://www.320youtube.com/v11/watch?v=' + info['id']
-	thumbnail = info['thumbnails'][len(info['thumbnails'])-1]['url']
+            url = 'https://www.320youtube.com/v11/watch?v={}'.format(info['id'])
             result = requests.get(url)
             soup = bs4.BeautifulSoup(result.text, 'html.parser')
             dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
@@ -356,7 +349,7 @@ async def commands(command, message):
             await message.channel.send(sendms.text)
     elif command == 'reversetranslate':
         arg = message.content.split(' ')
-        temp_trans = len(arg[1]) + len(arg[0]) + 2
+        temp_trans = len(arg[1]) + len(arg[0])
         await log('Debug', 'temp_trans = {}'.format(temp_trans))
         language = ['af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'be', 'bn', 'bs', 'bg', 'ca', 'ceb', 'ny', 'zh-cn', 'zh-tw', 'co', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'et', 'tl', 'fi', 'fr', 'fy', 'gl', 'ka', 'de', 'el', 'gu', 'ht', 'ha', 'haw', 'iw', 'he', 'hi', 'hmn', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 'jw', 'kn', 'kk', 'km', 'ko', 'ku', 'ky', 'lo', 'la', 'lv', 'lt', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'or', 'ps', 'fa', 'pl', 'pt', 'pa', 'ro', 'ru', 'sm', 'gd', 'sr', 'st', 'sn', 'sd', 'si', 'sk', 'sl', 'so', 'es', 'su', 'sw', 'sv', 'tg', 'ta', 'te', 'th', 'tr', 'uk', 'ur', 'ug', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo', 'zu']
         translator = googletrans.Translator()
@@ -371,7 +364,7 @@ async def commands(command, message):
         		sendms2 = translator.translate(sendms4.text, dest='ja')
         		await log('Debug', 'Translated  {}'.format(sendms2.text))
         		words = words + sendms2.text + ' > '
-        sendms4 = translator.translate(sendms4.text, dest=str(random.choice(language)))
+        sendms4 = translator.translate(sendms.text, dest=str(random.choice(language)))
         ted = translator.translate(sendms4.text, dest='ja')
         words = words + ted.text
         sendms = discord.Embed(title='Result', description=words, colour=0x7ED6DE)
@@ -407,7 +400,12 @@ async def commands(command, message):
         sendms = random.choice(omikuji)
         await message.channel.send(sendms)
     else:
-    	await message.channel.send('Nothing command {}'.format(command))
+    	sendms = discord.Embed(title="コマンド一覧", description="Cn!help <コマンド名>で詳細が見れます", color=0x00ffff)
+        sendms.set_footer(text="コマンドの詳細や使い方はCn!help <コマンド名>")
+        sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`search`,`random`,`translate`,`downloader`', inline=False)
+        sendms.add_field(name="Status", value='`check`,`about`,`information`,(`status`)', inline=False)
+        sendms.add_field(name="Other", value='`say`,`uploader`,`omikuji`,`ping`,`seen`', inline=False)
+        await message.channel.send(embed=sendms)
 
 @client.event
 async def on_ready():
@@ -449,9 +447,25 @@ async def on_message(message):
     if message.content.startswith(command_prefix):
     	prefix = message.content[len(command_prefix):]
     	start= prefix.split(' ')[0]
-    	if str(sys_commands).find(start) != -1:
+    	print(start)
+    	if start == 'rev':
+    		await commands('reversetranslate', message)
+    	elif start == 'translate':
+    		await commands('translator', message)
+    	elif starr == 'information':
+    		await commands('info', message)
+    	elif start == 'ytdl':
+    		await commands('downloader', message)
+    	elif start == 'dl':
+    		await commands('downloader', message)
+    	elif start == 'c':
+    		await commands('check' , message)
+    	elif start == 'mccheck':
+    		await commands('check', message)
+    	elif start == 'servercheck':
+    		await commands('check', message)
+    	elif str(sys_commands).find(start) != -1:
     		await commands(start, message)
-	
     	else:
     		await commands('help', message)
     if message.content.find('おみくじ') != -1:
