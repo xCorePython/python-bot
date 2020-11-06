@@ -400,12 +400,11 @@ async def commands(command, message):
         sendms = random.choice(omikuji)
         await message.channel.send(sendms)
     else:
-    	sendms = discord.Embed(title="コマンド一覧", description="Cn!help <コマンド名>で詳細が見れます", color=0x00ffff)
-        sendms.set_footer(text="コマンドの詳細や使い方はCn!help <コマンド名>")
-        sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`search`,`random`,`translate`,`downloader`', inline=False)
-        sendms.add_field(name="Status", value='`check`,`about`,`information`,(`status`)', inline=False)
-        sendms.add_field(name="Other", value='`say`,`uploader`,`omikuji`,`ping`,`seen`', inline=False)
-        await message.channel.send(embed=sendms)
+    	sendms = discord.Embed(title="コマンド一覧", description="コマンドの詳細や使い方はCn!help <コマンド名>", color=0x00ffff)
+    	sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`search`,`random`,`translate`,`downloader`', inline=False)
+    	sendms.add_field(name="Status", value='`check`,`about`,`information`,(`status`)', inline=False)
+    	sendms.add_field(name="Other", value='`say`,`uploader`,`omikuji`,`ping`,`seen`', inline=False)
+    	await message.channel.send(embed=sendms)
 
 @client.event
 async def on_ready():
