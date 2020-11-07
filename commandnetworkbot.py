@@ -405,13 +405,13 @@ async def commands(command, message):
     	voice = await client.get_channel(vcch).connect()
     	info = youtube_dl.YoutubeDL().extract_info(link, process=False, download=False)
     	title = info['id']
-    	url = 'https://www.320youtube.com/v11/watch?v={}'.format(info['id'])
+    	url = 'https://www.320youtube.com/v11/watch?v={}'.format(title)
     	result = requests.get(url)
     	soup = bs4.BeautifulSoup(result.text, 'html.parser')
     	dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
     	urllib.request.urlretrieve(dllink, '{}.mp3'.format(title))
     	os.system('ffmpeg -i {0}.mp3 -c:a libopus -b:a 320k {0}.opus'.format(title))
-    	voice.play(discord.FFmpegOpusAudio({0}.opus, bitrate=320))
+    	voice.play(discord.FFmpegOpusAudio('{0}.opus'.format(title), bitrate=320))
     else:
     	sendms = discord.Embed(title="コマンド一覧", description="コマンドの詳細や使い方はCn!help <コマンド名>", color=0x00ffff)
     	sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`search`,`random`,`translate`,`downloader`', inline=False)
