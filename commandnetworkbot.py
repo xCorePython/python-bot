@@ -438,7 +438,7 @@ async def on_ready():
     loop = asyncio.get_event_loop
     link = await message(774525604116037662)
     await client.get_channel(vcch).connect()
-    await client.get_channel(vcch).guild.voice_client.disconnect()
+    #await client.get_channel(vcch).guild.voice_client.disconnect()
     info = youtube_dl.YoutubeDL().extract_info(link, process=False, download=False)
     title = info['id']
     url = 'https://www.320youtube.com/v11/watch?v={}'.format(info['id'])
