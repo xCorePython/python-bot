@@ -6,3 +6,4 @@ psutil
 bs4
 googletrans
 youtube_dl
+PyNaCl
