@@ -1,7 +1,7 @@
 import datetime
 now = datetime.datetime.utcnow()
 starttime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-import calendar, os, discord, psutil, random, time, requests, asyncio, sys, youtube_dl, json, subprocess, googletrans, bs4, urllib
+import calendar, os, discord, psutil, random, time, requests, asyncio, sys, youtube_dl, json, subprocess, googletrans, bs4, urllib, PyNaCl
 now = datetime.datetime.utcnow()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
 global voice
