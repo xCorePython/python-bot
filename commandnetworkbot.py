@@ -1,10 +1,10 @@
 import datetime
 now = datetime.datetime.utcnow()
 starttime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-import calendar, os, discord, psutil, random, time, requests, asyncio, sys, youtube_dl, json, subprocess, googletrans, bs4
+import calendar, os, discord, psutil, random, time, requests, asyncio, sys, youtube_dl, json, subprocess, googletrans, bs4, urllib
 now = datetime.datetime.utcnow()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-#global 
+global voice
 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
@@ -23,6 +23,8 @@ command_count = len(sys_commands)
 sys_module_count = '15'
 sys_loop = 1
 client = discord.Client()
+vcch = 734217960222228490
+voice = await client.get_channel(vcch).connect()
 ydl_opts = {
     'format': 'bestaudio/best',
     'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
@@ -399,6 +401,15 @@ async def commands(command, message):
         omikuji = [ '大吉', '中吉', '小吉', '吉', '末吉', '凶', '小凶', '中凶', '大凶' ]
         sendms = random.choice(omikuji)
         await message.channel.send(sendms)
+    elif command == 'p':
+    	info = youtube_dl.YoutubeDL().extract_info(link, process=False, download=False)
+    	title = info['id'] + '.mp3'
+    	url = 'https://www.320youtube.com/v11/watch?v={}'.format(info['id'])
+    	result = requests.get(url)
+    	soup = bs4.BeautifulSoup(result.text, 'html.parser')
+    	dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
+    	urllib.request.urlretrieve(dllink, title)
+    	await voice.play(discordFFmpegPCMAudio(title))
     else:
     	sendms = discord.Embed(title="コマンド一覧", description="コマンドの詳細や使い方はCn!help <コマンド名>", color=0x00ffff)
     	sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`search`,`random`,`translate`,`downloader`', inline=False)
@@ -434,6 +445,7 @@ async def on_ready():
     await send(770901834558603284, str(now_date('off', 9)), 2)
     await send(770902094852390913, str(readytime), 2)
     await send(770902347667996672, str(activityst), 2)
+    voice.play(discord.FFmpegPCMAudio('bgm.mp3'))
 
 @client.event
 async def on_message(message):
