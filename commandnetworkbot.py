@@ -24,7 +24,6 @@ sys_module_count = '15'
 sys_loop = 1
 client = discord.Client()
 vcch = 734217960222228490
-voice = await client.get_channel(vcch).connect()
 ydl_opts = {
     'format': 'bestaudio/best',
     'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
@@ -402,6 +401,7 @@ async def commands(command, message):
         sendms = random.choice(omikuji)
         await message.channel.send(sendms)
     elif command == 'p':
+	voice = await client.get_channel(vcch).connect()
     	info = youtube_dl.YoutubeDL().extract_info(link, process=False, download=False)
     	title = info['id'] + '.mp3'
     	url = 'https://www.320youtube.com/v11/watch?v={}'.format(info['id'])
@@ -409,7 +409,7 @@ async def commands(command, message):
     	soup = bs4.BeautifulSoup(result.text, 'html.parser')
     	dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
     	urllib.request.urlretrieve(dllink, title)
-    	await voice.play(discordFFmpegPCMAudio(title))
+    	await voice.play(discord.FFmpegPCMAudio(title))
     else:
     	sendms = discord.Embed(title="コマンド一覧", description="コマンドの詳細や使い方はCn!help <コマンド名>", color=0x00ffff)
     	sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`search`,`random`,`translate`,`downloader`', inline=False)
