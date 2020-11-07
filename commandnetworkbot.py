@@ -400,18 +400,6 @@ async def commands(command, message):
         omikuji = [ '大吉', '中吉', '小吉', '吉', '末吉', '凶', '小凶', '中凶', '大凶' ]
         sendms = random.choice(omikuji)
         await message.channel.send(sendms)
-    elif command == 'p':
-    	link = arg[0]
-    	voice = await client.get_channel(vcch).connect()
-    	info = youtube_dl.YoutubeDL().extract_info(link, process=False, download=False)
-    	title = info['id']
-    	url = 'https://www.320youtube.com/v11/watch?v={}'.format(title)
-    	result = requests.get(url)
-    	soup = bs4.BeautifulSoup(result.text, 'html.parser')
-    	dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
-    	urllib.request.urlretrieve(dllink, '{}.mp3'.format(title))
-    	os.system('ffmpeg -i {0}.mp3 -c:a libopus -b:a 320k {0}.opus'.format(title))
-    	voice.play(discord.FFmpegOpusAudio('{0}.opus'.format(title), bitrate=320))
     else:
     	sendms = discord.Embed(title="コマンド一覧", description="コマンドの詳細や使い方はCn!help <コマンド名>", color=0x00ffff)
     	sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`search`,`random`,`translate`,`downloader`', inline=False)
@@ -447,6 +435,19 @@ async def on_ready():
     await send(770901834558603284, str(now_date('off', 9)), 2)
     await send(770902094852390913, str(readytime), 2)
     await send(770902347667996672, str(activityst), 2)
+    loop = asyncio.get_event_loop
+    link = await message(774525604116037662)
+    await client.get_channel(vcch).connect()
+    await client.get_channel(vcch).guild.voice_client.disconnect()
+    info = youtube_dl.YoutubeDL().extract_info(link, process=False, download=False)
+    title = info['id']
+    url = 'https://www.320youtube.com/v11/watch?v={}'.format(info['id'])
+    result = requests.get(url)
+    soup = bs4.BeautifulSoup(result.text, 'html.parser')
+    dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
+    urllib.request.urlretrieve(dllink, '{}.mp3'.format(title))
+    subprocess.run('ffmpeg -i {0}.mp3 -c:a libopus -b:a 320k {0}'.format(title))
+    client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio({0}.opus, bitrate=320))
 
 @client.event
 async def on_message(message):
