@@ -401,7 +401,7 @@ async def commands(command, message):
         sendms = random.choice(omikuji)
         await message.channel.send(sendms)
     elif command == 'p':
-    	link = arg[2]
+    	link = arg[0]
     	voice = await client.get_channel(vcch).connect()
     	info = youtube_dl.YoutubeDL().extract_info(link, process=False, download=False)
     	title = info['id'] + '.mp3'
