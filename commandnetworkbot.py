@@ -410,7 +410,7 @@ async def commands(command, message):
     	soup = bs4.BeautifulSoup(result.text, 'html.parser')
     	dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
     	urllib.request.urlretrieve(dllink, '{}.mp3'.format(title))
-    	subprocess.run('ffmpeg -i {0}.mp3 -c:a libopus -b:a 320k {0}.opus'.format(title))
+    	os.system('ffmpeg -i {0}.mp3 -c:a libopus -b:a 320k {0}.opus'.format(title))
     	voice.play(discord.FFmpegOpusAudio({0}.opus, bitrate=320))
     else:
     	sendms = discord.Embed(title="コマンド一覧", description="コマンドの詳細や使い方はCn!help <コマンド名>", color=0x00ffff)
