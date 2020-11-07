@@ -446,7 +446,6 @@ async def on_ready():
     await send(770901834558603284, str(now_date('off', 9)), 2)
     await send(770902094852390913, str(readytime), 2)
     await send(770902347667996672, str(activityst), 2)
-    voice.play(discord.FFmpegPCMAudio('bgm.mp3'))
 
 @client.event
 async def on_message(message):
@@ -464,7 +463,7 @@ async def on_message(message):
     		await commands('reversetranslate', message)
     	elif start == 'translate':
     		await commands('translator', message)
-    	elif starr == 'information':
+    	elif start == 'information':
     		await commands('info', message)
     	elif start == 'ytdl':
     		await commands('downloader', message)
