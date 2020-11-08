@@ -365,7 +365,7 @@ async def commands(command, message):
         		sendms2 = translator.translate(sendms4.text, dest='ja')
         		await log('Debug', 'Translated  {}'.format(sendms2.text))
         		words = words + sendms2.text + ' > '
-        sendms4 = translator.translate(sendms.text, dest=str(random.choice(language)))
+        sendms4 = translator.translate(sendms4.text, dest=str(random.choice(language)))
         ted = translator.translate(sendms4.text, dest='ja')
         words = words + ted.text
         sendms = discord.Embed(title='Result', description=words, colour=0x7ED6DE)
