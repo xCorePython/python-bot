@@ -413,7 +413,7 @@ def conv(info):
     soup = bs4.BeautifulSoup(result.text, 'html.parser')
     dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
     urllib.request.urlretrieve(dllink, '{}.mp3'.format(title))
-    os.system('ffmpeg -i {0}.mp3 -c:a libopus -loglevel fatal -b:a 320k {0}.opus'.format(title))
+    os.system('ffmpeg -i {0}.mp3 -c:a libopus -b:a 320k {0}.opus'.format(title))
     queue.append(title)
 
 
