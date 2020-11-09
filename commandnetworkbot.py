@@ -451,7 +451,7 @@ async def on_ready():
     	conv(info)
     n = 0
     await client.get_channel(vcch).connect()
-    await client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320))
+    client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320))
     start = now_date('off', 9)
     while sys_loop == 1:
     	time = float(now_date('off', 9) - start)
@@ -459,7 +459,7 @@ async def on_ready():
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
     	try:
     		n = n + 1
-    		await client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320))
+    		client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320))
     		start = now_date('off', 9)
     	except:
     			if n > len(queue):
