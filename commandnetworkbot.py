@@ -49,6 +49,14 @@ ydl_opts2 = {
         {'key': 'FFmpegMetadata'},
     ],
 }
+ydl_opts3 = {
+    'format': 'bestaudio/best',
+    'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
+    'ignoreerrors': True,
+    'noplaylist': True,
+    'extractaudio': True,
+    'audioformat': 'opus',
+}
 
 def now_month(mode):
         if mode == 'total':
@@ -239,7 +247,6 @@ async def commands(command, message):
         arg = message.content.split(' ')
         info = youtube_dl.YoutubeDL().extract_info(arg[1], download=False, process=False)
         link = 'https://youtu.be/{}'.format(info['id'])
-        thumbnail = info['thumbnails'][len(info['thumbnails'])-1]['url']
         if len(arg) == 2:
             ydl = youtube_dl.YoutubeDL(ydl_opts3)
             await message.channel.send('Downloading... (128kbps)')
@@ -251,6 +258,7 @@ async def commands(command, message):
             info_dict = ydl.extract_info(link, download=True, process=True)
             await message.channel.send(file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
         if arg[2] == 'high':
+            thumbnail = info['thumbnails'][len(info['thumbnails'])-1]['url']
             url = 'https://www.320youtube.com/v11/watch?v={}'.format(info['id'])
             result = requests.get(url)
             soup = bs4.BeautifulSoup(result.text, 'html.parser')
@@ -411,6 +419,12 @@ def conv(info):
     print('Converted')
     queue.append(title)
 
+def conver(info):
+	print('Converting and Downloading... ({})'.format(info))
+	link = 'https://www.youtube.com/watch?v={}'.format(info)
+	ydl = youtube_dl.YoutubeDL(ydl_opts3)
+    info_dict = ydl.extract_info(link, download=True, process=True)
+    print('Converted {}'.format(info))
 
 @client.event
 async def on_ready():
@@ -446,8 +460,8 @@ async def on_ready():
     await status('Loading queue... | {}'.format(sys_activity))
     links = await create_queue(774525604116037662)
     print('Loaded queue')
-    for n in range(1, int(len(links) + 1)):
-    	info = links[int(n - 1)].split('watch?v=')[1]
+    for n in range(len(links)):
+    	info = links[n].split('watch?v=')[1]
     	conv(info)
     n = 0
     await client.get_channel(vcch).connect()
@@ -455,7 +469,7 @@ async def on_ready():
     start = now_date('off', 9)
     while sys_loop == 1:
     	time = float(now_date('off', 9) - start)
-    	audio = reverse(float(MP3('{}.mp3'.format(queue[n])).info.length))
+    	audio = reverse(float(MP3('{}.mp3'.format(links[n].split('watch?v=')[1])).info.length))
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
     	try:
     		n = n + 1
