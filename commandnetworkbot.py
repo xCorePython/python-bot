@@ -400,17 +400,21 @@ async def create_queue(channelid):
 
 def conv(info):
     title = info
+    print('Downloading {}...'.format(title))
     url = 'https://www.320youtube.com/v11/watch?v={}'.format(info)
     result = requests.get(url)
     soup = bs4.BeautifulSoup(result.text, 'html.parser')
     dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
     urllib.request.urlretrieve(dllink, '{}.mp3'.format(title))
-    os.system('ffmpeg -i {0}.mp3 -c:a libopus -loglevel fatal -b:a 320k {0}.opus'.format(title))
+    print('Downloaded and Converting...')
+    os.system('ffmpeg -i {0}.mp3 -c:a libopus -b:a 320k {0}.opus'.format(title))
+    print('Converted')
     queue.append(title)
 
 
 @client.event
 async def on_ready():
+    print('Bot Started')
     build_count = await message(772392566707847180)
     await send(772392566707847180, int(int(build_count) + 1), 2)
     if sys.version.startswith('3.8.6'):
@@ -438,15 +442,17 @@ async def on_ready():
     await send(770901834558603284, str(now_date('off', 9)), 2)
     await send(770902094852390913, str(readytime), 2)
     await send(770902347667996672, str(activityst), 2)
-    await status('Loading queues... | {}'.format(sys_activity))
+    print('Loading queue...')
+    await status('Loading queue... | {}'.format(sys_activity))
     links = await create_queue(774525604116037662)
+    print('Loaded queue')
     await client.get_channel(vcch).connect()
     #await client.get_channel(vcch).guild.voice_client.disconnect()
     for n in range(len(links)):
     	info = links[n].split('watch?v=')[1]
     	conv(info)
     n = 0
-    client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320))
+    await client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320))
     start = now_date('off', 9)
     while sys_loop == 1:
     	time = float(now_date('off', 9) - start)
@@ -454,7 +460,7 @@ async def on_ready():
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
     	try:
     		n = n + 1
-    		client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320))
+    		await client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320))
     		start = now_date('off', 9)
     	except:
     			if n > len(queue):
