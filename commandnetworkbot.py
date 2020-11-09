@@ -408,17 +408,19 @@ async def play(n, channel):
 
 def conv(info):
     title = info
+    print('Downloading {}...'.format(title))
     url = 'https://www.320youtube.com/v11/watch?v={}'.format(info)
     result = requests.get(url)
     soup = bs4.BeautifulSoup(result.text, 'html.parser')
     dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
     urllib.request.urlretrieve(dllink, '{}.mp3'.format(title))
-    os.system('ffmpeg -i {0}.mp3 -c:a libopus -b:a 320k {0}.opus'.format(title))
+    os.system('ffmpeg -i {0}.mp3 -c:a libopus -loglevel verbose -b:a 320k {0}.opus'.format(title))
     queue.append(title)
 
 
 @client.event
 async def on_ready():
+    print('Bot Started')
     build_count = await message(772392566707847180)
     await send(772392566707847180, int(int(build_count) + 1), 2)
     if sys.version.startswith('3.8.6'):
@@ -446,7 +448,8 @@ async def on_ready():
     await send(770901834558603284, str(now_date('off', 9)), 2)
     await send(770902094852390913, str(readytime), 2)
     await send(770902347667996672, str(activityst), 2)
-    await status('Loading queues... | {}'.format(sys_activity))
+    print('Loading queue...)
+    await status('Loading queue... | {}'.format(sys_activity))
     links = await create_queue(774525604116037662)
     await client.get_channel(vcch).connect()
     channel = client.get_channel(vcch)
