@@ -1,7 +1,7 @@
 import datetime
 now = datetime.datetime.utcnow()
 starttime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-import calendar, os, discord, psutil, random, time, requests, asyncio, sys, youtube_dl, googletrans, bs4, urllib
+import calendar, os, discord, psutil, random, requests, asyncio, sys, youtube_dl, googletrans, bs4, urllib
 from mutagen.mp3 import MP3
 now = datetime.datetime.utcnow()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
@@ -398,29 +398,19 @@ async def create_queue(channelid):
 	   urls.append(message.content)
 	return urls
 
-np = []
-
-def next(error):
-	np.append('aaa')
-
-async def play(n, channel):
-	channel.guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320), after=next)
-
 def conv(info):
     title = info
-    print('Downloading {}...'.format(title))
     url = 'https://www.320youtube.com/v11/watch?v={}'.format(info)
     result = requests.get(url)
     soup = bs4.BeautifulSoup(result.text, 'html.parser')
     dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
     urllib.request.urlretrieve(dllink, '{}.mp3'.format(title))
-    os.system('ffmpeg -i {0}.mp3 -c:a libopus -loglevel verbose -b:a 320k {0}.opus'.format(title))
+    #os.system('ffmpeg -i {0}.mp3 -c:a libopus -loglevel fatal -b:a 320k {0}.opus'.format(title))
     queue.append(title)
 
 
 @client.event
 async def on_ready():
-    print('Bot Started')
     build_count = await message(772392566707847180)
     await send(772392566707847180, int(int(build_count) + 1), 2)
     if sys.version.startswith('3.8.6'):
@@ -448,26 +438,27 @@ async def on_ready():
     await send(770901834558603284, str(now_date('off', 9)), 2)
     await send(770902094852390913, str(readytime), 2)
     await send(770902347667996672, str(activityst), 2)
-    print('Loading queue...')
-    await status('Loading queue... | {}'.format(sys_activity))
+    await status('Loading queues... | {}'.format(sys_activity))
     links = await create_queue(774525604116037662)
     await client.get_channel(vcch).connect()
-    channel = client.get_channel(vcch)
     #await client.get_channel(vcch).guild.voice_client.disconnect()
     for n in range(len(links)):
     	info = links[n].split('watch?v=')[1]
     	conv(info)
     n = 0
-    await play(n, channel)
+    await play(n)
     start = now_date('off', 9)
     while sys_loop == 1:
     	time = float(now_date('off', 9) - start)
     	audio = reverse(float(MP3('{}.mp3'.format(links[n].split('watch?v=')[1])).info.length))
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
-    	if n != len(np):
+    	try:
+    		n = n + 1
+    		await client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320))
     		start = now_date('off', 9)
-    		await play(n, channel)
-    	n = len(np)
+    	except:
+    			if n > len(queue):
+    				n = 0
     	await asyncio.sleep(4)
 
 @client.event
