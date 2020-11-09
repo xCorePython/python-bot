@@ -446,8 +446,8 @@ async def on_ready():
     await status('Loading queue... | {}'.format(sys_activity))
     links = await create_queue(774525604116037662)
     print('Loaded queue')
-    for n in range(len(links)):
-    	info = links[n].split('watch?v=')[1]
+    for n in range(1, int(len(links) + 1)):
+    	info = links[int(n - 1)].split('watch?v=')[1]
     	conv(info)
     n = 0
     await client.get_channel(vcch).connect()
