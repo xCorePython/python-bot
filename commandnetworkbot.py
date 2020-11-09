@@ -400,11 +400,11 @@ async def create_queue(channelid):
 
 def conv(info):
     title = info
-    print('Downloading {}...'.format(title))
     url = 'https://www.320youtube.com/v11/watch?v={}'.format(info)
     result = requests.get(url)
     soup = bs4.BeautifulSoup(result.text, 'html.parser')
     dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
+    print('Downloading {}...'.format(title))
     urllib.request.urlretrieve(dllink, '{}.mp3'.format(title))
     print('Downloaded and Converting...')
     os.system('ffmpeg -i {0}.mp3 -c:a libopus -b:a 320k {0}.opus'.format(title))
