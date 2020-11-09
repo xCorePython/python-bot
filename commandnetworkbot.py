@@ -446,7 +446,7 @@ async def on_ready():
     	info = links[n].split('watch?v=')[1]
     	conv(info)
     n = 0
-    await play(n)
+    await client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320))
     start = now_date('off', 9)
     while sys_loop == 1:
     	time = float(now_date('off', 9) - start)
