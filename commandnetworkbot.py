@@ -1,10 +1,11 @@
 import datetime
 now = datetime.datetime.utcnow()
 starttime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-import calendar, os, discord, psutil, random, time, requests, asyncio, sys, youtube_dl, json, subprocess, googletrans, bs4, urllib
+import calendar, os, discord, psutil, random, time, requests, asyncio, sys, youtube_dl, googletrans, bs4, urllib
+from mutagen.mp3 import MP3
 now = datetime.datetime.utcnow()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-global voice
+#global voice
 
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
@@ -97,6 +98,10 @@ def now_date(mode, location):
 
 def reverse(data):
     time = int(float(data))
+    if time < 10:
+    	second = int(time)
+    	uptime = '0:0' + str(second)
+    	return uptime
     if time > 60:
         if time < 3600:
             minute = int(time / 60)
@@ -145,7 +150,7 @@ async def send(channelid, content, mode):
 
 async def status(content):
 	await client.change_presence(activity=discord.Game(content))
-	
+
 async def commands(command, message):
     arg = message.content.split(' ')[1:]
     if command == 'say':
@@ -170,34 +175,7 @@ async def commands(command, message):
             readms = open('stopwatch/{}.txt'.format(message.author.id), 'r', encoding = 'utf_8')
             readtime = readms.read()
             currenttime = float(nowtime) - float(readtime)
-            if currenttime > 3600:
-                sw02 = int(currenttime / 3600)
-                sw01 = int(int(currenttime - 3600 * sw02) / 60)
-                sw00 = float(currenttime - 60 * sw01)
-                if sw00 < 10:
-                    sendms = 'Now Time : ' + str(sw02) + str(sw01) + ':0' + str(sw00)
-                    await message.channel.send(sendms)
-                else:
-                   sendms = 'Now Time : ' + str(sw02) + str(sw01) + ':' + str(sw00)
-                   await message.channel.send(sendms)
-            if currenttime < 3600:
-                if currenttime > 60:
-                    sw01 = int(currenttime / 60)
-                    sw00 = float(currenttime - 60 * sw01)
-                    if sw00 < 10:
-                        sendms = 'Now Time : ' + str(sw01) + ':0' + str(sw00)
-                        await message.channel.send(sendms)
-                    else:
-                        sendms = 'Now Time : ' + str(sw01) + ':' + str(sw00)
-                        await message.channel.send(sendms)
-            if currenttime < 60:
-                sw00 = float(currenttime)
-                if sw00 < 10:
-                    sendms = 'Now Time : 0:0' + str(sw00)
-                    await message.channel.send(sendms)
-                else:
-                    sendms = 'Now Time : 0:' + str(sw00)
-                    await message.channel.send(sendms)
+            await message.channel.send(reverse(currenttime))
     elif command == 'timer':
         await message.channel.send('Timer Started!')
         arg = int(message.content[9:])
@@ -216,7 +194,7 @@ async def commands(command, message):
         sendms = discord.Embed(title='Bot\'s Ping', colour=0x7ED6DE)
         temp11 = str(int(float(aftersend - beforesend) * 1000)) + 'ms'
         sendms.add_field(name="Response Time", value=temp11, inline=False)
-        temp12 = open('data/system/status.txt', 'r', encoding = 'utf_8').read()
+        temp12 = await message(770902347667996672)
         temp13 = temp12.split(',')
         sendms.add_field(name="Startup Time", value=temp13[0], inline=False)
         sendms.add_field(name="Import Time", value=temp13[1], inline=False)
@@ -376,7 +354,7 @@ async def commands(command, message):
             #readms = 
     elif command == 'info':
         sendms = discord.Embed(title="Information", colour=0x7ED6DE)
-        info_temp = open('data/system/deploy/count.txt', 'r', encoding = 'utf_8').read()
+        info_temp = await message(768764777756622878)
         sendms.add_field(name="Deploy Count", value=info_temp, inline=False)
         sendms.add_field(name="Version", value=sys_version, inline=False)
         info_temp = str(psutil.cpu_percent()) + '%, ' + str(psutil.cpu_count(logical=False)) + 'C' + str(psutil.cpu_count()) + 'T, ' + str(psutil.cpu_freq().current) + 'MHz'
@@ -387,12 +365,14 @@ async def commands(command, message):
         sendms.add_field(name="Commands", value=command_count, inline=False)
         sendms.add_field(name="Servers", value=len(client.guilds), inline=False)
         sendms.add_field(name="Packages/Modules", value=sys_module_count, inline=False)
-        info_temp = open('data/system/update/date.txt', 'r', encoding = 'utf_8').read()
+        info_temp = await message(770904260715347988)
         sendms.add_field(name="Update Time", value=info_temp, inline=False)
-        info_temp = open('data/system/uptime.txt', 'r', encoding = 'utf_8').read()
+        info_temp = await message(770901834558603284)
         info_temp2 = int(float(now_date('off', 9)) - float(info_temp))
         info_temp3 = str(reverse(info_temp2))
         sendms.add_field(name="Uptime", value=info_temp3, inline=False)
+        info_temp = await message(772392566707847180)
+        sendms.add_field(name="Build count", value=info_temp, inline=False)
         sendms.add_field(name="Site", value="https://akitama.localinfo.jp/", inline=False)
         sendms.add_field(name="Language", value="English, Japanese", inline=False)
         await message.channel.send(embed=sendms)
@@ -400,17 +380,49 @@ async def commands(command, message):
         omikuji = [ '大吉', '中吉', '小吉', '吉', '末吉', '凶', '小凶', '中凶', '大凶' ]
         sendms = random.choice(omikuji)
         await message.channel.send(sendms)
+     #elif command == 'p':
+      	#await message.author.voice.channel.connect()
     else:
     	sendms = discord.Embed(title="コマンド一覧", description="コマンドの詳細や使い方はCn!help <コマンド名>", color=0x00ffff)
     	sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`search`,`random`,`translate`,`downloader`', inline=False)
     	sendms.add_field(name="Status", value='`check`,`about`,`information`,(`status`)', inline=False)
     	sendms.add_field(name="Other", value='`say`,`uploader`,`omikuji`,`ping`,`seen`', inline=False)
     	await message.channel.send(embed=sendms)
+    	
+queue = []
+
+async def create_queue(channelid):
+	messages = await client.get_channel(channelid).history(limit=1000).flatten()
+	urls = []
+	for message in messages:
+	   urls.append(message.content)
+	return urls
+
+np = []
+
+def next():
+	np.append('aaa')
+
+async def play(n):
+	client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320), after=next)
+
+def conv(info):
+    title = info
+    url = 'https://www.320youtube.com/v11/watch?v={}'.format(info)
+    result = requests.get(url)
+    soup = bs4.BeautifulSoup(result.text, 'html.parser')
+    dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
+    urllib.request.urlretrieve(dllink, '{}.mp3'.format(title))
+    #os.system('ffmpeg -i {0}.mp3 -c:a libopus -loglevel fatal -b:a 320k {0}.opus'.format(title))
+    queue.append(title)
+
 
 @client.event
 async def on_ready():
     build_count = await message(772392566707847180)
     await send(772392566707847180, int(int(build_count) + 1), 2)
+    if sys.version.startswith('3.8.6'):
+    	await send(768764777756622878, str(int(await message(768764777756622878)) + 1), 2)
     await client.change_presence(activity=discord.Game('Bot Starting... Please wait | {}'.format(sys_version)))
     data_version = await message(768764714271506452)
     ready_send = 'f'
@@ -428,29 +440,36 @@ async def on_ready():
         startupst.add_field(name='お知らせ', value=ready_info, inline=False)
         await send(707426067098501171, startupst, 9)
     sys_activity = command_prefix + 'help' + ' | ' + sys_version
-    await status(sys_activity)
     now = datetime.datetime.utcnow()
     readytime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
     activityst = str(int(float(readytime - starttime) * 1000)) + 'ms,' + str(int(float(importtime - starttime) * 1000)) + 'ms'
     await send(770901834558603284, str(now_date('off', 9)), 2)
     await send(770902094852390913, str(readytime), 2)
     await send(770902347667996672, str(activityst), 2)
-    loop = asyncio.get_event_loop
-    link = await message(774525604116037662)
+    await status('Loading queues... | {}'.format(sys_activity))
+    links = await create_queue(774525604116037662)
     await client.get_channel(vcch).connect()
     #await client.get_channel(vcch).guild.voice_client.disconnect()
-    info = youtube_dl.YoutubeDL().extract_info(link, process=False, download=False)
-    title = info['id']
-    url = 'https://www.320youtube.com/v11/watch?v={}'.format(info['id'])
-    result = requests.get(url)
-    soup = bs4.BeautifulSoup(result.text, 'html.parser')
-    dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
-    urllib.request.urlretrieve(dllink, '{}.mp3'.format(title))
-    subprocess.run('ffmpeg -i {0}.mp3 -c:a libopus -b:a 320k {0}'.format(title))
-    client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio({0}.opus, bitrate=320))
+    for n in range(len(links)):
+    	info = links[n].split('watch?v=')[1]
+    	conv(info)
+    n = 0
+    await play(n)
+    start = now_date('off', 9)
+    while sys_loop == 1:
+    	time = float(now_date('off', 9) - start)
+    	audio = reverse(float(MP3('{}.mp3'.format(links[n].split('watch?v=')[1])).info.length))
+    	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
+    	if n != len(np):
+    		n = a
+    		await play(n)
+    	n = len(np)
+    	await asyncio.sleep(4)
 
 @client.event
 async def on_message(message):
+    if message.channel.id == 774525604116037662:
+    	return
     if message.author.id == 637672964292214804:
         if message.content.startswith('Cn!admin uploader '):
             arg = message.content[18:]
@@ -481,51 +500,74 @@ async def on_message(message):
     		await commands(start, message)
     	else:
     		await commands('help', message)
+    	return
     if message.content.find('おみくじ') != -1:
         omikuji = [ '大吉', '中吉', '小吉', '吉', '末吉', '凶', '小凶', '中凶', '大凶' ]
         sendms = random.choice(omikuji)
         await message.channel.send(sendms)
+        return
     if message.content.find('よかったね') != -1:
         await message.channel.send('よかったね')
+        return
     if message.content.find('良かったね') != -1:
         await message.channel.send('良かったね')
+        return
     if message.content.find('kusa') != -1:
         await message.channel.send('ww')
+        return
     if message.content.find('草') != -1:
         await message.channel.send('ww')
+        return
     if message.content.find('くさ') != -1:
         await message.channel.send('ww')
+        return
     if message.content.find('クサ') != -1:
         await message.channel.send('ww')
+        return
     if message.content.find('ｸｻ') != -1:
         await message.channel.send('ww')
+        return
     if message.content.find('KUSA') != -1:
         await message.channel.send('ww')
+        return
     if message.content.find('いいね') != -1:
         await message.channel.send('いいね')
+        return
     if message.content.find('f**k') != -1:
         await message.channel.send('暴言！')
+        return
     if message.content.find('fuck') != -1:
         await message.channel.send('暴言！')
+        return
     if message.content.find('Fuck') != -1:
         await message.channel.send('暴言！')
+        return
     if message.content.find('F**k') != -1:
         await message.channel.send('暴言！')
+        return
     if message.content.find('死ね') != -1:
         await message.channel.send('暴言！')
+        return
     if message.content.find('しね') != -1:
         await message.channel.send('暴言！')
+        return
     if message.content.find('tintin') != -1:
         await message.channel.send('ﾊﾊｯ!')
+        return
     if message.content.find('w') != -1:
         await message.channel.send('ww')
+        return
     if message.content.find('ｗ') != -1:
         await message.channel.send('ww')
+        return
     if message.content.find('じゃね？ww') != -1:
         await message.channel.send('それなww')
+        return
     if message.content.find('じゃね？ｗｗ') != -1:
         await message.channel.send('それなww')
+        return
     if message.content.find('じゃね?w') != -1:
         await message.channel.send('それなww')
+        return
 
 client.run(sys_token)
