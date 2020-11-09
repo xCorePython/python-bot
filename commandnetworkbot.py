@@ -400,7 +400,7 @@ async def create_queue(channelid):
 
 np = []
 
-def next():
+def next(error):
 	np.append('aaa')
 
 async def play(n):
@@ -413,7 +413,7 @@ def conv(info):
     soup = bs4.BeautifulSoup(result.text, 'html.parser')
     dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
     urllib.request.urlretrieve(dllink, '{}.mp3'.format(title))
-    #os.system('ffmpeg -i {0}.mp3 -c:a libopus -loglevel fatal -b:a 320k {0}.opus'.format(title))
+    os.system('ffmpeg -i {0}.mp3 -c:a libopus -loglevel fatal -b:a 320k {0}.opus'.format(title))
     queue.append(title)
 
 
@@ -461,7 +461,7 @@ async def on_ready():
     	audio = reverse(float(MP3('{}.mp3'.format(links[n].split('watch?v=')[1])).info.length))
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
     	if n != len(np):
-    		n = a
+    		start = now_date('off', 9)
     		await play(n)
     	n = len(np)
     	await asyncio.sleep(4)
