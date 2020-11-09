@@ -446,6 +446,7 @@ async def on_ready():
     await send(770901834558603284, str(now_date('off', 9)), 2)
     await send(770902094852390913, str(readytime), 2)
     await send(770902347667996672, str(activityst), 2)
+    await asyncio.sleep(28)
     await status('Loading queues... | {}'.format(sys_activity))
     links = await create_queue(774525604116037662)
     await client.get_channel(vcch).connect()
