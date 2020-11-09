@@ -403,8 +403,8 @@ np = []
 def next(error):
 	np.append('aaa')
 
-async def play(n):
-	client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320), after=next)
+async def play(n, channel):
+	channel.guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320), after=next)
 
 def conv(info):
     title = info
@@ -449,12 +449,13 @@ async def on_ready():
     await status('Loading queues... | {}'.format(sys_activity))
     links = await create_queue(774525604116037662)
     await client.get_channel(vcch).connect()
+    channel = client.get_channel(vcch)
     #await client.get_channel(vcch).guild.voice_client.disconnect()
     for n in range(len(links)):
     	info = links[n].split('watch?v=')[1]
     	conv(info)
     n = 0
-    await play(n)
+    await play(n, channel)
     start = now_date('off', 9)
     while sys_loop == 1:
     	time = float(now_date('off', 9) - start)
@@ -462,7 +463,7 @@ async def on_ready():
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
     	if n != len(np):
     		start = now_date('off', 9)
-    		await play(n)
+    		await play(n, channel)
     	n = len(np)
     	await asyncio.sleep(4)
 
