@@ -478,7 +478,9 @@ async def on_ready():
     start = now_date('off', 9)
     while sys_loop == 1:
     	time = float(now_date('off', 9) - start)
-    	audio = reverse(OggOpus('{}.opus'.format(queue[n]).info.length))
+    	audio = reverse(int(float(OggOpus('{}.opus'.format(queue[n])).info.length)))
+    	await log('Debug', n)
+    	await log('Debug', audio)
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
     	try:
     		n = n + 1
