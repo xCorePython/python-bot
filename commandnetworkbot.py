@@ -478,7 +478,7 @@ async def on_ready():
     start = now_date('off', 9)
     while sys_loop == 1:
     	time = float(now_date('off', 9) - start)
-    	audio = reverse(float(OggOpus('{}.opus'.format(links[n].split('watch?v=')[1])).info.length))
+    	audio = reverse(float(OggOpus('{}.opus'.format(queue[n]).info.length))
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
     	try:
     		n = n + 1
