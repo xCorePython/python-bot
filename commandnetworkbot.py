@@ -429,6 +429,7 @@ def conver(info):
 	ydl = youtube_dl.YoutubeDL(ydl_opts3)
 	info_dict = ydl.extract_info(link, download=True, process=True)
 	print('Converted {}'.format(info))
+    queue.append(info)
 
 first = ['Not Converted']
 
