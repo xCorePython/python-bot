@@ -51,11 +51,14 @@ ydl_opts2 = {
 }
 ydl_opts3 = {
     'format': 'bestaudio/best',
-    'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
+    'outtmpl': "%(id)s" + '.%(ext)s',
     'ignoreerrors': True,
     'noplaylist': True,
-    'extractaudio': True,
-    'audioformat': 'opus',
+    'postprocessors': [
+        {'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'opus',
+         'preferredquality': '320'},
+        {'key': 'FFmpegMetadata'},
 }
 
 def now_month(mode):
