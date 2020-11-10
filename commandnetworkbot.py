@@ -114,7 +114,7 @@ def reverse(data):
     	second = int(time)
     	uptime = '0:0' + str(second)
     	return uptime
-    if time > 60:
+    if time >= 60:
         if time < 3600:
             minute = int(time / 60)
             second = int(time - minute * 60)
@@ -348,7 +348,7 @@ async def commands(command, message):
         sendms4 = translator.translate(message.content[temp_trans:], dest=str(random.choice(language)))
         sendms3 = translator.translate(sendms4.text, dest='ja')
         await log('Debug', 'Translated  {}'.format(sendms3.text))
-        words = sendms3.text + ' > '
+        words = message.content[temp_trans:] + ' > ' + sendms3.text + ' > '
         if len(arg) > 2:
         	for n in range(1, int(int(arg[1]) - 2)):
         		sendms4 = translator.translate(sendms4.text, dest=str(random.choice(language)))
