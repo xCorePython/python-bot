@@ -426,7 +426,7 @@ def conver(info):
 	info_dict = ydl.extract_info(link, download=True, process=True)
 	print('Converted {}'.format(info))
 
-first = []
+first = ['Not Converted']
 
 @client.event
 async def on_ready():
@@ -458,7 +458,7 @@ async def on_ready():
     await send(770901834558603284, str(now_date('off', 9)), 2)
     await send(770902094852390913, str(readytime), 2)
     await send(770902347667996672, str(activityst), 2)
-    if len(first) == 0:
+    if len(first) == 1:
     	print('Loading queue...')
     	await status('Loading queue... | {}'.format(sys_activity))
     	links = await create_queue(774525604116037662)
