@@ -478,13 +478,11 @@ async def on_ready():
     start = now_date('off', 9)
     while sys_loop == 1:
     	time = float(now_date('off', 9) - start)
-    	audio = reverse(int(float(OggOpus('{}.opus'.format(queue[n])).info.length)))
-    	await log('Debug', n)
-    	await log('Debug', audio)
+    	audio = reverse(int(float(OggOpus('{}.opus'.format(queue[n])).info.length))
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
     	try:
+    		client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n + 1]), bitrate=320))
     		n = n + 1
-    		client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320))
     		start = now_date('off', 9)
     	except:
     			if n > len(queue):
