@@ -2,7 +2,7 @@ import datetime
 now = datetime.datetime.utcnow()
 starttime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
 import calendar, os, discord, psutil, random, requests, asyncio, sys, youtube_dl, googletrans, bs4, urllib
-from mutagen.mp3 import MP3
+from mutagen.oggopus import Opus
 now = datetime.datetime.utcnow()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
 #global voice
@@ -478,7 +478,7 @@ async def on_ready():
     start = now_date('off', 9)
     while sys_loop == 1:
     	time = float(now_date('off', 9) - start)
-    	audio = reverse(float(MP3('{}.mp3'.format(links[n].split('watch?v=')[1])).info.length))
+    	audio = reverse(float(Opus('{}.mp3'.format(links[n].split('watch?v=')[1])).info.length))
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
     	try:
     		n = n + 1
