@@ -59,6 +59,7 @@ ydl_opts3 = {
         'preferredcodec': 'opus',
          'preferredquality': '320'},
         {'key': 'FFmpegMetadata'},
+    ],
 }
 
 def now_month(mode):
