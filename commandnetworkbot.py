@@ -62,6 +62,14 @@ ydl_opts3 = {
     ],
 }
 
+translator = googletrans.Translator()
+while sys_loop == 1:
+	try:
+		sendms = translator.translate('konnnichiha', dest='en')
+		break
+	except:
+		translator = googletrans.translator()
+
 def now_month(mode):
         if mode == 'total':
             now = datetime.datetime.utcnow()
@@ -329,13 +337,11 @@ async def commands(command, message):
         temp_trans = len(arg[1]) + len(arg[0])
         if arg[1].find('>') != -1:
             lang = arg[1].split('>')
-            translator = googletrans.Translator()
             sendms = translator.translate(message.content[temp_trans:], src=lang[1], dest=lang[2])
             await message.channel.send(sendms.text)
         if len(arg) == 2:
             await message.channel.send('引数の数を正しくしてください。')
         else:
-            translator = googletrans.Translator()
             sendms = translator.translate(message.content[temp_trans:], dest=arg[1])
             await message.channel.send(sendms.text)
     elif command == 'reversetranslate':
@@ -343,7 +349,6 @@ async def commands(command, message):
         temp_trans = len(arg[1]) + len(arg[0]) + 2
         await log('Debug', 'temp_trans = {}'.format(temp_trans))
         language = ['af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'be', 'bn', 'bs', 'bg', 'ca', 'ceb', 'ny', 'zh-cn', 'zh-tw', 'co', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'et', 'tl', 'fi', 'fr', 'fy', 'gl', 'ka', 'de', 'el', 'gu', 'ht', 'ha', 'haw', 'iw', 'he', 'hi', 'hmn', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 'jw', 'kn', 'kk', 'km', 'ko', 'ku', 'ky', 'lo', 'la', 'lv', 'lt', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'or', 'ps', 'fa', 'pl', 'pt', 'pa', 'ro', 'ru', 'sm', 'gd', 'sr', 'st', 'sn', 'sd', 'si', 'sk', 'sl', 'so', 'es', 'su', 'sw', 'sv', 'tg', 'ta', 'te', 'th', 'tr', 'uk', 'ur', 'ug', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo', 'zu']
-        translator = googletrans.Translator()
         await log('Debug', 'arg = {}'.format(message.content[temp_trans:]))
         sendms4 = translator.translate(message.content[temp_trans:], dest=str(random.choice(language)))
         sendms3 = translator.translate(sendms4.text, dest='ja')
@@ -427,7 +432,12 @@ def conver(info):
 	print('Converting and Downloading... ({})'.format(info))
 	link = 'https://www.youtube.com/watch?v={}'.format(info)
 	ydl = youtube_dl.YoutubeDL(ydl_opts3)
-	info_dict = ydl.extract_info(link, download=True, process=True)
+	while sys_loop == 1:
+		try:
+			info_dict = ydl.extract_info(link, download=True, process=True)
+			break
+		except:
+			print('Retrying...')
 	print('Converted {}'.format(info))
 	queue.append(info)
 
@@ -476,16 +486,17 @@ async def on_ready():
     await client.get_channel(vcch).connect()
     client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320))
     start = now_date('off', 9)
+    audio = reverse(int(float(OggOpus('{}.opus'.format(queue[n])).info.length)))
     while sys_loop == 1:
     	time = float(now_date('off', 9) - start)
-    	audio = reverse(int(float(OggOpus('{}.opus'.format(queue[n])).info.length)))
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
     	try:
     		client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n + 1]), bitrate=320))
-    		n = n + 1
-    		if n > len(queue):
-    			n = 0
     		start = now_date('off', 9)
+    		audio = reverse(int(float(OggOpus('{}.opus'.format(queue[n + 1])).info.length)))
+    		n = n + 1
+    		if n == len(queue):
+    			n = -1
     	except:
     		aa = audio
     	await asyncio.sleep(4)
