@@ -487,7 +487,7 @@ async def on_ready():
     			n = 0
     		start = now_date('off', 9)
     	except:
-    		audio = aa
+    		aa = audio
     	await asyncio.sleep(4)
 
 @client.event
