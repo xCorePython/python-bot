@@ -64,7 +64,7 @@ ydl_opts3 = {
 
 while sys_loop == 1:
 	try:
-		translator = googletrans.translator()
+		translator = googletrans.Translator()
 		sendms = translator.translate('konnnichiha', dest='en')
 		break
 	except:
