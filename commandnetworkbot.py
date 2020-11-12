@@ -62,13 +62,13 @@ ydl_opts3 = {
     ],
 }
 
-translator = googletrans.Translator()
 while sys_loop == 1:
 	try:
+		translator = googletrans.translator()
 		sendms = translator.translate('konnnichiha', dest='en')
 		break
 	except:
-		translator = googletrans.translator()
+		print('Retrying...')
 
 def now_month(mode):
         if mode == 'total':
@@ -488,6 +488,8 @@ async def on_ready():
     start = now_date('off', 9)
     audio = reverse(int(float(OggOpus('{}.opus'.format(queue[n])).info.length)))
     while sys_loop == 1:
+    	if n == len(queue):
+    		n = -1
     	time = float(now_date('off', 9) - start)
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
     	try:
@@ -495,8 +497,6 @@ async def on_ready():
     		start = now_date('off', 9)
     		audio = reverse(int(float(OggOpus('{}.opus'.format(queue[n + 1])).info.length)))
     		n = n + 1
-    		if n == len(queue):
-    			n = -1
     	except:
     		aa = audio
     	await asyncio.sleep(4)
