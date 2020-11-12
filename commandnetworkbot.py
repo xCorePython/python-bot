@@ -496,7 +496,8 @@ async def on_ready():
     		audio = reverse(int(float(OggOpus('{}.opus'.format(queue[n + 1])).info.length)))
     		n = n + 1
     		if int(n + 1) == len(queue):
-			n = -1
+                n = -1
+			
     	except:
     		print(n, len(queue))
     	await asyncio.sleep(4)
