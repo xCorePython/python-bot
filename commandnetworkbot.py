@@ -491,6 +491,7 @@ async def on_ready():
     	if n == len(queue):
     		n = -1
     	time = float(now_date('off', 9) - start)
+    	print(n)
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
     	try:
     		client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n + 1]), bitrate=320))
