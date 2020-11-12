@@ -488,10 +488,9 @@ async def on_ready():
     start = now_date('off', 9)
     audio = reverse(int(float(OggOpus('{}.opus'.format(queue[n])).info.length)))
     while sys_loop == 1:
-    	if n == len(queue):
+    	if n = len(queue):
     		n = -1
     	time = float(now_date('off', 9) - start)
-    	print(n)
     	await status('Time : {} / {} | {}'.format(reverse(time), audio , sys_activity))
     	try:
     		client.get_channel(vcch).guild.voice_client.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[n + 1]), bitrate=320))
@@ -499,7 +498,7 @@ async def on_ready():
     		audio = reverse(int(float(OggOpus('{}.opus'.format(queue[n + 1])).info.length)))
     		n = n + 1
     	except:
-    		aa = audio
+    		print(n, len(queue))
     	await asyncio.sleep(4)
 
 @client.event
