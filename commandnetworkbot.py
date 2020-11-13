@@ -399,6 +399,12 @@ async def commands(command, message):
         await message.channel.send(sendms)
      #elif command == 'p':
       	#await message.author.voice.channel.connect()
+      elif command == 'endless-play':
+      	if arg[0] == 'add':
+      		await message.channel.send(':arrows_counterclockwise: Your request processing...')
+      		info = links[n].split('watch?v=')[1]
+      		conver(info)
+      		await message.channel.send(':check: Your request successfully added')
     else:
     	sendms = discord.Embed(title="コマンド一覧", description="コマンドの詳細や使い方はCn!help <コマンド名>", color=0x00ffff)
     	sendms.add_field(name="Tool", value='`timer`,`check`,`time`,`stopwatch`,`search`,`random`,`translate`,`downloader`', inline=False)
@@ -495,7 +501,7 @@ async def on_ready():
     		start = now_date('off', 9)
     		audio = reverse(int(float(OggOpus('{}.opus'.format(queue[n + 1])).info.length)))
     		n = n + 1
-    		if n = len(queue):
+    		if n == len(queue):
     			n = -1
     	except:
     		print(n, len(queue))
