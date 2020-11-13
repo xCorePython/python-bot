@@ -402,7 +402,7 @@ async def commands(command, message):
     elif command == 'endless-play':
       	if arg[0] == 'add':
       		await message.channel.send(':arrows_counterclockwise: Your request processing...')
-      		info = links[n].split('watch?v=')[1]
+      		info = arg[1]
       		conver(info)
       		await message.channel.send(':check: Your request successfully added')
     else:
