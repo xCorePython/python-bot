@@ -397,9 +397,9 @@ async def commands(command, message):
         omikuji = [ '大吉', '中吉', '小吉', '吉', '末吉', '凶', '小凶', '中凶', '大凶' ]
         sendms = random.choice(omikuji)
         await message.channel.send(sendms)
-     #elif command == 'p':
+    #elif command == 'p':
       	#await message.author.voice.channel.connect()
-      elif command == 'endless-play':
+    elif command == 'endless-play':
       	if arg[0] == 'add':
       		await message.channel.send(':arrows_counterclockwise: Your request processing...')
       		info = links[n].split('watch?v=')[1]
