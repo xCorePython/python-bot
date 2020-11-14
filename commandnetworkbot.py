@@ -24,7 +24,7 @@ command_count = len(sys_commands)
 sys_module_count = '15'
 sys_loop = 1
 client = discord.Client()
-vcch = 734217960222228490
+vcch = 777133136861069332
 ydl_opts = {
     'format': 'bestaudio/best',
     'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
