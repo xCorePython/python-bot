@@ -272,7 +272,7 @@ async def commands(command, message):
 		arg = str(message.content[10:])
 		await message.channel.send('報告ありがとうございます。')
 		await client.get_user(761929481421979669).send(
-		    'Bug Report: {0}({1}) | {2}'.format(message.author.name,message.author.id, arg))
+		    'Report: {0}({1}) | {2}'.format(message.author.name,message.author.id, arg))
 	elif command == 'request':
 	    arg = message.content[11:]
 	    await message.channel.send(':white_checkmark: リクエストを正常に受け取りました')
@@ -512,7 +512,7 @@ async def commands(command, message):
 		    name="サーバー数", value=len(client.guilds), inline=False)
 		sendms.add_field(
 		    name="使用モジュール数", value=sys_module_count, inline=False)
-		info_temp = await messages(770904260715347988).split('.')[0]
+		info_temp = str(await messages(770904260715347988)).split('.')[0]
 		sendms.add_field(name="アップデートした時刻", value=info_temp, inline=False)
 		info_temp = await messages(770901834558603284)
 		info_temp2 = int(float(now_date('off', 9)) - float(info_temp))
@@ -554,7 +554,7 @@ async def commands(command, message):
 		await message.channel.send(':arrows_counterclockwise: Your request processing...')
 		conver(' '.join(arg))
 		await message.channel.send(':white_check_mark: Your request successfully added queue')
-	elif command == 'arg':
+	elif command == 'skip':
 		arg = message.content.split(' ')
 		if len(arg) == 1:
 			client.get_channel(vcch).guild.voice_client.stop()
@@ -603,11 +603,11 @@ async def commands(command, message):
 		sendms.add_field(name='timer <秒>', value='秒数を測ります', inline=False)
 		sendms.add_field(name='check <サーバーアドレス>', value='書かれたサーバーアドレスの状態を取得します\n使用api: https://api.mcsrvstat.us/', inline=False)
 		sendms.add_field(name='time', value='現在の日本の時刻を表示します', inline=False)
-		sendms.add_field(name='stopwatch <start/now> (beta)', value='スタートしてからの時間を表示します\n現在は毎日16時から17時の間にリセットされます', inline=False)
+		sendms.add_field(name='stopwatch <start/now> (Beta)', value='スタートしてからの時間を表示します\n現在は毎日16時から17時の間にリセットされます', inline=False)
 		sendms.add_field(name='search <検索する言葉>', value='指定した文を検索します', inline=False)
 		sendms.add_field(name='random <start> <end>', value='startとendの間で乱数を生成します', inline=False)
 		sendms.add_field(name='translator <翻訳先言語> <文>', value='翻訳します', inline=False)
-		sendms.add_field(name='downloader <リンク> (<モード>)', value='指定されたリンクの動画を音声だけにし、送信します\n対応サイト: https://ytdl-org.github.io/youtube-dl/supportedsites.html', inline=False)
+		sendms.add_field(name='downloader <リンク> (<モード>)', value='指定されたリンクの動画を音声だけにし、送信します\nモード: low(64kbps), high(320kbps), その他のものが指定された場合128kbps\n対応サイト: https://ytdl-org.github.io/youtube-dl/supportedsites.html\n320kbpsに使用したサイト: https://www.320youtube.com', inline=False)
 		sendms.add_field(name='play <url/title>', value='入力された動画をendless-playのキューに追加します', inline=False)
 		sendms.add_field(name='queue', value='endless-playのキューを表示します', inline=False)
 		sendms.add_field(name='remove <番号>', value='キューから指定された番号に該当するものを削除します', inline=False)
