@@ -1,5 +1,4 @@
 discord.py
-pip
 requests
 asyncio
 psutil
@@ -7,4 +6,3 @@ bs4
 googletrans
 youtube_dl
 PyNaCl
-mutagen
