@@ -552,7 +552,7 @@ async def commands(command, message):
 		await message.channel.send(embed=sendms)
 	elif command == 'play':
 		await message.channel.send(':arrows_counterclockwise: Your request processing...')
-		conver(' '.join(arg[1:]))
+		conver(' '.join(arg))
 		await message.channel.send(':white_check_mark: Your request successfully added queue')
 	elif command == 'arg':
 		arg = message.content.split(' ')
