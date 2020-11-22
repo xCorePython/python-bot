@@ -366,15 +366,15 @@ async def commands(command, message):
 			await message.channel.send('Downloading... (128kbps)')
 			info_dict = ydl.extract_info(link, download=True, process=True)
 			await message.channel.send(
-			    file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
+			    file=discord.File('{0}.mp3'.format(info_dict['id'])))
 		if arg[2] == 'low':
 			ydl = youtube_dl.YoutubeDL(ydl_opts)
 			await message.channel.send('Downloading... (64kbps)')
 			info_dict = ydl.extract_info(link, download=True, process=True)
 			await message.channel.send(
-			    file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
+			    file=discord.File('{0}.mp3'.format(info_dict['id'])))
 		if arg[2] == 'high':
-			thumbnail = info['thumbnails'][(info['thumbnails']) - 1]['url']
+			thumbnail = info['thumbnails'][len(info['thumbnails']) - 1]['url']
 			url = 'https://www.320youtube.com/v11/watch?v={}'.format(
 			    info['id'])
 			result = requests.get(url)
@@ -396,7 +396,7 @@ async def commands(command, message):
 			await message.channel.send('Downloading... (128kbps)')
 			info_dict = ydl.extract_info(link, download=True, process=True)
 			await message.channel.send(
-			    file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
+			    file=discord.File('{0}.mp3'.format(info_dict['id'])))
 	elif command == 'search':
 		arg = ' '.join(arg)
 		result = requests.get(
@@ -599,7 +599,7 @@ async def commands(command, message):
 		await message.channel.send(embed=sendms)
 	elif command == 'leave':
 		await client.get_channel(vcch).guild.voice_client.disconnect()
-		await message.add_reaction('white_check_mark:')
+		await message.add_reaction(':white_check_mark:')
 	elif command == 'owner':
 	    status = await messages(778387340485722113)
 	    if status == 'school':
