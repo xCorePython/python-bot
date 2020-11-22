@@ -590,7 +590,7 @@ async def commands(command, message):
 		await message.channel.send(':white_check_mark: Removed')
 	elif command == 'join':
 	    await client.get_channel(vcch).connect()
-	    await message.add_reaction(':white_check_mark')
+	    await message.add_reaction(':white_check_mark:')
 	elif command == 'queue':
 		queues = []
 		for m in range(len(queue)):
@@ -599,7 +599,7 @@ async def commands(command, message):
 		await message.channel.send(embed=sendms)
 	elif command == 'leave':
 		await client.get_channel(vcch).guild.voice_client.disconnect()
-		await message.add_reaction('white_check_mark')
+		await message.add_reaction('white_check_mark:')
 	elif command == 'owner':
 	    status = await messages(778387340485722113)
 	    if status == 'school':
