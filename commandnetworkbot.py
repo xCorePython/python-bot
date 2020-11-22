@@ -3,7 +3,7 @@ now = datetime.datetime.utcnow()
 starttime = float(now.strftime("0.%f")) + int(now.second) + int(
     int(now.day) * 86400) + int(int(now.hour) * 3600) + int(
         int(now.minute) * 60)
-import calendar, os, discord, psutil, random, requests, asyncio, sys, youtube_dl, googletrans, bs4
+import calendar, os, discord, psutil, random, requests, asyncio, sys, youtube_dl, googletrans, bs4, queue
 now = datetime.datetime.utcnow()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(
     int(now.day) * 86400) + int(int(now.hour) * 3600) + int(
@@ -78,6 +78,7 @@ ydl_opts3 = {
     True,
     'noplaylist':
     True,
+    'quiet': True,
     'postprocessors': [
         {
             'key': 'FFmpegExtractAudio',
@@ -552,8 +553,11 @@ async def commands(command, message):
 		await message.channel.send(embed=sendms)
 	elif command == 'play':
 		await message.channel.send(':arrows_counterclockwise: Your request processing...')
-		conver(' '.join(arg))
-		await message.channel.send(':white_check_mark: Your request successfully added queue')
+		info = conver(' '.join(arg))
+		if info == 'Failed':
+			await message.channel.send('No result')
+		else:
+			await message.channel.send(':white_check_mark: Your request successfully added queue')
 	elif command == 'skip':
 		arg = message.content.split(' ')
 		if len(arg) == 1:
@@ -575,18 +579,24 @@ async def commands(command, message):
 		arg = int(message.content.split(' ')[1])- 1
 		if arg+1 == np[len(np)-1]:
 		    client.get_channel(vcch).guild.voice_client.stop()
+		if arg < np[len(np) - 1]:
+			np.append(np[len(np) - 1] - 1)
 		del queue[arg]
 		del drs[arg]
 		del titles[arg]
-		await message.channel.send(':white_checkmark: Removed')
+		await message.channel.send(':white_check_mark: Removed')
 	elif command == 'join':
 	    await client.get_channel(vcch).connect()
+	    await message.add_reaction(':white_check_mark')
 	elif command == 'queue':
 		queues = []
 		for m in range(len(queue)):
 		    queues.append('{}: {}'.format(str(m+1), titles[m]))
 		sendms = discord.Embed(title='Queue', description=str('\n'.join(queues)))
 		await message.channel.send(embed=sendms)
+	elif command == 'leave':
+		await client.get_channel(vcch).guild.voice_client.disconnect()
+		await message.add_reaction('white_check_mark')
 	elif command == 'owner':
 	    status = await messages(778387340485722113)
 	    if status == 'school':
@@ -650,23 +660,24 @@ def conv(info):
 
 
 def conver(info):
-	print('Converting and Downloading... ({})'.format(info))
 	ydl = youtube_dl.YoutubeDL(ydl_opts3)
-	for n in range(1, 3):
+	for n in range(1, 10):
 		try:
 		    if info.startswith('https://'):
 		        info_dict = ydl.extract_info(info, download=True, process=True)
+		        return 'Complete'
+		        queue.append(info_dict['id'])
+		        drs.append(info_dict['duration'])
+		        titles.append(info_dict['title'])
 		    else:
 		        info_dict = ydl.extract_info("ytsearch:{}".format(info), download=True, process=True)
-		        print(info_dict)
-		        info_dict = ydl.extract_info(info_dict['entries'][0]['id'], download=False, process=False)
+		        return 'Complete'
+		        queue.append(info_dict['id'])
+		        drs.append(info_dict['duration'])
+		        titles.append(info_dict['title'])
 		    break
 		except:
-		    print('Retrying...')
-	print('Converted {}'.format(info))
-	queue.append(info_dict['id'])
-	drs.append(reverse(info_dict['duration']))
-	titles.append(info_dict['title'])
+		    return 'Failed'
 
 
 first = ['Not Converted']
