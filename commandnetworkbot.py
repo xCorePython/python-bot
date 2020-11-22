@@ -736,13 +736,6 @@ async def on_ready():
 	await status(sys_activity)
 	n = 0
 	await client.get_channel(vcch).connect()
-	client.get_channel(vcch).guild.voice_client.play(
-	    discord.FFmpegOpusAudio('{0}.opus'.format(queue[n]), bitrate=320))
-	start = now_date('off', 9)
-	audio = drs[n]
-	starts.append(start)
-	stdate.append(now_date('on', 9))
-	np.append(n)
 	while sys_loop == 1:
 		try:
 			client.get_channel(vcch).guild.voice_client.play(
