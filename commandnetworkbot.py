@@ -362,7 +362,7 @@ async def commands(command, message):
 		    arg[1], download=False, process=False)
 		link = 'https://youtu.be/{}'.format(info['id'])
 		if len(arg) == 2:
-			ydl = youtube_dl.YoutubeDL(ydl_opts3)
+			ydl = youtube_dl.YoutubeDL(ydl_opts2)
 			await message.channel.send('Downloading... (128kbps)')
 			info_dict = ydl.extract_info(link, download=True, process=True)
 			await message.channel.send(
@@ -392,7 +392,7 @@ async def commands(command, message):
 			    text='Powered by 320youtube | https://www.320youtube.com')
 			await message.channel.send(embed=sendms)
 		else:
-			ydl = youtube_dl.YoutubeDL(ydl_opts3)
+			ydl = youtube_dl.YoutubeDL(ydl_opts2)
 			await message.channel.send('Downloading... (128kbps)')
 			info_dict = ydl.extract_info(link, download=True, process=True)
 			await message.channel.send(
