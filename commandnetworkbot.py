@@ -673,9 +673,9 @@ def conver(info):
 		    else:
 		        print('Downloading', info, '...')
 		        info_dict = ydl.extract_info("ytsearch:{}".format(info), download=True, process=True)
-		        queue.append(info_dict['id'])
-		        drs.append(info_dict['duration'])
-		        titles.append(info_dict['title'])
+		        queue.append(info_dict['entries'][0]['id'])
+		        drs.append(info_dict['entries'][0]['duration'])
+		        titles.append(info_dict['entries'][0]['title'])
 		        return 'Complete'
 		except:
 		    print('Retrying...')
