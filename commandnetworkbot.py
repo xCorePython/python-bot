@@ -735,6 +735,7 @@ async def on_ready():
 		first.append('Converted')
 	await status(sys_activity)
 	n = 0
+	retries = 0
 	await client.get_channel(vcch).connect()
 	while sys_loop == 1:
 		try:
@@ -750,7 +751,7 @@ async def on_ready():
 			if int(n + 1) >= len(queue):
 				n = -1
 		except:
-			aa = audio
+			retries = retries + 1
 		await asyncio.sleep(1)
 
 
