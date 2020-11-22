@@ -398,7 +398,7 @@ async def commands(command, message):
 			await message.channel.send(
 			    file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
 	elif command == 'search':
-		arg = message.content[10:]
+		arg = ' '.join(arg)
 		result = requests.get(
 		    'https://www.google.com/search?q={}/'.format(arg))
 		soup = bs4.BeautifulSoup(result.text, 'html.parser')
@@ -664,20 +664,22 @@ def conver(info):
 	for n in range(1, 10):
 		try:
 		    if info.startswith('https://'):
+		        print('Downloading', info, '...')
 		        info_dict = ydl.extract_info(info, download=True, process=True)
-		        return 'Complete'
 		        queue.append(info_dict['id'])
 		        drs.append(info_dict['duration'])
 		        titles.append(info_dict['title'])
+		        return 'Complete'
 		    else:
+		        print('Downloading', info, '...')
 		        info_dict = ydl.extract_info("ytsearch:{}".format(info), download=True, process=True)
-		        return 'Complete'
 		        queue.append(info_dict['id'])
 		        drs.append(info_dict['duration'])
 		        titles.append(info_dict['title'])
-		    break
+		        return 'Complete'
 		except:
-		    return 'Failed'
+		    print('Retrying...')
+	return 'Failed'
 
 
 first = ['Not Converted']
@@ -773,16 +775,44 @@ async def on_message(message):
 		prefix = message.content[len(command_prefix):]
 		start = prefix.split(' ')[0]
 		print(start)
+		if start == 'q':
+		    await commands('queue', message)
+		    return
+		if start == 'dc':
+		    await commands('leave', message)
+		    return
+		if start == 'j':
+		    await commands('join', message)
+		    return
 		if start == 'join':
 		    await commands('join', message)
+		    return
+		if start == 'del':
+		    await commands('remove', message)
+		    return
+		if start == 'd':
+		    await commands('remove', message)
+		    return
 		if start == 'r':
 		    await commands('remove', message)
 		    return
+		if start == 'p':
+		    await commands('play', message)
+		    return
+		if start == 'n':
+		    await commands('nowplaying', message)
+		    return
+		if start == 'l':
+		    await commands('leave', message)
+		    return
+		if start == 'stop':
+		    await commands('leave', message)
+		    return
+		if start == 'st':
+		    await commands('nowplaying', message)
+		    return
 		if start == 's':
 			await commands('skip', message)
-			return
-		if start == 'endless-play':
-			await commands('endless-play', message)
 			return
 		if start == 'np':
 			await commands('nowplaying', message)
