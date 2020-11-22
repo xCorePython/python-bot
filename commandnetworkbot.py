@@ -553,7 +553,10 @@ async def commands(command, message):
 		await message.channel.send(embed=sendms)
 	elif command == 'play':
 		await message.channel.send(':arrows_counterclockwise: Your request processing...')
-		info = conver(' '.join(arg))
+		info, file = conver(' '.join(arg))
+		if file != 'Failed':
+			if os.path.isfile('{}.opus'.format(file)) == False:
+				info, file = conver(' '.join(arg))
 		if info == 'Failed':
 			await message.channel.send('No result')
 		else:
@@ -669,17 +672,17 @@ def conver(info):
 		        queue.append(info_dict['id'])
 		        drs.append(info_dict['duration'])
 		        titles.append(info_dict['title'])
-		        return 'Complete'
+		        return 'Complete', info_dict['id']
 		    else:
 		        print('Downloading', info, '...')
 		        info_dict = ydl.extract_info("ytsearch:{}".format(info), download=True, process=True)
 		        queue.append(info_dict['entries'][0]['id'])
 		        drs.append(info_dict['entries'][0]['duration'])
 		        titles.append(info_dict['entries'][0]['title'])
-		        return 'Complete'
+		        return 'Complete', info_dict['entries'][0]['id']
 		except:
 		    print('Retrying...')
-	return 'Failed'
+	return 'Failed', 'Failed'
 
 
 first = ['Not Converted']
@@ -738,6 +741,8 @@ async def on_ready():
 	retries = 0
 	await client.get_channel(vcch).connect()
 	while sys_loop == 1:
+		if int(n + 1) >= len(queue):
+			n = -1
 		try:
 			client.get_channel(vcch).guild.voice_client.play(
 			    discord.FFmpegOpusAudio(
@@ -748,8 +753,6 @@ async def on_ready():
 			audio = drs[n + 1]
 			n = n + 1
 			np.append(n)
-			if int(n + 1) >= len(queue):
-				n = -1
 		except:
 			retries = retries + 1
 		await asyncio.sleep(1)
