@@ -148,8 +148,7 @@ def now_date(mode, location):
 				if month > 12:
 					month = month - 12
 					year = year + 1
-		a01 = datetime.datetime(year, month, day, hour, now.minute, now.second,
-		                        int(now.strftime("%f")))
+		a01 = datetime.datetime(year, month, day, hour, now.minute, now.second, int(now.strftime("%f")))
 		return a01.strftime("%Y/%m/%d %H:%M:%S.%f")
 
 def reverse(data):
@@ -195,7 +194,6 @@ class Queue:
 	def __init__(self):
 		self.np = 0
 		self.queue = []
-		self.voice = None
 
 	def add(self, value):
 		value['bitrate'] = int(str(subprocess.run("ffprobe -print_format json -show_format {}.opus".format(value['id']), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, text=True).stdout).split('"bit_rate": "')[1].split('"')[0])
@@ -714,7 +712,7 @@ def stop(voice):
 	voice.stop()
 
 def play(queue, voice):
-    voice.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[0]['id']), bitrate=320, after=q.next()))
+    voice.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[0]['id'])), bitrate=320, after=q.next())
 
 first = ['Not Converted']
 
@@ -765,7 +763,6 @@ async def on_ready():
 	await status(sys_activity)
 	await client.get_channel(vcch).connect()
 	q.set(client.get_channel(vcch).guild.voice_client)
-	await asyncio.sleep(2)
 	q.start()
 
 @client.event
