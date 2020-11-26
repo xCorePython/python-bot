@@ -209,17 +209,20 @@ class Queue:
 			return 'Failed'
 	def start(self):
 		self.start = now_date('off', 9)
+		self.start2 = now_date('on', 9)
 		play(self.queue, self.voice)
 	def set(self, value):
 		self.voice = value
 	def next(self):
 		if len(queue) == 1:
 			self.start = now_date('off', 9)
+			self.start2 = now_date('on', 9)
 			play(self.queue, self.voice)
 		self.played = self.queue[0]
 		self.queue = self.queue[1:]
 		self.queue.append(self.played)
 		self.start = now_date('off', 9)
+		self.start2 = now_date('on', 9)
 		play(self.queue, self.voice)
 	def np1(self):
 		return self.queue
@@ -605,6 +608,7 @@ async def commands(command, message):
 		sendms.add_field(name='Time', value='{} / {}'.format(reverse(nowpl),reverse(info['duration'])),inline=False)
 		sendms.add_field(name='Codec', value='Opus / {}kbps (VBR)'.format(str(int(info['bitrate'])/1000)), inline=False)
 		sendms.set_thumbnail(url=str(info['thumbnails'][len(info['thumbnails']) - 1]['url']))
+		sendms.set_footer()
 		await message.channel.send(embed=sendms)
 	elif command == 'play':
 		await message.channel.send(':arrows_counterclockwise: Your request processing...')
@@ -612,7 +616,14 @@ async def commands(command, message):
 		if info == 'Failed':
 			await message.channel.send(':x: No result')
 		else:
-			await message.channel.send(':white_check_mark: Your request successfully added queue')
+			sendms = discord.Embed(title='Added')
+			link = 'https://youtu.be/' + info['id']
+			sendms.add_field(name='Title', value='[{}]({})'.format(info['title'], link), inline=False)
+			sendms.add_field(name='Uploader',value='[{}]({})'.format(info['uploader'],info['uploader_url']),inline=False)
+			sendms.add_field(name='Codec', value='Opus / {}kbps (VBR)'.format(str(int(info['bitrate'])/1000)), inline=False)
+			sendms.set_thumbnail(url=str(info['thumbnails'][len(info['thumbnails']) - 1]['url']))
+			sendms.set_footer(text='Extracted from {}'.format(info['extractor']))
+			await message.channel.send(embed=sendms)
 	elif command == 'skip':
 		arg = message.content.split(' ')
 		if len(arg) == 1:
@@ -690,8 +701,8 @@ def conver(info):
 		        return info_dict
 		    else:
 		        info_dict = ydl.extract_info("ytsearch:{}".format(info), download=True, process=True)
-		        q.add(info_dict)
-		        return info_dict
+		        q.add(info_dict['entries'][0])
+		        return info_dict['entries'][0]
 		    break
 		except:
 		    return 'Failed'
@@ -766,8 +777,30 @@ async def on_message(message):
 		prefix = message.content[len(command_prefix):]
 		start = prefix.split(' ')[0]
 		print(start)
+		if start == 'q':
+		    await commands('queue', message)
+		    return
+		if start == 'n':
+		    await commands('nowplaying', message)
+		    return
+		if start == 'd':
+		    await commands('remove', message)
+		    return
+		if start == 'del':
+		    await commands('remove', message)
+		    return
+		if start == 'dc':
+		    await commands('leave', message)
+		    return
+		if start == 'l':
+		    await commands('leave', message)
+		    return
+		if start == 'p':
+			await commands('play', message)
+			return
 		if start == 'join':
 		    await commands('join', message)
+		    return
 		if start == 'r':
 		    await commands('remove', message)
 		    return
