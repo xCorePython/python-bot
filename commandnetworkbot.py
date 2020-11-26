@@ -78,7 +78,6 @@ ydl_opts3 = {
     True,
     'noplaylist':
     True,
-    'quiet': True,
     'postprocessors': [
         {
             'key': 'FFmpegExtractAudio',
@@ -194,6 +193,7 @@ class Queue:
 	def __init__(self):
 		self.np = 0
 		self.queue = []
+		self.voice = None
 
 	def add(self, value):
 		value['bitrate'] = int(str(subprocess.run("ffprobe -print_format json -show_format {}.opus".format(value['id']), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, text=True).stdout).split('"bit_rate": "')[1].split('"')[0])
