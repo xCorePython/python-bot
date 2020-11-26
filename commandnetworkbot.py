@@ -214,7 +214,7 @@ class Queue:
 	def set(self, value):
 		self.voice = value
 	def next(self):
-		if len(queue) == 1:
+		if len(self.queue) == 1:
 			self.start = now_date('off', 9)
 			self.start2 = now_date('on', 9)
 			play(self.queue, self.voice)
@@ -231,7 +231,7 @@ class Queue:
 	def np3(self):
 		return self.start2
 	def skip(self, value):
-		if len(queue) == 1:
+		if len(self.queue) == 1:
 			stop(self.voice)
 			play(self.queue, self.voice)
 		if value == 1:
@@ -677,7 +677,7 @@ async def commands(command, message):
 		sendms.add_field(name='search <検索する言葉>', value='指定した文を検索します', inline=False)
 		sendms.add_field(name='random <start> <end>', value='startとendの間で乱数を生成します', inline=False)
 		sendms.add_field(name='translator <翻訳先言語> <文>', value='翻訳します', inline=False)
-		sendms.add_field(name='downloader <リンク> (<モード>)', value='指定されたリンクの動画を音声だけにし、送信します\nモード: low(64kbps), high(320kbps), その他のものが指定された場合128kbps[対応サイト](https://ytdl-org.github.io/youtube-dl/supportedsites.html)[320kbpsに使用したサイト]() https://www.320youtube.com)', inline=False)
+		sendms.add_field(name='downloader <リンク> (<モード>)', value='指定されたリンクの動画を音声だけにし、送信します\nモード: low(64kbps), high(320kbps), その他のものが指定された場合128kbps[対応サイト](https://ytdl-org.github.io/youtube-dl/supportedsites.html)[320kbpsに使用したサイト]( https://www.320youtube.com)', inline=False)
 		sendms.add_field(name='play <url/title>', value='入力された動画をendless-playのキューに追加します', inline=False)
 		sendms.add_field(name='queue', value='endless-playのキューを表示します', inline=False)
 		sendms.add_field(name='remove <番号>', value='キューから指定された番号に該当するものを削除します', inline=False)
