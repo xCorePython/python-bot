@@ -3,7 +3,7 @@ now = datetime.datetime.utcnow()
 starttime = float(now.strftime("0.%f")) + int(now.second) + int(
     int(now.day) * 86400) + int(int(now.hour) * 3600) + int(
         int(now.minute) * 60)
-import calendar, os, discord, psutil, random, requests, asyncio, sys, youtube_dl, googletrans, bs4, queue
+import calendar, os, discord, psutil, random, requests, asyncio, sys, youtube_dl, googletrans, bs4, subprocess
 now = datetime.datetime.utcnow()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(
     int(now.day) * 86400) + int(int(now.hour) * 3600) + int(
@@ -12,23 +12,23 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v5.1.01'
+sys_version = 'v5.2.01'
 sys_commands = [
     'timer', 'check', 'time', 'stopwatch', 'search', 'random', 'translator',
     'check', 'info', 'about', 'say', 'uploader', 'omikuji', 'ping', 'seen',
     'downloader', 'reversetranslate', 'play', 'nowplaying', 'queue', 'remove', 'skip'
 ]
 
-ready_log = 'helpの大幅修正、queueコマンド追加、endless-play addをplayコマンドに変更、jumpコマンドとskipコマンドの統合'
+ready_log = 'endless-playの安定化、バグ修正'
 ready_log2 = 'いろんなコマンドを追加'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
-command_prefix = 'Cn!'
+command_prefix = 'c.'
 command_count = len(sys_commands)
 sys_module_count = '12'
 sys_loop = 1
 client = discord.Client()
 vcch = 734217960222228490
-#vcch = 777133136861069332
+vcch = 584262828807028746
 ydl_opts = {
     'format':
     'bestaudio/best',
@@ -90,15 +90,7 @@ ydl_opts3 = {
         },
     ],
 }
-
-while sys_loop == 1:
-	try:
-		translator = googletrans.Translator()
-		sendms = translator.translate('konnnichiha', dest='en')
-		break
-	except:
-		print('Retrying...')
-
+			
 
 def now_month(mode):
 	if mode == 'total':
@@ -160,7 +152,6 @@ def now_date(mode, location):
 		                        int(now.strftime("%f")))
 		return a01.strftime("%Y/%m/%d %H:%M:%S.%f")
 
-
 def reverse(data):
 	time = int(float(data))
 	if time < 10:
@@ -200,6 +191,59 @@ def reverse(data):
 		uptime = '0:' + str(time)
 		return uptime
 
+class Queue:
+	def __init__(self):
+		self.np = 0
+		self.queue = []
+		self.voice = None
+
+	def add(self, value):
+		value['bitrate'] = int(str(subprocess.run("ffprobe -print_format json -show_format {}.opus".format(value['id']), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, text=True).stdout).split('"bit_rate": "')[1].split('"')[0])
+		self.queue.append(value)
+	
+	def remove(self, value):
+		try:
+			del self.queue[int(value)]
+			return 'Done'
+		except:
+			return 'Failed'
+	def start(self):
+		self.start = now_date('off', 9)
+		play(self.queue, self.voice)
+	def set(self, value):
+		self.voice = value
+	def next(self):
+		if len(queue) == 1:
+			self.start = now_date('off', 9)
+			play(self.queue, self.voice)
+		self.played = self.queue[0]
+		self.queue = self.queue[1:]
+		self.queue.append(self.played)
+		self.start = now_date('off', 9)
+		play(self.queue, self.voice)
+	def np1(self):
+		return self.queue
+	def np2(self):
+	    return self.start
+	def skip(self, value):
+		if len(queue) == 1:
+			stop(self.voice)
+			play(self.queue, self.voice)
+		if value == 1:
+			self.played = self.queue[0]
+			self.queue = self.queue[1:]
+			self.queue.append(self.played)
+			stop(self.voice)
+			play(self.queue, self.voice)
+		else:
+			for n in range(value):
+				self.played = self.queue[0]
+				self.queue = self.queue[1:]
+				self.queue.append(self.played)
+			stop(self.voice)
+			play(self.queue, self.voice)
+			
+q = Queue()
 
 async def log(level, info):
 	await client.get_channel(773053692629876757).send('[{0}] {1}'.format(
@@ -358,9 +402,11 @@ async def commands(command, message):
 		    file=discord.File('uploader/{}'.format(arg)))
 	elif command == 'downloader':
 		arg = message.content.split(' ')
-		link = arg[1]
+		info = youtube_dl.YoutubeDL().extract_info(
+		    arg[1], download=False, process=False)
+		link = 'https://youtu.be/{}'.format(info['id'])
 		if len(arg) == 2:
-			ydl = youtube_dl.YoutubeDL(ydl_opts2)
+			ydl = youtube_dl.YoutubeDL(ydl_opts3)
 			await message.channel.send('Downloading... (128kbps)')
 			info_dict = ydl.extract_info(link, download=True, process=True)
 			await message.channel.send(
@@ -372,8 +418,7 @@ async def commands(command, message):
 			await message.channel.send(
 			    file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
 		if arg[2] == 'high':
-			info = youtube_dl.YoutubeDL().extract_info(link, download=False, process=False)
-			thumbnail = info['thumbnails'][len(info['thumbnails']) - 1]['url']
+			thumbnail = info['thumbnails'][(info['thumbnails']) - 1]['url']
 			url = 'https://www.320youtube.com/v11/watch?v={}'.format(
 			    info['id'])
 			result = requests.get(url)
@@ -391,13 +436,13 @@ async def commands(command, message):
 			    text='Powered by 320youtube | https://www.320youtube.com')
 			await message.channel.send(embed=sendms)
 		else:
-			ydl = youtube_dl.YoutubeDL(ydl_opts2)
+			ydl = youtube_dl.YoutubeDL(ydl_opts3)
 			await message.channel.send('Downloading... (128kbps)')
 			info_dict = ydl.extract_info(link, download=True, process=True)
 			await message.channel.send(
 			    file=discord.File('youtube/{0}.mp3'.format(info_dict['id'])))
 	elif command == 'search':
-		arg = ' '.join(arg)
+		arg = message.content[10:]
 		result = requests.get(
 		    'https://www.google.com/search?q={}/'.format(arg))
 		soup = bs4.BeautifulSoup(result.text, 'html.parser')
@@ -442,6 +487,13 @@ async def commands(command, message):
 		arg = message.content.split(' ')
 		await message.channel.send(random.randint(int(arg[1]), int(arg[2])))
 	elif command == 'translator':
+		while sys_loop == 1:
+			try:
+				translator = googletrans.Translator()
+				sendms = translator.translate('konnnichiha', dest='en')
+				break
+			except:
+				print('Retrying...')
 		arg = message.content.split(' ')
 		temp_trans = len(arg[1]) + len(arg[0]) + 2
 		if arg[1].find('>') != -1:
@@ -456,6 +508,13 @@ async def commands(command, message):
 			    message.content[temp_trans:], dest=arg[1])
 			await message.channel.send(sendms.text)
 	elif command == 'reversetranslate':
+		while sys_loop == 1:
+			try:
+				translator = googletrans.Translator()
+				sendms = translator.translate('konnnichiha', dest='en')
+				break
+			except:
+				print('Retrying...')
 		arg = message.content.split(' ')
 		temp_trans = len(arg[1]) + len(arg[0]) + 2
 		await log('Debug', 'temp_trans = {}'.format(temp_trans))
@@ -532,73 +591,58 @@ async def commands(command, message):
 	#elif command == 'p':
 	#await message.author.voice.channel.connect()
 	elif command == 'nowplaying':
-		n = np[len(np) - 1]
-		link = 'https://youtu.be/' + queue[n]
-		info = youtube_dl.YoutubeDL().extract_info(link, download=False, process=False)
+		info = q.np1()[0]
+		start = q.np2()
+		link = 'https://youtu.be/' + info['id']
 		sendms = discord.Embed(title='Now Playing')
-		sendms.add_field(name='Track', value=str(np[len(np) - 1] + 1), inline=False)
 		sendms.add_field(name='Title', value='[{}]({})'.format(info['title'], link), inline=False)
 		sendms.add_field(name='Uploader',value='[{}]({})'.format(info['uploader'],info['uploader_url']),inline=False)
-		start = starts[len(starts)- 1]
 		nowti = now_date('off', 9)
 		nowpl = int(float(nowti - start))
 		duration = info['duration']
 		if nowpl > duration:
 			nowpl = duration
 		sendms.add_field(name='Time', value='{} / {}'.format(reverse(nowpl),reverse(info['duration'])),inline=False)
-		sendms.add_field(name='Codec', value='Opus / 320kbps', inline=False)
+		sendms.add_field(name='Codec', value='Opus / {}kbps (VBR)'.format(str(int(info['bitrate'])/1000)), inline=False)
 		sendms.set_thumbnail(url=str(info['thumbnails'][len(info['thumbnails']) - 1]['url']))
-		sendms.set_footer(text='Started at {}'.format(stdate[len(stdate) - 1].split('.')[0]))
 		await message.channel.send(embed=sendms)
 	elif command == 'play':
 		await message.channel.send(':arrows_counterclockwise: Your request processing...')
-		info, file = conver(' '.join(arg))
-		if file != 'Failed':
-			if os.path.isfile('{}.opus'.format(file)) == False:
-				info, file = conver(' '.join(arg))
+		info = conver(' '.join(arg))
 		if info == 'Failed':
-			await message.channel.send('No result')
+			await message.channel.send(':x: No result')
 		else:
 			await message.channel.send(':white_check_mark: Your request successfully added queue')
 	elif command == 'skip':
 		arg = message.content.split(' ')
 		if len(arg) == 1:
-			client.get_channel(vcch).guild.voice_client.stop()
+			q.skip(1)
 			await message.channel.send(':fast_forward: Skipped')
-			return
-		n = 0
-		while sys_loop == 1:
-		    if n == int(arg[1]):
-		        break
-		    try:
-		        client.get_channel(vcch).guild.voice_client.stop()
-		        n = n + 1
-		    except:
-		        aa = n
-		    await asyncio.sleep(1)
-		await message.channel.send(':fast_forward: {} songs skipped'.format(arg[1]))
+		else:
+			if arg[1] == '1':
+				q.skip(1)
+				await message.channel.send(':fast_forward: Skipped')
+			else:
+				q.skip(int(arg[1]))
+				await message.channel.send(':fast_forward: {} songs skipped'.format(arg[1]))
 	elif command == 'remove':
-		arg = int(message.content.split(' ')[1])- 1
-		if arg+1 == np[len(np)-1]:
-		    client.get_channel(vcch).guild.voice_client.stop()
-		if arg < np[len(np) - 1]:
-			np.append(np[len(np) - 1] - 1)
-		del queue[arg]
-		del drs[arg]
-		del titles[arg]
+		arg = message.content.split(' ')
+		q.remove(int(arg[1]))
 		await message.channel.send(':white_check_mark: Removed')
 	elif command == 'join':
 	    await client.get_channel(vcch).connect()
-	    await message.add_reaction(':white_check_mark:')
+	    await message.channel.send(':white_check_mark: Joined')
 	elif command == 'queue':
+		queue = q.np1()
 		queues = []
-		for m in range(len(queue)):
-		    queues.append('{}: {}'.format(str(m+1), titles[m]))
-		sendms = discord.Embed(title='Queue', description=str('\n'.join(queues)))
+		for n in range(1, len(queue)):
+			queues.append('{}: {}'.format(n, queue[n]['title']))
+		sendms = discord.Embed(title='Queue', description='\n'.join(queues))
+		sendms.add_field(name='Now Playing', value=queue[0]['title'])
 		await message.channel.send(embed=sendms)
 	elif command == 'leave':
 		await client.get_channel(vcch).guild.voice_client.disconnect()
-		await message.add_reaction(':white_check_mark:')
+		await message.channel.send('white_check_mark: Disconnected')
 	elif command == 'owner':
 	    status = await messages(778387340485722113)
 	    if status == 'school':
@@ -613,13 +657,13 @@ async def commands(command, message):
 		sendms.add_field(name='information', value='Botの詳細を表示します', inline=False)
 		sendms.add_field(name='ping', value='Botの遅延等を表示します', inline=False)
 		sendms.add_field(name='timer <秒>', value='秒数を測ります', inline=False)
-		sendms.add_field(name='check <サーバーアドレス>', value='書かれたサーバーアドレスの状態を取得します\n使用api: https://api.mcsrvstat.us/', inline=False)
+		sendms.add_field(name='check <サーバーアドレス>', value='書かれたサーバーアドレスの状態を取得します\n[使用api](https://api.mcsrvstat.us/)', inline=False)
 		sendms.add_field(name='time', value='現在の日本の時刻を表示します', inline=False)
 		sendms.add_field(name='stopwatch <start/now> (Beta)', value='スタートしてからの時間を表示します\n現在は毎日16時から17時の間にリセットされます', inline=False)
 		sendms.add_field(name='search <検索する言葉>', value='指定した文を検索します', inline=False)
 		sendms.add_field(name='random <start> <end>', value='startとendの間で乱数を生成します', inline=False)
 		sendms.add_field(name='translator <翻訳先言語> <文>', value='翻訳します', inline=False)
-		sendms.add_field(name='downloader <リンク> (<モード>)', value='指定されたリンクの動画を音声だけにし、送信します\nモード: low(64kbps), high(320kbps), その他のものが指定された場合128kbps\n対応サイト: https://ytdl-org.github.io/youtube-dl/supportedsites.html\n320kbpsに使用したサイト: https://www.320youtube.com', inline=False)
+		sendms.add_field(name='downloader <リンク> (<モード>)', value='指定されたリンクの動画を音声だけにし、送信します\nモード: low(64kbps), high(320kbps), その他のものが指定された場合128kbps[対応サイト](https://ytdl-org.github.io/youtube-dl/supportedsites.html)[320kbpsに使用したサイト]() https://www.320youtube.com)', inline=False)
 		sendms.add_field(name='play <url/title>', value='入力された動画をendless-playのキューに追加します', inline=False)
 		sendms.add_field(name='queue', value='endless-playのキューを表示します', inline=False)
 		sendms.add_field(name='remove <番号>', value='キューから指定された番号に該当するものを削除します', inline=False)
@@ -629,15 +673,6 @@ async def commands(command, message):
 		sendms.add_field(name='request <文>', value='追加してほしいコマンドがあったりする場合はこれを使用してください', inline=False)
 		await message.channel.send(embed=sendms)
 
-
-queue = []
-starts = []
-stdate = []
-np = []
-drs = []
-titles = []
-
-
 async def create_queue(channelid):
 	messages = await client.get_channel(channelid).history(limit=1000).flatten()
 	urls = []
@@ -645,47 +680,29 @@ async def create_queue(channelid):
 		urls.append(message.content)
 	return urls
 
-
-def conv(info):
-	title = info
-	url = 'https://www.320youtube.com/v11/watch?v={}'.format(info)
-	result = requests.get(url)
-	soup = bs4.BeautifulSoup(result.text, 'html.parser')
-	dllink = str(str(soup).split('href=')[8])[1:].split('" rel')[0]
-	print('Downloading {}...'.format(title))
-	urllib.request.urlretrieve(dllink, '{}.mp3'.format(title))
-	print('Downloaded and Converting...')
-	os.system(
-	    'ffmpeg -i {0}.mp3 -c:a libopus -b:a 320k {0}.opus'.format(title))
-	print('Converted')
-	queue.append(title)
-
-
 def conver(info):
 	ydl = youtube_dl.YoutubeDL(ydl_opts3)
 	for n in range(1, 10):
 		try:
 		    if info.startswith('https://'):
-		        print('Downloading', info, '...')
 		        info_dict = ydl.extract_info(info, download=True, process=True)
-		        queue.append(info_dict['id'])
-		        drs.append(info_dict['duration'])
-		        titles.append(info_dict['title'])
-		        return 'Complete', info_dict['id']
+		        q.add(info_dict)
+		        return info_dict
 		    else:
-		        print('Downloading', info, '...')
 		        info_dict = ydl.extract_info("ytsearch:{}".format(info), download=True, process=True)
-		        queue.append(info_dict['entries'][0]['id'])
-		        drs.append(info_dict['entries'][0]['duration'])
-		        titles.append(info_dict['entries'][0]['title'])
-		        return 'Complete', info_dict['entries'][0]['id']
+		        q.add(info_dict)
+		        return info_dict
+		    break
 		except:
-		    print('Retrying...')
-	return 'Failed', 'Failed'
+		    return 'Failed'
 
+def stop(voice):
+	voice.stop()
+
+def play(queue, voice):
+    voice.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[0]['id']), bitrate=320))
 
 first = ['Not Converted']
-
 
 @client.event
 async def on_ready():
@@ -699,11 +716,8 @@ async def on_ready():
 	    activity=discord.Game('Bot Starting... Please wait | {}'.format(
 	        sys_version)))
 	data_version = await messages(768764714271506452)
-	ready_send = 'f'
 	if data_version != sys_version:
-		ready_send = 't'
 		await send(768764714271506452, sys_version, 2)
-	if ready_send == 't':
 		startupst = discord.Embed(
 		    title='Command Network Botがアップデートされました',
 		    description=sys_version,
@@ -716,7 +730,6 @@ async def on_ready():
 		startupst.add_field(name='次回更新予定内容', value=ready_log2, inline=False)
 		startupst.add_field(name='お知らせ', value=ready_info, inline=False)
 		await send(707426067098501171, startupst, 9)
-	sys_activity = command_prefix + 'help' + ' | ' + sys_version
 	now = datetime.datetime.utcnow()
 	readytime = float(now.strftime("0.%f")) + int(now.second) + int(
 	    int(now.day) * 86400) + int(int(now.hour) * 3600) + int(
@@ -728,34 +741,18 @@ async def on_ready():
 	await send(770902347667996672, str(activityst), 2)
 	if len(first) == 1:
 		print('Loading queue...')
-		await status('Loading queue... | {}'.format(sys_activity))
 		links = await create_queue(774525604116037662)
-		print('Loaded queue')
 		for n in range(len(links)):
 		    link = links[n]
 		    conver(link)
-		first.append('Converted')
+		print('Loaded queue')
+		first.append('Converted')	
+	sys_activity = command_prefix + 'help' + ' | ' + sys_version
 	await status(sys_activity)
-	n = 0
-	retries = 0
 	await client.get_channel(vcch).connect()
-	while sys_loop == 1:
-		if int(n + 1) >= len(queue):
-			n = -1
-		try:
-			client.get_channel(vcch).guild.voice_client.play(
-			    discord.FFmpegOpusAudio(
-			        '{0}.opus'.format(queue[n + 1]), bitrate=320))
-			start = now_date('off', 9)
-			starts.append(start)
-			stdate.append(now_date('on', 9))
-			audio = drs[n + 1]
-			n = n + 1
-			np.append(n)
-		except:
-			retries = retries + 1
-		await asyncio.sleep(1)
-
+	q.set(client.get_channel(vcch).guild.voice_client)
+	await asyncio.sleep(2)
+	q.start()
 
 @client.event
 async def on_message(message):
@@ -765,50 +762,20 @@ async def on_message(message):
 		if message.content.startswith('Cn!admin uploader '):
 			arg = message.content[18:]
 			await message.channel.send(file=discord.File(arg))
-	if message.author.id == client.user.id:
-		return
 	if message.content.startswith(command_prefix):
 		prefix = message.content[len(command_prefix):]
 		start = prefix.split(' ')[0]
 		print(start)
-		if start == 'q':
-		    await commands('queue', message)
-		    return
-		if start == 'dc':
-		    await commands('leave', message)
-		    return
-		if start == 'j':
-		    await commands('join', message)
-		    return
 		if start == 'join':
 		    await commands('join', message)
-		    return
-		if start == 'del':
-		    await commands('remove', message)
-		    return
-		if start == 'd':
-		    await commands('remove', message)
-		    return
 		if start == 'r':
 		    await commands('remove', message)
 		    return
-		if start == 'p':
-		    await commands('play', message)
-		    return
-		if start == 'n':
-		    await commands('nowplaying', message)
-		    return
-		if start == 'l':
-		    await commands('leave', message)
-		    return
-		if start == 'stop':
-		    await commands('leave', message)
-		    return
-		if start == 'st':
-		    await commands('nowplaying', message)
-		    return
 		if start == 's':
 			await commands('skip', message)
+			return
+		if start == 'endless-play':
+			await commands('endless-play', message)
 			return
 		if start == 'np':
 			await commands('nowplaying', message)
@@ -847,6 +814,8 @@ async def on_message(message):
 		omikuji = ['大吉', '中吉', '小吉', '吉', '末吉', '凶', '小凶', '中凶', '大凶']
 		sendms = random.choice(omikuji)
 		await message.channel.send(sendms)
+		return
+	if message.author.id == client.user.id:
 		return
 	if message.content.find('よかったね') != -1:
 		await message.channel.send('よかったね')
