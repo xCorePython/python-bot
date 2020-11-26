@@ -228,6 +228,8 @@ class Queue:
 		return self.queue
 	def np2(self):
 	    return self.start
+	def np3(self):
+		return self.start2
 	def skip(self, value):
 		if len(queue) == 1:
 			stop(self.voice)
@@ -596,6 +598,7 @@ async def commands(command, message):
 	elif command == 'nowplaying':
 		info = q.np1()[0]
 		start = q.np2()
+		start2 = q.np3()
 		link = 'https://youtu.be/' + info['id']
 		sendms = discord.Embed(title='Now Playing')
 		sendms.add_field(name='Title', value='[{}]({})'.format(info['title'], link), inline=False)
@@ -608,7 +611,7 @@ async def commands(command, message):
 		sendms.add_field(name='Time', value='{} / {}'.format(reverse(nowpl),reverse(info['duration'])),inline=False)
 		sendms.add_field(name='Codec', value='Opus / {}kbps (VBR)'.format(str(int(info['bitrate'])/1000)), inline=False)
 		sendms.set_thumbnail(url=str(info['thumbnails'][len(info['thumbnails']) - 1]['url']))
-		sendms.set_footer()
+		sendms.set_footer(text='Started at {}'.format(start2.split('.')[0]))
 		await message.channel.send(embed=sendms)
 	elif command == 'play':
 		await message.channel.send(':arrows_counterclockwise: Your request processing...')
@@ -711,7 +714,7 @@ def stop(voice):
 	voice.stop()
 
 def play(queue, voice):
-    voice.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[0]['id']), bitrate=320))
+    voice.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[0]['id']), bitrate=320, after=q.next()))
 
 first = ['Not Converted']
 
