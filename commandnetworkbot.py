@@ -712,7 +712,8 @@ def stop(voice):
 	voice.stop()
 
 def play(queue, voice):
-    voice.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[0]['id']), bitrate=320), after=q.next())
+    print(queue)
+    voice.play(discord.FFmpegOpusAudio('{0}.opus'.format(queue[0]['id'])), after=q.next())
 
 first = ['Not Converted']
 
