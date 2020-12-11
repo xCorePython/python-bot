@@ -12,15 +12,28 @@ importtime = float(now.strftime("0.%f")) + int(now.second) + int(
 sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
 sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
 sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v5.2.01'
+sys_version = 'v5.3.03'
 sys_commands = [
     'timer', 'check', 'time', 'stopwatch', 'search', 'random', 'translator',
     'check', 'info', 'about', 'say', 'uploader', 'omikuji', 'ping', 'seen',
-    'downloader', 'reversetranslate', 'play', 'nowplaying', 'queue', 'remove', 'skip'
+    'downloader', 'reversetranslate', 'play', 'nowplaying', 'queue', 'remove', 'skip', 'report', 'request'
 ]
 
-ready_log = 'endless-playの安定化、バグ修正'
-ready_log2 = 'いろんなコマンドを追加'
+ready_log = '''
+endless-playをさらに安定化
+イコライザーの設定の調整
+'''
+ready_log2 = '''
+aboutコマンドとdocsコマンドを追加
+'''
+ready_log3 = '''
+bassboostコマンドとequalizerコマンドを追加
+checkコマンドにサーバーのサムネイルを追加
+'''
+ready_log = '\n・'.join(ready_log[:-1].split('\n'))[1:]
+ready_log2 = ready_log2[1:-1]
+ready_log3 = ready_log3[1:-1]
+invite_link = 'https://discord.com/api/oauth2/authorize?client_id=761929481421979669&permissions=8&redirect_uri=https%3A%2F%2Fdiscord.gg%2FbSfDG7WRZS&scope=bot'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
 command_prefix = 'c.'
 command_count = len(sys_commands)
@@ -30,44 +43,26 @@ client = discord.Client()
 vcch = 734217960222228490
 vcch = 584262828807028746
 ydl_opts = {
-    'format':
-    'bestaudio/best',
-    'outtmpl':
-    "youtube/" + "%(id)s" + '.%(ext)s',
-    'ignoreerrors':
-    True,
-    'noplaylist':
-    True,
-    'postprocessors': [
-        {
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '64'
-        },
-        {
-            'key': 'FFmpegMetadata'
-        },
-    ],
+    'format': 'bestaudio/best',
+    'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
+    'ignoreerrors': True,
+    'noplaylist': True,
+    'postprocessors': [{
+    	'key': 'FFmpegExtractAudio',
+    	'preferredcodec': 'mp3',
+        'preferredquality': '64'},
+        {'key': 'FFmpegMetadata'},],
 }
 ydl_opts2 = {
-    'format':
-    'bestaudio/best',
-    'outtmpl':
-    "youtube/" + "%(id)s" + '.%(ext)s',
-    'ignoreerrors':
-    True,
-    'noplaylist':
-    True,
-    'postprocessors': [
-        {
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '128'
-        },
-        {
-            'key': 'FFmpegMetadata'
-        },
-    ],
+    'format': 'bestaudio/best',
+    'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
+    'ignoreerrors': True,
+    'noplaylist': True,
+    'postprocessors': [{
+    	'key': 'FFmpegExtractAudio',
+    	'preferredcodec': 'mp3',
+        'preferredquality': '128'},
+        {'key': 'FFmpegMetadata'},],
 }
 
 def now_month(mode):
@@ -187,7 +182,6 @@ async def send(channelid, content, mode):
 
 async def status(content):
 	await client.change_presence(activity=discord.Game(content))
-
 
 async def commands(command, message):
 	arg = message.content.split(' ')[1:]
@@ -472,6 +466,7 @@ async def commands(command, message):
 	elif command == 'memo':
 		arg = message.content.split(' ')
 		#if arg[1] == 'add':
+		#readms =
 	elif command == 'info':
 		sendms = discord.Embed(title="Information", colour=0x7ED6DE)
 		sendms.add_field(name='使用プログラム言語', value='Python 3.8.2∼3.8.6', inline=False)
@@ -529,7 +524,7 @@ async def commands(command, message):
 		sendms.add_field(name='search <検索する言葉>', value='指定した文を検索します', inline=False)
 		sendms.add_field(name='random <start> <end>', value='startとendの間で乱数を生成します', inline=False)
 		sendms.add_field(name='translator <翻訳先言語> <文>', value='翻訳します', inline=False)
-		sendms.add_field(name='downloader <リンク> (<モード>)', value='指定されたリンクの動画を音声だけにし、送信します\nモード: low(64kbps), high(320kbps), その他のものが指定された場合128kbps[対応サイト](https://ytdl-org.github.io/youtube-dl/supportedsites.html)[320kbpsに使用したサイト]( https://www.320youtube.com)', inline=False)
+		sendms.add_field(name='downloader <リンク> (<モード>)', value='指定されたリンクの動画を音声だけにし、送信します\nモード: low(64kbps), high(320kbps), その他のものが指定された場合128kbps\n[対応サイト](https://ytdl-org.github.io/youtube-dl/supportedsites.html), [320kbpsに使用したサイト]( https://www.320youtube.com)', inline=False)
 		sendms.add_field(name='play <url/title>', value='入力された動画をendless-playのキューに追加します', inline=False)
 		sendms.add_field(name='queue', value='endless-playのキューを表示します', inline=False)
 		sendms.add_field(name='remove <番号>', value='キューから指定された番号に該当するものを削除します', inline=False)
@@ -554,7 +549,7 @@ async def on_ready():
 	if data_version != sys_version:
 		await send(768764714271506452, sys_version, 2)
 		startupst = discord.Embed(
-		    title='Command Network Botがアップデートされました',
+		    title='Botがアップデートされました',
 		    description=sys_version,
 		    colour=0x00ffff)
 		temp01 = now_date('on', 9)
@@ -563,6 +558,7 @@ async def on_ready():
 		startupst.set_footer(text=temp02)
 		startupst.add_field(name='更新内容', value=ready_log, inline=False)
 		startupst.add_field(name='次回更新予定内容', value=ready_log2, inline=False)
+		startupst.add_field(name='次々回更新予定内容', value=ready_log3, inline=False)
 		startupst.add_field(name='お知らせ', value=ready_info, inline=False)
 		await send(707426067098501171, startupst, 9)
 	now = datetime.datetime.utcnow()
@@ -589,6 +585,12 @@ async def on_message(message):
 		prefix = message.content[len(command_prefix):]
 		start = prefix.split(' ')[0]
 		print(start)
+		if start == 'v':
+			return
+		if start == 'vol':
+			return
+		if start == 'volume':
+			return
 		if start == 'q':
 		    return
 		if start == 'n':
