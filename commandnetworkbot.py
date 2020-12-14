@@ -31,8 +31,8 @@ bassboostコマンドとequalizerコマンドを追加
 checkコマンドにサーバーのサムネイルを追加
 '''
 ready_log = '\n・'.join(ready_log[:-1].split('\n'))[1:]
-ready_log2 = ready_log2[1:-1]
-ready_log3 = ready_log3[1:-1]
+ready_log2 = '\n・'.join(ready_log2[:-1].split('\n'))[1:]
+ready_log3 = '\n・'.join(ready_log3[:-1].split('\n'))[1:]
 invite_link = 'https://discord.com/api/oauth2/authorize?client_id=761929481421979669&permissions=8&redirect_uri=https%3A%2F%2Fdiscord.gg%2FbSfDG7WRZS&scope=bot'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
 command_prefix = 'c.'
@@ -232,12 +232,12 @@ async def commands(command, message):
 	elif command == 'report':
 		arg = str(message.content[10:])
 		await message.channel.send('報告ありがとうございます。')
-		await client.get_user(761929481421979669).send(
+		await client.get_user(686082337900986396).send(
 		    'Report: {0}({1}) | {2}'.format(message.author.name,message.author.id, arg))
 	elif command == 'request':
 	    arg = message.content[11:]
 	    await message.channel.send(':white_checkmark: リクエストを正常に受け取りました')
-	    await client.get_user(761929481421979669).send(
+	    await client.get_user(686082337900986396).send(
 		    'Request: {0}({1}) | {2}'.format(message.author.name,message.author.id, arg))
 	elif command == 'ping':
 		now = datetime.datetime.utcnow()
@@ -245,7 +245,7 @@ async def commands(command, message):
 		    int(int(now.month * 365) + int(now_month('total'))) * 86400) + int(
 		        int(now.day) * 86400) + int(int(now.hour) * 3600) + int(
 		            int(now.minute) * 60)
-		await message.channel.send('Pong!')
+		editms = await message.channel.send('Pong!')
 		now = datetime.datetime.utcnow()
 		aftersend = float(now.strftime("0.%f")) + int(now.second) + int(
 		    int(int(now.month * 365) + int(now_month('total'))) * 86400) + int(
@@ -267,7 +267,7 @@ async def commands(command, message):
 		sendms.add_field(name='Memory Usage', value=temp19, inline=False)
 		temp111 = 'Time : ' + now_date('on', 9)
 		sendms.set_footer(text=temp111)
-		await message.channel.send(embed=sendms)
+		await editms.edit(content=None, embed=sendms)
 	elif command == 'check':
 		arg = str(message.content[9:])
 		data = requests.get("https://api.mcsrvstat.us/2/{}".format(arg)).json()
@@ -406,7 +406,7 @@ async def commands(command, message):
 		while sys_loop == 1:
 			try:
 				translator = googletrans.Translator()
-				sendms = translator.translate('konnnichiha', dest='en')
+				sendms = translator.translate('hello', dest='ja')
 				break
 			except:
 				print('Retrying...')
@@ -427,13 +427,12 @@ async def commands(command, message):
 		while sys_loop == 1:
 			try:
 				translator = googletrans.Translator()
-				sendms = translator.translate('konnnichiha', dest='en')
+				sendms = translator.translate('hello', dest='ja')
 				break
 			except:
 				print('Retrying...')
 		arg = message.content.split(' ')
 		temp_trans = len(arg[1]) + len(arg[0]) + 2
-		await log('Debug', 'temp_trans = {}'.format(temp_trans))
 		language = [
 		    'af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'be', 'bn', 'bs', 'bg',
 		    'ca', 'ceb', 'ny', 'zh-cn', 'zh-tw', 'co', 'hr', 'cs', 'da', 'nl',
@@ -585,6 +584,12 @@ async def on_message(message):
 		prefix = message.content[len(command_prefix):]
 		start = prefix.split(' ')[0]
 		print(start)
+		if start == 'clear':
+			return
+		if start == 'c':
+			return
+		if start == 'cl':
+			return
 		if start == 'v':
 			return
 		if start == 'vol':
