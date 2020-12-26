@@ -3,28 +3,23 @@ now = datetime.datetime.utcnow()
 starttime = float(now.strftime("0.%f")) + int(now.second) + int(
     int(now.day) * 86400) + int(int(now.hour) * 3600) + int(
         int(now.minute) * 60)
-import calendar, os, discord, psutil, random, requests, asyncio, sys, youtube_dl, googletrans, bs4, subprocess
+import calendar, os, discord, psutil, random, requests, asyncio, sys, youtube_dl, googletrans, bs4
 now = datetime.datetime.utcnow()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(
     int(now.day) * 86400) + int(int(now.hour) * 3600) + int(
         int(now.minute) * 60)
 
-sys_token = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.ItlW0Q2Fej-OyNdbfUKO2czZQvk'
-sys_token2 = 'NzYwNDkwNjYwNDQzODQ4NzM0.X3M0Hg.lTDx_AvmNNr1spqwUo1wqetaVlM'
-sys_token3 = 'NjgwOTAxMTEyOTA3NTYzMDcx.XxLShg.NdGG5gd8gQ9_GGTqomBBqSfRC08'
-sys_version = 'v5.3.03'
-sys_commands = [
-    'timer', 'check', 'time', 'stopwatch', 'search', 'random', 'translator',
-    'check', 'info', 'about', 'say', 'uploader', 'omikuji', 'ping', 'seen',
-    'downloader', 'reversetranslate', 'play', 'nowplaying', 'queue', 'remove', 'skip', 'report', 'request'
+sys_version = 'v6.0.1'
+sys_commands = ['timer', 'check', 'time', 'stopwatch', 'search', 'random', 'translator','check', 'info', 'about', 'say', 'uploader', 'omikuji', 'ping', 'seen', 'downloader', 'reversetranslate', 'play', 'nowplaying', 'queue', 'remove', 'skip', 'report', 'request', 'shuffle', 'clear', 'volume', 'bassboost', 'about', 
 ]
 
 ready_log = '''
-endless-playをさらに安定化
-イコライザーの設定の調整
+helpコマンドの修正
+aboutコマンドを追加
+バージョン表示をa.b.cに変更
 '''
 ready_log2 = '''
-aboutコマンドとdocsコマンドを追加
+docsコマンドを追加
 '''
 ready_log3 = '''
 bassboostコマンドとequalizerコマンドを追加
@@ -37,11 +32,13 @@ invite_link = 'https://discord.com/api/oauth2/authorize?client_id=76192948142197
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
 command_prefix = 'c.'
 command_count = len(sys_commands)
-sys_module_count = '12'
+sys_module_count = '13'
 sys_loop = 1
 client = discord.Client()
 vcch = 734217960222228490
 vcch = 584262828807028746
+color1 = 0x377EF0
+color2 = 0xF8C63D
 ydl_opts = {
     'format': 'bestaudio/best',
     'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
@@ -187,7 +184,7 @@ async def commands(command, message):
 	arg = message.content.split(' ')[1:]
 	if command == 'say':
 		sendms = discord.Embed(
-		    description=message.content[7:], colour=0xF46900)
+		    description=' '.join(arg), colour=0xF46900)
 		sendms.set_author(
 		    name=message.author.name, icon_url=message.author.avatar_url)
 		await message.channel.send(embed=sendms)
@@ -197,7 +194,7 @@ async def commands(command, message):
 		    title='Time', description=temp11, colour=0x7ED6DE)
 		await message.channel.send(embed=sendms)
 	elif command == 'stopwatch':
-		arg = message.content[13:]
+		arg = ' '.join(arg)
 		if arg == 'start':
 			now = datetime.datetime.utcnow()
 			nowtime = float(now.strftime("0.%f")) + int(now.second) + int(
@@ -224,21 +221,21 @@ async def commands(command, message):
 			currenttime = float(nowtime) - float(readtime)
 			await message.channel.send(reverse(currenttime))
 	elif command == 'timer':
-		await message.channel.send('Timer Started!')
-		arg = int(message.content[9:])
-		await asyncio.sleep(arg)
-		await message.channel.send('Timer Finished!\n<@{}>'.format(
-		    message.author.id))
+		arg = int(' '.join(arg))
+		try:
+			await message.channel.send('Timer Started!')
+			await asyncio.sleep(arg)
+			await message.channel.send('Timer Finished!\n<@{}>'.format(message.author.id))
+		except:
+			await message.channel.send(':x: Failed starting timer')
 	elif command == 'report':
-		arg = str(message.content[10:])
 		await message.channel.send('報告ありがとうございます。')
-		await client.get_user(686082337900986396).send(
-		    'Report: {0}({1}) | {2}'.format(message.author.name,message.author.id, arg))
+		await client.get_user(783669082641137664).send(
+		    'Report: {0}({1}) | {2}'.format(message.author.name,message.author.id, ' '.join(arg)))
 	elif command == 'request':
-	    arg = message.content[11:]
-	    await message.channel.send(':white_checkmark: リクエストを正常に受け取りました')
-	    await client.get_user(686082337900986396).send(
-		    'Request: {0}({1}) | {2}'.format(message.author.name,message.author.id, arg))
+	    await message.channel.send(':white_check_mark: リクエストを正常に受け取りました')
+	    await client.get_user(783669082641137664).send(
+		    'Request: {0}({1}) | {2}'.format(message.author.name,message.author.id, ' '.join(arg)))
 	elif command == 'ping':
 		now = datetime.datetime.utcnow()
 		beforesend = float(now.strftime("0.%f")) + int(now.second) + int(
@@ -406,7 +403,7 @@ async def commands(command, message):
 		while sys_loop == 1:
 			try:
 				translator = googletrans.Translator()
-				sendms = translator.translate('hello', dest='ja')
+				translator.translate('hello', dest='ja')
 				break
 			except:
 				print('Retrying...')
@@ -427,7 +424,7 @@ async def commands(command, message):
 		while sys_loop == 1:
 			try:
 				translator = googletrans.Translator()
-				sendms = translator.translate('hello', dest='ja')
+				translator.translate('hello', dest='ja')
 				break
 			except:
 				print('Retrying...')
@@ -445,19 +442,22 @@ async def commands(command, message):
 		    'so', 'es', 'su', 'sw', 'sv', 'tg', 'ta', 'te', 'th', 'tr', 'uk',
 		    'ur', 'ug', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo', 'zu'
 		]
-		sendms4 = translator.translate(
-		    message.content[temp_trans:], dest=str(random.choice(language)))
+		sendms4 = translator.translate(message.content[temp_trans:], dest=str(random.choice(language)))
 		sendms3 = translator.translate(sendms4.text, dest='ja')
+		print(sendms3)
 		words = message.content[temp_trans:] + ' > ' + sendms3.text + ' > '
 		if len(arg) > 2:
 			for n in range(1, int(int(arg[1]) - 2)):
 				sendms4 = translator.translate(
 				    sendms4.text, dest=str(random.choice(language)))
 				sendms2 = translator.translate(sendms4.text, dest='ja')
+				print(sendms4)
+				print(sendms2)
 				words = words + sendms2.text + ' > '
 		sendms4 = translator.translate(
 		    sendms4.text, dest=str(random.choice(language)))
 		ted = translator.translate(sendms4.text, dest='ja')
+		print(ted)
 		words = words + ted.text
 		sendms = discord.Embed(
 		    title='Result', description=words, colour=0x7ED6DE)
@@ -468,7 +468,7 @@ async def commands(command, message):
 		#readms =
 	elif command == 'info':
 		sendms = discord.Embed(title="Information", colour=0x7ED6DE)
-		sendms.add_field(name='使用プログラム言語', value='Python 3.8.2∼3.8.6', inline=False)
+		sendms.add_field(name='使用プログラム言語', value='Python 3.8.3∼3.9.1', inline=False)
 		info_temp = await messages(768764777756622878)
 		sendms.add_field(name="デプロイ回数", value=info_temp, inline=False)
 		sendms.add_field(name="Version", value=sys_version, inline=False)
@@ -509,28 +509,101 @@ async def commands(command, message):
 	        await message.channel.send('Owner is in school now')
 	    if status == 'home':
 	        await message.channel.send('Owner is at home now')
+	elif command == 'command':
+		sendms = discord.Embed(title='Command : {}'.format(' '.join(arg)), colour=color1)
+		t1 = None
+		t2 = 'None'
+		t3 = None
+		mode = None
+		warn = None
+		footer = None
+		args = None
+		if arg[0] ==  'help':
+			t1 = 'ヘルプを表示します'
+		if arg[0] == 'support':
+			t1 = 'サポートになる情報を表示します'
+		if arg[0] == 'about':
+			t1 = 'Botの詳細を表示します'
+		if arg[0] == 'ping':
+			t1 = 'Botの遅延等を表示します'
+		if arg[0] == 'timer':
+			args = '秒数'
+			t1 = '秒数を測ります'
+		if arg[0] == 'check':
+			args = 'サーバーアドレス'
+			t1 = '引数に指定されたサーバーアドレスの状態を取得します'
+			t3 = 'Minecraft Servers'
+		if arg[0] == 'time':
+			t1 = '現在の日本の時刻を表示します'
+		if arg[0] == 'stopwatch':
+			mode = 'start, now'
+			args = 'モード'
+			t1 = 'スタートしてからの時間を表示します'
+			warn = '現在は毎日16時から17時の間にリセットされます'
+		if arg[0] == 'search':
+			args = '文'
+			t1 = '引数に指定した文を検索します'
+		if arg[0] == 'random':
+			args = 'start, end'
+			t1 = 'startとendの間で乱数を生成します'
+			ex = 'c.random 1 200'
+		if arg[0] == 'translator':
+			t2 = 't, trans, tl'
+			args = '変換先言語(元言語>変換先言語), 文'
+			t1 = '引数に指定された言語に翻訳します'
+		if arg[0] == 'downloader':
+			mode = 'low(64kbps), high(320kbps), その他のものが指定された場合128kbps'
+			warn = 'highはYouTubeのみ可能\n[対応サイト](https://ytdl-org.github.io/youtube-dl/supportedsites.html), [320kbpsに使用したサイト]( https://www.320youtube.com)'
+			args = 'mode, url'
+			t1 = '指定されたリンクの動画を音声だけにし、送信します'
+		if arg[0] == 'play':
+			t2 = 'p'
+			t1 = '入力された動画をendless-playのキューに追加します'
+			args = '動画リンク/動画タイトル'
+			footer = 'デフォルト検索サイト: YouTube'
+		if arg[0] == 'queue':
+			t2 = 'q'
+			t1 = 'endless-playのキューを表示します'
+		if arg[0] == 'remove':
+			t2 = 'r, del, delete, d'
+			t1 = 'キューから指定された番号に該当するものを削除します'
+			args = '番号'
+		if arg[0] == 'nowplaying':
+			t2 = 'n, np, now'
+			t1 = 'endless-playで再生中の曲を表示します'
+		if arg[0] == 'skip':
+			t2 = 's'
+			t1 = '何も指定されていない場合、再生中の曲をスキップします\n指定されている場合、指定された回数スキップします'
+			args = '(番号)'
+		if arg[0] == 'report':
+		    t1 = 'バグなどを報告する場合に使用してください'
+		    args = '文'
+		if arg[0] == 'request':
+			t1 = '追加してほしいコマンドがあったりする場合はこれを使用してください'
+			args = '文'
+		if t1 == None:
+			await message.channel.send('Not found command : `{}`'.format(' '.join(arg)))
+			return
+		if args != None:
+			sendms.add_field(name='引数', value=args, inline=False)
+		if mode != None:
+			sendms.add_field(name='モード', value=mode, inline=False)
+		sendms.add_field(name='説明', value=t1, inline=False)
+		sendms.add_field(name='別名', value=t2, inline=False)
+		if t3 != None:
+			sendms.add_field(name='対応サイト', value=t3, inline=False)
+		if warn != None:
+			sendms.add_field(name='注意事項', value=warn, inline=False)
+		if footer != None:
+		  	sendms.set_footer(text=footer)
+		await message.channel.send(embed=sendms)
 	else:
-		sendms = discord.Embed(
-		    title="コマンド一覧",
-		    color=0x00ffff)
-		sendms.add_field(name='help', value='これを表示します', inline=False)
-		sendms.add_field(name='information', value='Botの詳細を表示します', inline=False)
-		sendms.add_field(name='ping', value='Botの遅延等を表示します', inline=False)
-		sendms.add_field(name='timer <秒>', value='秒数を測ります', inline=False)
-		sendms.add_field(name='check <サーバーアドレス>', value='書かれたサーバーアドレスの状態を取得します\n[使用api](https://api.mcsrvstat.us/)', inline=False)
-		sendms.add_field(name='time', value='現在の日本の時刻を表示します', inline=False)
-		sendms.add_field(name='stopwatch <start/now> (Beta)', value='スタートしてからの時間を表示します\n現在は毎日16時から17時の間にリセットされます', inline=False)
-		sendms.add_field(name='search <検索する言葉>', value='指定した文を検索します', inline=False)
-		sendms.add_field(name='random <start> <end>', value='startとendの間で乱数を生成します', inline=False)
-		sendms.add_field(name='translator <翻訳先言語> <文>', value='翻訳します', inline=False)
-		sendms.add_field(name='downloader <リンク> (<モード>)', value='指定されたリンクの動画を音声だけにし、送信します\nモード: low(64kbps), high(320kbps), その他のものが指定された場合128kbps\n[対応サイト](https://ytdl-org.github.io/youtube-dl/supportedsites.html), [320kbpsに使用したサイト]( https://www.320youtube.com)', inline=False)
-		sendms.add_field(name='play <url/title>', value='入力された動画をendless-playのキューに追加します', inline=False)
-		sendms.add_field(name='queue', value='endless-playのキューを表示します', inline=False)
-		sendms.add_field(name='remove <番号>', value='キューから指定された番号に該当するものを削除します', inline=False)
-		sendms.add_field(name='nowplaying', value='endless-playで再生中の曲を表示します', inline=False)
-		sendms.add_field(name='skip (<番号>)', value='何も指定されていない場合、再生中の曲をスキップします\n指定されている場合、指定された回数スキップします', inline=False)
-		sendms.add_field(name='report <文>', value='バグなどを報告する場合に使用してください', inline=False)
-		sendms.add_field(name='request <文>', value='追加してほしいコマンドがあったりする場合はこれを使用してください', inline=False)
+		sendms = discord.Embed(title="Command List", description='Prefix: c. | c.command <command>', color=0x00ffff)
+		sendms.add_field(name='Support/Help', value='`support`,`report`,`request`,`help`,`command`,`about`', inline=False)
+		sendms.add_field(name='Music', value='`play`,`nowplaying`,`volume`,`queue`,`skip`,`remove`,`shuffle`,`bassboost(beta)`,`join`,`disconnect`', inline=False)
+		sendms.add_field(name='Fun', value='`random`,`say`,`choice`,`reversetranslate`,`seen`,`omikuji`', inline=False)
+		sendms.add_field(name='Tool', value='`search`,`timer`,`check`,`time`,`timer`,`downloader`,`translator`,`uploader`', inline=False)
+		sendms.add_field(name='Status', value='`ping`,`information`', inline=False)
 		await message.channel.send(embed=sendms)
 
 @client.event
@@ -636,6 +709,21 @@ async def on_message(message):
 			return
 		if start == 'queue':
 			return
+		if start == 'command':
+			await commands('command', message)
+			return
+		if start == 'co':
+			await commands('command', message)
+			return
+		elif start == 't':
+			await commands('translator', message)
+			return
+		elif start == 'trans':
+			await commands('translator', message)
+			return
+		elif start == 'tl':
+			await commands('translator', message)
+			return
 		if start == 'rev':
 			await commands('reversetranslate', message)
 			return
@@ -734,4 +822,4 @@ async def on_message(message):
 		await message.channel.send('それなww')
 		return
 
-client.run(sys_token)
+client.run(os.getenv('DISCORD_TOKEN'))
