@@ -2,5 +2,5 @@ discord.py
 requests
 psutil
 bs4
-googletrans==3.1.0a0
+googletrans==4.0.0rc1
 youtube_dl
