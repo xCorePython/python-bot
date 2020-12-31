@@ -2,7 +2,7 @@
 このBotはPythonで作られたいろんな機能があるbotです。
 
 ## 使用方法
-### Python 3.8.6以上を[ダウンロード](https://www.python.org/downloads/)
+#### Python 3.8.6以上を[ダウンロード](https://www.python.org/downloads/)
 FFmpegを[ダウンロード](https://ffmpeg.org/download.html)
 このレポジトリを[ダウンロード](https://github.com/xCorePython/python-bot.git)
 環境変数を追加 (一応コードを書き換えることで代用可)
