@@ -3,31 +3,30 @@ now = datetime.datetime.utcnow()
 starttime = float(now.strftime("0.%f")) + int(now.second) + int(
     int(now.day) * 86400) + int(int(now.hour) * 3600) + int(
         int(now.minute) * 60)
-import calendar, os, discord, psutil, random, requests, asyncio, sys, youtube_dl, googletrans, bs4
+import calendar, os, discord, psutil, random, requests, asyncio, sys, youtube_dl, googletrans, bs4, advancedtime, base64
 now = datetime.datetime.utcnow()
 importtime = float(now.strftime("0.%f")) + int(now.second) + int(
     int(now.day) * 86400) + int(int(now.hour) * 3600) + int(
         int(now.minute) * 60)
 
-sys_version = 'v6.0.1'
+sys_version = 'v6.0.2'
 sys_commands = ['timer', 'check', 'time', 'stopwatch', 'search', 'random', 'translator','check', 'info', 'about', 'say', 'uploader', 'omikuji', 'ping', 'seen', 'downloader', 'reversetranslate', 'play', 'nowplaying', 'queue', 'remove', 'skip', 'report', 'request', 'shuffle', 'clear', 'volume', 'bassboost', 'about', 
 ]
 
 ready_log = '''
-helpコマンドの修正
-aboutコマンドを追加
-バージョン表示をa.b.cに変更
+checkコマンドにサーバーのサムネイルを追加
+pingコマンドの修正
 '''
 ready_log2 = '''
 docsコマンドを追加
 '''
 ready_log3 = '''
 bassboostコマンドとequalizerコマンドを追加
-checkコマンドにサーバーのサムネイルを追加
 '''
 ready_log = '\n・'.join(ready_log[:-1].split('\n'))[1:]
 ready_log2 = '\n・'.join(ready_log2[:-1].split('\n'))[1:]
 ready_log3 = '\n・'.join(ready_log3[:-1].split('\n'))[1:]
+check_url = 'https://discord.com/api/v6'
 invite_link = 'https://discord.com/api/oauth2/authorize?client_id=761929481421979669&permissions=8&redirect_uri=https%3A%2F%2Fdiscord.gg%2FbSfDG7WRZS&scope=bot'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
 command_prefix = 'c.'
@@ -39,6 +38,9 @@ vcch = 734217960222228490
 vcch = 584262828807028746
 color1 = 0x377EF0
 color2 = 0xF8C63D
+now_date = advancedtime.checktime
+now_month = advancedtime.checkmonth
+reverse = advancedtime.fetchtime
 ydl_opts = {
     'format': 'bestaudio/best',
     'outtmpl': "youtube/" + "%(id)s" + '.%(ext)s',
@@ -61,103 +63,6 @@ ydl_opts2 = {
         'preferredquality': '128'},
         {'key': 'FFmpegMetadata'},],
 }
-
-def now_month(mode):
-	if mode == 'total':
-		now = datetime.datetime.utcnow()
-		if now.month == 1:
-			a01 = 0
-			for n in range(1):
-				nowcalendar = str(
-				    calendar.month(
-				        int('{}'.format(now.year)), int('{}'.format(n))))
-				a01 = a01 + int(nowcalendar[int(len(nowcalendar) -
-				                                3):int(len(nowcalendar) - 1)])
-			a01 = a01 + now.day
-			return a01
-		if now.month > 2:
-			a01 = 0
-			for n in range(1, now.month):
-				nowcalendar = str(
-				    calendar.month(
-				        int('{}'.format(now.year)), int('{}'.format(n))))
-				a01 = a01 + int(nowcalendar[int(len(nowcalendar) -
-				                                3):int(len(nowcalendar) - 1)])
-			a01 = a01 + now.day
-			return a01
-	if mode == 'month':
-		now = datetime.datetime.utcnow()
-		nowcalendar = str(
-		    calendar.month(
-		        int('{}'.format(now.year)), int('{}'.format(now.month))))
-		a01 = int(
-		    nowcalendar[int(len(nowcalendar) - 3):int(len(nowcalendar) - 1)])
-		return a01
-
-
-def now_date(mode, location):
-	if mode == 'off':
-		now = datetime.datetime.utcnow()
-		return float(now.strftime("0.%f")) + int(now.second) + int(
-		    int(int(now.month * 365) + int(now_month('month'))) * 86400) + int(int(now.day) * 86400) + int(int(now.hour) * 3600) + int(int(now.minute) * 60)
-	if mode == 'on':
-		now = datetime.datetime.utcnow()
-		locationtime = location
-		year = now.year
-		hour = now.hour + locationtime
-		day = now.day
-		month = now.month
-		if hour > 24:
-			hour2 = hour / 24
-			hour = hour - hour2 * 24
-			day = day + 1
-			if day > now_month('month'):
-				month = month + 1
-				if month > 12:
-					month = month - 12
-					year = year + 1
-		a01 = datetime.datetime(year, month, day, hour, now.minute, now.second, int(now.strftime("%f")))
-		return a01.strftime("%Y/%m/%d %H:%M:%S.%f")
-
-def reverse(data):
-	time = int(float(data))
-	if time < 10:
-		second = int(time)
-		uptime = '0:0' + str(second)
-		return uptime
-	if time >= 60:
-		if time < 3600:
-			minute = int(time / 60)
-			second = int(time - minute * 60)
-			if second < 10:
-				uptime = str(minute) + ':0' + str(second)
-				return uptime
-			else:
-				uptime = str(minute) + ':' + str(second)
-				return uptime
-		else:
-			hour = int(time / 3600)
-			minute = int(int(time - hour * 3600) / 60)
-			second = int(time - hour * 3600 - minute * 60)
-			if minute < 10:
-				if second < 10:
-					uptime = str(hour) + ':0' + str(minute) + ':0' + str(
-					    second)
-					return uptime
-				else:
-					uptime = str(hour) + ':0' + str(minute) + ':' + str(second)
-					return uptime
-			else:
-				if second < 10:
-					uptime = str(hour) + ':' + str(minute) + ':0' + str(second)
-					return uptime
-				else:
-					uptime = str(hour) + ':' + str(minute) + ':' + str(second)
-					return uptime
-	else:
-		uptime = '0:' + str(time)
-		return uptime
-
 
 async def log(level, info):
 	await client.get_channel(773053692629876757).send('[{0}] {1}'.format(
@@ -237,31 +142,22 @@ async def commands(command, message):
 	    await client.get_user(783669082641137664).send(
 		    'Request: {0}({1}) | {2}'.format(message.author.name,message.author.id, ' '.join(arg)))
 	elif command == 'ping':
-		now = datetime.datetime.utcnow()
-		beforesend = float(now.strftime("0.%f")) + int(now.second) + int(
-		    int(int(now.month * 365) + int(now_month('total'))) * 86400) + int(
-		        int(now.day) * 86400) + int(int(now.hour) * 3600) + int(
-		            int(now.minute) * 60)
+		beforesend = now_date('off', 9)
 		editms = await message.channel.send('Pong!')
-		now = datetime.datetime.utcnow()
-		aftersend = float(now.strftime("0.%f")) + int(now.second) + int(
-		    int(int(now.month * 365) + int(now_month('total'))) * 86400) + int(
-		        int(now.day) * 86400) + int(int(now.hour) * 3600) + int(
-		            int(now.minute) * 60)
+		aftersend = now_date('off', 9)
+		response = requests.post(check_url, timeout=30)
 		sendms = discord.Embed(title='Bot\'s Ping', colour=0x7ED6DE)
-		temp11 = str(int(float(aftersend - beforesend) * 1000)) + 'ms'
-		sendms.add_field(name="Response Time", value=temp11, inline=False)
-		temp12 = await messages(770902347667996672)
-		temp13 = temp12.split(',')
-		sendms.add_field(name="Startup Time", value=temp13[0], inline=False)
-		sendms.add_field(name="Import Time", value=temp13[1], inline=False)
-		temp18 = str(psutil.cpu_percent()) + '%, ' + str(
-		    psutil.cpu_count(logical=False)) + 'C' + str(
-		        psutil.cpu_count()) + 'T, ' + str(
-		            psutil.cpu_freq().current) + 'MHz'
-		sendms.add_field(name='CPU', value=temp18, inline=False)
-		temp19 = str(psutil.virtual_memory().percent) + '%'
-		sendms.add_field(name='Memory Usage', value=temp19, inline=False)
+		sendms.add_field(name='API Responce Time', value='{:.2f}ms'.format(float(response.elapsed.total_seconds())*1000))
+		sendms.add_field(name="Response Time", value='{}ms'.format(str(int(float(aftersend - beforesend) * 1000))), inline=False)
+		beforemath = now_date('off', 9)
+		temp81 = 999
+		for n in range(999):
+			temp81 = temp81 * 999
+		aftermath = now_date('off', 9)
+		sendms.add_field(name="Performance Time(999⁹⁹⁹)", value='{:.4f}ms'.format(float(aftermath - beforemath) * 1000), inline=False)
+		#logical=False
+		sendms.add_field(name='CPU', value='{}%, {}Thread, {}MHz'.format(str(psutil.cpu_percent()), str(psutil.cpu_count()), str(psutil.cpu_freq().current)), inline=False)
+		sendms.add_field(name='Memory Usage', value='{}%'.format(str(psutil.virtual_memory().percent)), inline=False)
 		temp111 = 'Time : ' + now_date('on', 9)
 		sendms.set_footer(text=temp111)
 		await editms.edit(content=None, embed=sendms)
@@ -284,6 +180,10 @@ async def commands(command, message):
 			sendms.add_field(name='Players', value=str(sendms1), inline=False)
 			sendms.add_field(
 			    name='Version', value=str(data['version']), inline=False)
+			with open('decode.jpg', "wb+") as f:
+				f.write(base64.b64decode(str(data['icon'].split(',')[1])))
+			thumbnail = await client.get_channel(793030006221307915).send(file=discord.File('decode.jpg'))
+			sendms.set_thumbnail(url=thumbnail.attachments[0].url)
 			temp21 = 'Time : ' + now_date('on', 9)
 			sendms.set_footer(text=temp21)
 			await message.channel.send(embed=sendms)
