@@ -1,2 +1,2 @@
-bot: python commandnetworkbot.py
-musicbot: python MusicBot.py
+Main: python bot-main.py
+Music: python bot-music.py
