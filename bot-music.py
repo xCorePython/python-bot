@@ -1,11 +1,14 @@
-import discord, youtube_dl, subprocess, datetime, json, os
+import discord, youtube_dl, subprocess, datetime, json, os, requests
 
 sys_loop = 1
 sys_data = 772380469094252554
 command_prefix = 't.'
 client = discord.Client()
-vcch = int(os.getenv('VCID'))
-queuech = int(os.getenv('QUEUEID'))
+vcch = os.getenv('VCID')
+queuech = os.getenv('QUEUEID')
+#reverse = advancedtime.fetchtime
+#now_date = advancedtime.checktime
+#now_month = advancedtime.checkmonth
 JST = datetime.timezone(datetime.timedelta(hours=+9), 'JST')
 color1 = 0x377EF0
 color2 = 0xF8C63D
@@ -50,8 +53,8 @@ class Queue:
 	def start(self):
 		if not self.queue:
 			return
-		self._start = timestamp()
-		self._start2 = time()
+		self._start = time()
+		self._start2 = timestamp()
 		self.play()
 	def set(self, value):
 		self._voice = value
@@ -67,21 +70,21 @@ class Queue:
 		except:
 			print('Stop Failed : Not Playing')
 		if self.skipped == True:
-			self._start = timestamp()
-			self._start2 = time()
+			self._start = time()
+			self._start2 = timestamp()
 			self.skipped = False
 			self.play()
 			return
 		if len(self.queue) == 1:
-			self._start = timestamp()
-			self._start2 = time()
+			self._start = time()
+			self._start2 = timestamp()
 			self.play()
 			return
 		self.played = self.queue[0]
 		self.queue = self.queue[1:]
 		self.queue.append(self.played)
-		self._start = timestamp()
-		self._start2 = time()
+		self._start = time()
+		self._start2 = timestamp()
 		self.play()
 	def np1(self):
 		return self.queue
@@ -96,14 +99,14 @@ class Queue:
 			return
 		self.skipped = True
 		if len(self.queue) == 1:
-			self._start = timestamp()
-			self._start2 = time()
+			self._start = time()
+			self._start2 = timestamp()
 			self.stop()
 		if value == 1:
 			self.played = self.queue[0]
 			self.queue = self.queue[1:]
-			self._start = timestamp()
-			self._start2 = time()
+			self._start = time()
+			self._start2 = timestamp()
 			self.queue.append(self.played)
 			self.stop()
 		else:
@@ -111,8 +114,8 @@ class Queue:
 				self.played = self.queue[0]
 				self.queue = self.queue[1:]
 				self.queue.append(self.played)
-			self._start = timestamp()
-			self._start2 = time()
+			self._start = time()
+			self._start2 = timestamp()
 			self.stop()
 	def stop(self):
 		self._voice.stop()
@@ -127,18 +130,18 @@ async def commands(command, message):
 	arg = message.content.split(' ')[1:]
 	if command == 'nowplaying':
 		info = q.np1()[0]
-		start = q.np2()
-		start2 = q.np3()
+		start = q.np3()
+		start2 = q.np2()
 		link = 'https://youtu.be/' + info['id']
 		sendms = discord.Embed(title='Now Playing', colour=color1)
 		sendms.add_field(name='Title', value='[{}]({})'.format(info['title'], link), inline=False)
 		sendms.add_field(name='Uploader',value='[{}]({})'.format(info['uploader'],info['uploader_url']),inline=False)
 		nowti = timestamp()
-		nowpl = float(nowti - start)
+		nowpl = int(float(nowti - start))
 		duration = info['duration']
 		if nowpl > duration:
 			nowpl = duration
-		sendms.add_field(name='Time', value='{} / {}'.format(datetime.timedelta(seconds=int(float(nowpl))), datetime.timedelta(seconds=int(float(duration)))), inline=False)
+		sendms.add_field(name='Time', value='{} / {}'.format(datetime.timedelta(seconds=int(nowpl)),datetime.timedelta(seconds=int(info['duration']))),inline=False)
 		sendms.add_field(name='Codec', value=info['streams'][0]['codec_long_name'], inline=False)
 		sendms.add_field(name='Bitrate', value='{}kbps / {}'.format(str(int(info['format']['bit_rate'])/1000),  info['streams'][0]['channel_layout']), inline=False)
 		sendms.add_field(name='Volume', value='{}%'.format(str(int(float(client.get_channel(vcch).guild.voice_client.source.volume)*100))), inline=False)
@@ -155,7 +158,7 @@ async def commands(command, message):
 			sendms = discord.Embed(title='Successfully Added', colour=color1)
 			sendms.add_field(name='Title', value='[{}](https://youtu.be/{})'.format(info['title'], info['id']), inline=False)
 			sendms.add_field(name='Uploader',value='[{}]({})'.format(info['uploader'],info['uploader_url']),inline=False)
-			sendms.add_field(name='Duration', value=datetime.timedelta(seconds=int(float(info['duration']))))
+			sendms.add_field(name='Duration', value=datetime.timedelta(seconds=int(info['duration'])))
 			sendms.add_field(name='Codec', value=info['streams'][0]['codec_long_name'], inline=False)
 			sendms.add_field(name='Bitrate', value='{}kbps / {}'.format(str(int(info['format']['bit_rate'])/1000),  info['streams'][0]['channel_layout']), inline=False)
 			sendms.set_thumbnail(url=str(info['thumbnails'][len(info['thumbnails']) - 1]['url']))
@@ -369,7 +372,7 @@ async def on_message(message):
 				await commands('queue', message)
 				return
 		except:
-			await message.channel.send(':x: **Failed run command**')
+			await message.channel.send(':x: **Failed run command** {}')
 
 async def create_queue():
 	messages = await client.get_channel(queuech).history(limit=1).flatten()
@@ -379,13 +382,16 @@ async def create_queue():
 
 def finalize(info_dict):
 	try:
-			for data in info_dict['formats']:
-				if data['format_id'] == '251':
-					info_dict['path'] = data['url']
-			data = json.loads(subprocess.run("ffprobe -i \"{}\" -print_format json -show_streams  -show_format -loglevel quiet".format(info_dict['path']), stdout=subprocess.PIPE, shell=True).stdout)
-			info_dict['format'] = data['format']
-			info_dict['streams'] = data['streams']
-			return info_dict
+		result = requests.get('https://www.320youtube.com/v18/watch?v={}'.format(info_dict['id'])).text
+		info_dict['path'] = str(str(result).split('href=')[8])[1:].split('" rel')[0]
+			#for data in info_dict['formats']:
+			#	if data['format_id'] == '251':
+			#		info_dict['path'] = data['url']
+		data = json.loads(subprocess.run("ffprobe -i \"{}\" -print_format json -show_streams  -show_format -loglevel quiet".format(info_dict['path']), stdout=subprocess.PIPE, shell=True).stdout)
+		print(data)
+		info_dict['format'] = data['format']
+		info_dict['streams'] = data['streams']
+		return info_dict
 	except:
 		return 'Failed'
 
