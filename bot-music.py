@@ -275,7 +275,7 @@ async def on_ready():
 		    download(links[n])
 		print('Loaded queue')
 		first.append('Converted')
-	q.seteq({'before_options': '-reconnect 1', 'options': '-vn -ac 2 -af \"firequalizer=gain_entry=\'entry(0,6);entry(10,3);entry(30,-5);entry(2500,-5);entry(8000, 0);entry(9000,10);entry(22000,10)\'\"',})
+	q.seteq({'before_options': '-reconnect 1', 'options': '-vn -af \"firequalizer=gain_entry=\'entry(0,6);entry(10,3);entry(30,-5);entry(2500,-5);entry(8000, 0);entry(9000,10);entry(22000,10)\'\"',})
 	try:
 		await client.get_channel(vcch).connect()
 		q.set(client.get_channel(vcch).guild.voice_client)
