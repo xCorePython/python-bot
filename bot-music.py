@@ -147,7 +147,7 @@ async def commands(command, message):
 		sendms.add_field(name='Time', value='{} / {}'.format(datetime.timedelta(seconds=int(nowpl)),datetime.timedelta(seconds=int(info['duration']))),inline=False)
 		sendms.add_field(name='Codec', value=info['streams'][0]['codec_long_name'], inline=False)
 		sendms.add_field(name='Bitrate', value='{}kbps / {}'.format(str(int(info['format']['bit_rate'])/1000),  info['streams'][0]['channel_layout']), inline=False)
-		sendms.add_field(name='Volume', value='100%'.format(str(int(float(client.get_channel(vcch).guild.voice_client.source.volume)*100))), inline=False)
+		sendms.add_field(name='Volume', value='100%', inline=False)
 		sendms.add_field(name='Equalizer', value='Bass: x6.0')
 		sendms.set_thumbnail(url=str(info['thumbnails'][len(info['thumbnails']) - 1]['url']))
 		sendms.set_footer(text='Started at {} | FireEqualizer from FFmpeg'.format(start2))
