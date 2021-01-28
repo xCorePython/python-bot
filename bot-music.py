@@ -122,7 +122,10 @@ class Queue:
 	def setvolume(self, value):
 		self._volume = value
 	def play(self):
-		self._voice.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(self.queue[0]['path'], **self.options), volume=self._volume), after=self.next)
+		if self.queue[0]['format']['format_name']:
+			self._voice.play(discord.PCMVolumeTransformer(discord.FFmpegOpusAudio(self.queue[0]['path'], **self.options), volume=self._volume), after=self.next)
+		else:
+			self._voice.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(self.queue[0]['path'], **self.options), volume=self._volume), after=self.next)
 
 q = Queue()
 
@@ -378,13 +381,12 @@ async def on_message(message):
 
 def finalize(info_dict):
 	try:
-		result = requests.get('https://www.320youtube.com/v21/watch?v={}'.format(info_dict['id'])).text
-		info_dict['path'] = str(str(result).split('href=')[8])[1:].split('" rel')[0]
-			#for data in info_dict['formats']:
-			#	if data['format_id'] == '251':
-			#		info_dict['path'] = data['url']
+		#result = requests.get('https://www.320youtube.com/v21/watch?v={}'.format(info_dict['id'])).text
+		#info_dict['path'] = str(str(result).split('href=')[8])[1:].split('" rel')[0]
+		for data in info_dict['formats']:
+			if data['format_id'] == '251':
+				info_dict['path'] = data['url']
 		data = json.loads(subprocess.run("ffprobe -i \"{}\" -print_format json -show_streams  -show_format -loglevel quiet".format(info_dict['path']), stdout=subprocess.PIPE, shell=True).stdout)
-		print(data)
 		info_dict['format'] = data['format']
 		info_dict['streams'] = data['streams']
 		return info_dict
