@@ -1,4 +1,4 @@
-import discord, youtube_dl, subprocess, datetime, json, os, requests
+import discord, youtube_dl, subprocess, datetime, json, os
 
 sys_loop = 1
 sys_data = 772380469094252554
@@ -123,9 +123,9 @@ class Queue:
 		self._volume = value
 	def play(self):
 		if self.queue[0]['format']['format_name']:
-			self._voice.play(discord.PCMVolumeTransformer(discord.FFmpegOpusAudio(self.queue[0]['path'], **self.options), volume=self._volume), after=self.next)
+			self._voice.play(discord.FFmpegOpusAudio(self.queue[0]['path'], **self.options), after=self.next)
 		else:
-			self._voice.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(self.queue[0]['path'], **self.options), volume=self._volume), after=self.next)
+			self._voice.play(discord.FFmpegPCMAudio(self.queue[0]['path'], **self.options), after=self.next)
 
 q = Queue()
 
