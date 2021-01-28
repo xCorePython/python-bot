@@ -265,7 +265,9 @@ async def on_ready():
 	print('Bot Started')
 	if len(first) == 1:
 		print('Loading queue...')
-		links = str(await create_queue()).split('\n')
+		messages = await client.get_channel(queuech).history(limit=1).flatten()
+		for message in messages:
+			links = str(message.content).split('\n')
 		for n in range(len(links)):
 		    download(links[n])
 		print('Loaded queue')
@@ -374,15 +376,9 @@ async def on_message(message):
 		except:
 			await message.channel.send(':x: **Failed run command** {}')
 
-async def create_queue():
-	messages = await client.get_channel(queuech).history(limit=1).flatten()
-	for message in messages:
-		return message.content
-
-
 def finalize(info_dict):
 	try:
-		result = requests.get('https://www.320youtube.com/v18/watch?v={}'.format(info_dict['id'])).text
+		result = requests.get('https://www.320youtube.com/v21/watch?v={}'.format(info_dict['id'])).text
 		info_dict['path'] = str(str(result).split('href=')[8])[1:].split('" rel')[0]
 			#for data in info_dict['formats']:
 			#	if data['format_id'] == '251':
