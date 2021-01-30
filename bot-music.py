@@ -122,7 +122,7 @@ class Queue:
 	def setvolume(self, value):
 		self._volume = value
 	def play(self):
-		if self.queue[0]['format']['format_name']:
+		if self.queue[0]['format']['format_name'] == 'opus':
 			self._voice.play(discord.FFmpegOpusAudio(self.queue[0]['path'], **self.options), after=self.next)
 		else:
 			self._voice.play(discord.FFmpegPCMAudio(self.queue[0]['path'], **self.options), after=self.next)
