@@ -720,7 +720,5 @@ async def on_message(message):
 		return
 	if message.content.find('じゃね?') != -1:
 		await message.channel.send('それなww')
-		return
 
-os.environ['DISCORD_TOKEN'] = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.dng1E81gFsfbLKQqxRyf1ai7omU'
 client.run(os.getenv('DISCORD_TOKEN'))
