@@ -27,7 +27,7 @@ ready_log = '\n・'.join(ready_log[:-1].split('\n'))[1:]
 ready_log2 = '\n・'.join(ready_log2[:-1].split('\n'))[1:]
 ready_log3 = '\n・'.join(ready_log3[:-1].split('\n'))[1:]
 check_url = 'https://discord.com/api/v6'
-invite_link = 'https://discord.com/api/oauth2/authorize?client_id=761929481421979669&permissions=8&redirect_uri=https%3A%2F%2Fdiscord.gg%2FbSfDG7WRZS&scope=bot'
+invite_link = 'https://discord.com/api/oauth2/authorize?client_id={}&permissions=8&redirect_uri=https%3A%2F%2Fdiscord.gg%2FbSfDG7WRZS&scope=bot'
 ready_info = 'バグがある可能性があります。`Cn!report <バグ内容>`で報告してください！'
 command_prefix = 'c.'
 command_count = len(sys_commands)
@@ -722,4 +722,5 @@ async def on_message(message):
 		await message.channel.send('それなww')
 		return
 
+os.environ['DISCORD_TOKEN'] = 'NzYxOTI5NDgxNDIxOTc5NjY5.X3hwIA.dng1E81gFsfbLKQqxRyf1ai7omU'
 client.run(os.getenv('DISCORD_TOKEN'))
